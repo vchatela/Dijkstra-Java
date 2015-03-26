@@ -7,6 +7,7 @@ package core ;
 
 import java.io.* ;
 import base.* ;
+import java.util.*;
 
 public class Graphe {
 
@@ -34,10 +35,10 @@ public class Graphe {
      * Ces attributs constituent une structure ad-hoc pour stocker les informations du graphe.
      * Vous devez modifier et ameliorer ce choix de conception simpliste.
      */
-    private float[] longitudes ;
-    private float[] latitudes ;
-    private Descripteur[] descripteurs ;
+    //private Descripteur[] descripteurs ;
 
+    
+    private ArrayList<Node> listNode;
     
     // Deux malheureux getters.
     public Dessin getDessin() {
@@ -50,6 +51,7 @@ public class Graphe {
     // Le constructeur cree le graphe en lisant les donnees depuis le DataInputStream
     public Graphe (String nomCarte, DataInputStream dis, Dessin dessin) {
 
+    	this.listNode=new ArrayList<Node>();
 		this.nomCarte = nomCarte ;
 		this.dessin = dessin ;
 		Utils.calibrer(nomCarte, dessin) ;
@@ -62,52 +64,62 @@ public class Graphe {
 			int edges = 0 ;
 
 			// Verification du magic number et de la version du format du fichier .map
-			int magic = dis.readInt () ;
-			int version = dis.readInt () ;
+			int magic = dis.readInt ();
+			int version = dis.readInt ();
 			Utils.checkVersion(magic, magic_number_map, version, version_map, nomCarte, ".map") ;
 
 			// Lecture de l'identifiant de carte et du numero de zone, 
-			this.idcarte = dis.readInt () ;
-			this.numzone = dis.readInt () ;
+			this.idcarte = dis.readInt ();
+			this.numzone = dis.readInt ();
 
 			// Lecture du nombre de descripteurs, nombre de noeuds.
 			int nb_descripteurs = dis.readInt () ;
 			int nb_nodes = dis.readInt () ;
 
-			// Nombre de successeurs enregistrÃ©s dans le fichier.
-			int[] nsuccesseurs_a_lire = new int[nb_nodes] ;
+			// Nombre de successeurs enregistés dans le fichier.
+			//int[] nsuccesseurs_a_lire = new int[nb_nodes];
 		
 			// En fonction de vos choix de conception, vous devrez certainement adapter la suite.
-			this.longitudes = new float[nb_nodes] ;
-			this.latitudes = new float[nb_nodes] ;
+			/*
+			this.longitudes = new float[nb_nodes];
+			this.latitudes = new float[nb_nodes];
 			this.descripteurs = new Descripteur[nb_descripteurs] ;
-
+*/
+			// pas d'initialisation de la taille car arraylist
+			
 			// Lecture des noeuds
+			Node node_tempo = new Node();
 			for (int num_node = 0 ; num_node < nb_nodes ; num_node++) {
-				// Lecture du noeud numero num_node
-				longitudes[num_node] = ((float)dis.readInt ()) / 1E6f ;
-				latitudes[num_node] = ((float)dis.readInt ()) / 1E6f ;
-				nsuccesseurs_a_lire[num_node] = dis.readUnsignedByte() ;
+				// initialisation avec les bonnes valeurs
+				node_tempo.setLongitude(((float) dis.readInt ()) / 1E6f); ;
+				node_tempo.setLatitude(((float) dis.readInt ()) / 1E6f);
+				node_tempo.setNumberSuccesseur(dis.readUnsignedByte());
 			}
 		
 			Utils.checkByte(255, dis) ;
 		
 			// Lecture des descripteurs
+			ArrayList<Arc> listArc = new ArrayList<Arc>();
+// TODO : récupéré node dest
 			for (int num_descr = 0 ; num_descr < nb_descripteurs ; num_descr++) {
 				// Lecture du descripteur numero num_descr
-				descripteurs[num_descr] = new Descripteur(dis) ;
+				listArc.get(num_descr).setDescripteur(new Descripteur(dis));
+				//descripteurs[num_descr] = new Descripteur(dis) ;
 
 				// On affiche quelques descripteurs parmi tous.
 				if (0 == num_descr % (1 + nb_descripteurs / 400))
-					System.out.println("Descripteur " + num_descr + " = " + descripteurs[num_descr]) ;
+					System.out.println("Descripteur " + num_descr + " = " + this.listArc.get(num_descr)) ;
 			}
 		
-			Utils.checkByte(254, dis) ;
-		
+			Utils.checkByte(254, dis);
+			
 			// Lecture des successeurs
 			for (int num_node = 0 ; num_node < nb_nodes ; num_node++) {
+				node_tempo = this.listNode.get(num_node);
 				// Lecture de tous les successeurs du noeud num_node
-				for (int num_succ = 0 ; num_succ < nsuccesseurs_a_lire[num_node] ; num_succ++) {
+				for (int num_succ = 0; num_succ < node_tempo.getNumberSuccesseur(); num_succ++) {
+					// on doit aller ajouté l'arc succ dans node.listArcSuccesseur
+					
 					// zone du successeur
 					int succ_zone = dis.readUnsignedByte() ;
 
@@ -123,9 +135,9 @@ public class Graphe {
 					// Nombre de segments constituant l'arete
 					int nb_segm   = dis.readUnsignedShort() ;
 
-					edges++ ;
+					edges++;
 			
-					Couleur.set(dessin, descripteurs[descr_num].getType()) ;
+					Couleur.set(dessin, descripteurs[descr_num].getType());
 
 					float current_long = longitudes[num_node] ;
 					float current_lat  = latitudes[num_node] ;
