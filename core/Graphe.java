@@ -74,33 +74,33 @@ public class Graphe {
 
 			// Lecture du nombre de descripteurs, nombre de noeuds.
 			int nb_descripteurs = dis.readInt () ;
-			int nb_nodes = dis.readInt () ;
+			int nb_Nodes = dis.readInt () ;
 
 			// Nombre de successeurs enregistés dans le fichier.
-			//int[] nsuccesseurs_a_lire = new int[nb_nodes];
+			//int[] nsuccesseurs_a_lire = new int[nb_Nodes];
 		
 			// En fonction de vos choix de conception, vous devrez certainement adapter la suite.
 			/*
-			this.longitudes = new float[nb_nodes];
-			this.latitudes = new float[nb_nodes];
+			this.longitudes = new float[nb_Nodes];
+			this.latitudes = new float[nb_Nodes];
 			this.descripteurs = new Descripteur[nb_descripteurs] ;
 */
 			// pas d'initialisation de la taille car arraylist
 			
 			// Lecture des noeuds
-			Node node_tempo = new Node();
-			for (int num_node = 0 ; num_node < nb_nodes ; num_node++) {
+			Node Node_tempo = new Node();
+			for (int num_Node = 0 ; num_Node < nb_Nodes ; num_Node++) {
 				// initialisation avec les bonnes valeurs
-				node_tempo.setLongitude(((float) dis.readInt ()) / 1E6f); ;
-				node_tempo.setLatitude(((float) dis.readInt ()) / 1E6f);
-				node_tempo.setNumberSuccesseur(dis.readUnsignedByte());
+				Node_tempo.setLongitude(((float) dis.readInt ()) / 1E6f); ;
+				Node_tempo.setLatitude(((float) dis.readInt ()) / 1E6f);
+				Node_tempo.setNumberSuccesseur(dis.readUnsignedByte());
 			}
 		
 			Utils.checkByte(255, dis) ;
 		
 			// Lecture des descripteurs
 			ArrayList<Arc> listArc = new ArrayList<Arc>();
-// TODO : récupéré node dest
+// TODO : récupéré Node dest
 			for (int num_descr = 0 ; num_descr < nb_descripteurs ; num_descr++) {
 				// Lecture du descripteur numero num_descr
 				listArc.get(num_descr).setDescripteur(new Descripteur(dis));
@@ -114,17 +114,17 @@ public class Graphe {
 			Utils.checkByte(254, dis);
 			
 			// Lecture des successeurs
-			for (int num_node = 0 ; num_node < nb_nodes ; num_node++) {
-				node_tempo = this.listNode.get(num_node);
-				// Lecture de tous les successeurs du noeud num_node
-				for (int num_succ = 0; num_succ < node_tempo.getNumberSuccesseur(); num_succ++) {
-					// on doit aller ajouté l'arc succ dans node.listArcSuccesseur
+			for (int num_Node = 0 ; num_Node < nb_Nodes ; num_Node++) {
+				Node_tempo = this.listNode.get(num_Node);
+				// Lecture de tous les successeurs du noeud num_Node
+				for (int num_succ = 0; num_succ < Node_tempo.getNumberSuccesseur(); num_succ++) {
+					// on doit aller ajouté l'arc succ dans Node.listArcSuccesseur
 					
 					// zone du successeur
 					int succ_zone = dis.readUnsignedByte() ;
 
 					// numero de noeud du successeur
-					int dest_node = Utils.read24bits(dis) ;
+					int dest_Node = Utils.read24bits(dis) ;
 
 					// descripteur de l'arete
 					int descr_num = Utils.read24bits(dis) ;
@@ -139,8 +139,8 @@ public class Graphe {
 			
 					Couleur.set(dessin, descripteurs[descr_num].getType());
 
-					float current_long = longitudes[num_node] ;
-					float current_lat  = latitudes[num_node] ;
+					float current_long = longitudes[num_Node] ;
+					float current_lat  = latitudes[num_Node] ;
 
 					// Chaque segment est dessine'
 					for (int i = 0 ; i < nb_segm ; i++) {
@@ -151,17 +151,17 @@ public class Graphe {
 						current_lat  += delta_lat ;
 					}
 			
-					// Le dernier trait rejoint le sommet destination.
+					// Le dernier trait rejoint le Node destination.
 					// On le dessine si le noeud destination est dans la zone du graphe courant.
 					if (succ_zone == numzone) {
-						dessin.drawLine(current_long, current_lat, longitudes[dest_node], latitudes[dest_node]) ;
+						dessin.drawLine(current_long, current_lat, longitudes[dest_Node], latitudes[dest_Node]) ;
 					}
 				}
 	    	}
 	    
 	    	Utils.checkByte(253, dis) ;
 
-	    	System.out.println("Fichier lu : " + nb_nodes + " sommets, " + edges + " aretes, " 
+	    	System.out.println("Fichier lu : " + nb_Nodes + " Nodes, " + edges + " aretes, " 
 			       + nb_descripteurs + " descripteurs.") ;
 
 		} catch (IOException e) {
@@ -191,7 +191,7 @@ public class Graphe {
     }
 
     /**
-     *  Attend un clic sur la carte et affiche le numero de sommet le plus proche du clic.
+     *  Attend un clic sur la carte et affiche le numero de Node le plus proche du clic.
      *  A n'utiliser que pour faire du debug ou des tests ponctuels.
      *  Ne pas utiliser automatiquement a chaque invocation des algorithmes.
      */
@@ -209,12 +209,12 @@ public class Graphe {
 			float minDist = Float.MAX_VALUE ;
 			int   noeud   = 0 ;
 		
-			for (int num_node = 0 ; num_node < longitudes.length ; num_node++) {
-				float londiff = (longitudes[num_node] - lon) ;
-				float latdiff = (latitudes[num_node] - lat) ;
+			for (int num_Node = 0 ; num_Node < longitudes.length ; num_Node++) {
+				float londiff = (longitudes[num_Node] - lon) ;
+				float latdiff = (latitudes[num_Node] - lat) ;
 				float dist = londiff*londiff + latdiff*latdiff ;
 				if (dist < minDist) {
-					noeud = num_node ;
+					noeud = num_Node ;
 					minDist = dist ;
 				}
 			}
@@ -251,25 +251,25 @@ public class Graphe {
 
 	    // Origine du chemin
 	    int first_zone = dis.readUnsignedByte() ;
-	    int first_node = Utils.read24bits(dis) ;
+	    int first_Node = Utils.read24bits(dis) ;
 
 	    // Destination du chemin
 	    int last_zone  = dis.readUnsignedByte() ;
-	    int last_node = Utils.read24bits(dis) ;
+	    int last_Node = Utils.read24bits(dis) ;
 
-	    System.out.println("Chemin de " + first_zone + ":" + first_node + " vers " + last_zone + ":" + last_node) ;
+	    System.out.println("Chemin de " + first_zone + ":" + first_Node + " vers " + last_zone + ":" + last_Node) ;
 
 	    int current_zone = 0 ;
-	    int current_node = 0 ;
+	    int current_Node = 0 ;
 
 	    // Tous les noeuds du chemin
 	    for (int i = 0 ; i < nb_noeuds ; i++) {
 			current_zone = dis.readUnsignedByte() ;
-			current_node = Utils.read24bits(dis) ;
-			System.out.println(" --> " + current_zone + ":" + current_node) ;
+			current_Node = Utils.read24bits(dis) ;
+			System.out.println(" --> " + current_zone + ":" + current_Node) ;
 	    }
 
-	    if ((current_zone != last_zone) || (current_node != last_node)) {
+	    if ((current_zone != last_zone) || (current_Node != last_Node)) {
 		    System.out.println("Le chemin " + nom_chemin + " ne termine pas sur le bon noeud.") ;
 		    System.exit(1) ;
 		}
