@@ -29,12 +29,12 @@ public class Arc {
 	/*
 	 * Méthodes
 	*/
-	public void addSegment() {
-	
+	public void addSegment(Segment segment) {
+		this.listSegment.add(segment);
 	}
 	
-	public void addDescripteur() {
-	
+	public void addDescripteur(Descripteur descripteur) {
+		this.descripteur = descripteur;
 	}
 
 	public ArrayList<Segment> getListSegment() {

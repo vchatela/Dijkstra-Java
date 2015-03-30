@@ -7,7 +7,6 @@ public class Node {
 	private float latitude;
 	private ArrayList<Arc> listArc;
 	private int numberArc;
-	
 	public Node(){
 		this.longitude = 0;
 		this.latitude = 0;
