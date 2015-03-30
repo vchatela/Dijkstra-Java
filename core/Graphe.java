@@ -98,6 +98,7 @@ public class Graphe {
 				Node_tempo.setNumberArc(nb_successeur);
 				this.listNode.add(Node_tempo);
 			}
+			
 		// Vérification de la lecture des noeuds ! cf format fichier .map
 			Utils.checkByte(255, dis) ;
 		
