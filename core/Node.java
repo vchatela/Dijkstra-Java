@@ -20,17 +20,19 @@ public class Node {
 	*/
 	
 	public Node(){
+		this.num = 0;
 		this.longitude = 0;
 		this.latitude = 0;
 		this.listArc = new ArrayList<Arc>();
 		this.numberArc = 0;
 	}
 	
-	public Node(float longitude, float latitude){
+	public Node(int num, float longitude, float latitude, int numberArc){
+		this.num = num;
 		this.longitude=longitude;
 		this.latitude=latitude;
 		this.listArc = new ArrayList<Arc>();
-		this.numberArc = 0;
+		this.numberArc = numberArc;
 	}
 	
 	

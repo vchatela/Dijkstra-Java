@@ -87,17 +87,12 @@ public class Graphe {
 			int nb_successeur;
 			
 			// Lecture des noeuds
-			Node Node_tempo = new Node();
 			for (int num_Node = 0 ; num_Node < nb_Nodes ; num_Node++) {
 				// initialisation avec les bonnes valeurs
-				Node_tempo.setNum(num_Node);
 				longitude = ((float) dis.readInt ()) / 1E6f;
-				Node_tempo.setLongitude(longitude);
 				latitude = ((float) dis.readInt ()) / 1E6f;
-				Node_tempo.setLatitude(latitude);
 				nb_successeur=dis.readUnsignedByte();
-				Node_tempo.setNumberArc(nb_successeur);
-				this.listNode.add(Node_tempo);
+				this.listNode.add(new Node(num_Node, longitude, latitude, nb_successeur));
 			}
 			
 		// Vérification de la lecture des noeuds ! cf format fichier .map
@@ -121,10 +116,10 @@ public class Graphe {
 			// Lecture des successeurs
 			for (int num_Node = 0 ; num_Node < nb_Nodes ; num_Node++) {
 				//Récupération du noeud n° num_node
-				Node_tempo = this.listNode.get(num_Node);
 				
+				System.out.println("******Débug nombre arc pour le noeud "+num_Node+" : "+this.listNode.get(num_Node).getNumberArc());
 				//Initialisation de tous ces arcs (successeurs)
-				for (int num_succ = 0; num_succ < Node_tempo.getNumberArc(); num_succ++) {
+				for (int num_succ = 0; num_succ < this.listNode.get(num_Node).getNumberArc(); num_succ++) {
 					
 					// Lecture de tous les successeurs du noeud num_Node
 					int succ_zone = dis.readUnsignedByte() ; 	// zone du successeur
@@ -134,10 +129,10 @@ public class Graphe {
 					int nb_segm   = dis.readUnsignedShort() ; 	// Nombre de segments constituant l'arete
 
 					// Création d'un arc initialisé avec toutes les lectures précédentes et ajout dans la liste des arcs du noeud num_node
-					Arc arc= new Arc(succ_zone, dest_Node, descr_num, longueur, nb_segm, descripteurs[descr_num],this.listNode.get(num_Node));
+					Arc arc = new Arc(succ_zone, dest_Node, descr_num, longueur, nb_segm, descripteurs[descr_num], this.listNode.get(num_Node));
 					this.listNode.get(num_Node).getArrayListArc().add(arc);
 					
-					//Incrémentation du nombre de noeuds
+					//Incrémentation du nombre d'arrêtes
 					edges++;
 					
 					//si le sens n'est pas unique on doit ajouter une arête dans l'autre sens (noeud destinataire ->noeud actuel)
