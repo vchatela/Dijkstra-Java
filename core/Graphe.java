@@ -47,6 +47,9 @@ public class Graphe {
     public int getZone() {
     	return numzone ;
     }
+    public ArrayList<Node> getArrayList() {
+    	return this.listNode;
+    }
 
     // Le constructeur cree le graphe en lisant les donnees depuis le DataInputStream
     public Graphe (String nomCarte, DataInputStream dis, Dessin dessin) {
