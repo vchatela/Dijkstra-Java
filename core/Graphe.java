@@ -105,7 +105,6 @@ public class Graphe {
 			
 			// Lecture des descripteurs
 			Descripteur[] descripteurs = new Descripteur[nb_descripteurs] ;
-// TODO : récupéré Node dest
 			for (int num_descr = 0 ; num_descr < nb_descripteurs ; num_descr++) {
 				// Lecture du descripteur numero num_descr
 				descripteurs[num_descr]= new Descripteur(dis);
@@ -138,30 +137,39 @@ public class Graphe {
 					// Nombre de segments constituant l'arete
 					int nb_segm   = dis.readUnsignedShort() ;
 
-					Arc arc= new Arc(succ_zone, dest_Node, descr_num, longueur, nb_segm, descripteurs[descr_num],Node_tempo);
+					Arc arc= new Arc(succ_zone, dest_Node, descr_num, longueur, nb_segm, descripteurs[descr_num],this.listNode.get(dest_Node));
 					this.listNode.get(num_Node).getArrayListArc().add(arc);
 					
 					edges++;
-			//TODO : correction !
+					//si le sens n'est pas unique on doit ajouter une arête dans l'autre sens (noeud destinataire ->noeud actuel)
+	    			if(!descripteurs[descr_num].isSensUnique()&&(succ_zone==numzone)){
+	    				Arc arc_dest = new Arc(succ_zone, num_Node, descr_num, longueur, nb_segm, descripteurs[descr_num],Node_tempo);
+	    				this.listNode.get(dest_Node).getArrayListArc().add(arc_dest);
+	    			}
 					Couleur.set(dessin, descripteurs[descr_num].getType());
 
-					float current_long = longitudes[num_Node] ;
-					float current_lat  = latitudes[num_Node] ;
+					float current_long = this.listNode.get(num_Node).getLongitude();
+					float current_lat  = this.listNode.get(num_Node).getLatitude();
 
 					// Chaque segment est dessine'
 					for (int i = 0 ; i < nb_segm ; i++) {
 						float delta_lon = (dis.readShort()) / 2.0E5f ;
 						float delta_lat = (dis.readShort()) / 2.0E5f ;
+						
+						//Ajout du segment i au successeur actuel
+						this.listNode.get(num_Node).getArrayListArc().get(num_succ).addSegment(new Segment(delta_lon, delta_lat));
+						
+						//Dessin des segments
 						dessin.drawLine(current_long, current_lat, (current_long + delta_lon), (current_lat + delta_lat)) ;
+						
 						current_long += delta_lon ;
 						current_lat  += delta_lat ;
 					}
 			
 					// Le dernier trait rejoint le Node destination.
 					// On le dessine si le noeud destination est dans la zone du graphe courant.
-		//TODO : correction !
 					if (succ_zone == numzone) {
-						dessin.drawLine(current_long, current_lat, longitudes[dest_Node], latitudes[dest_Node]) ;
+						dessin.drawLine(current_long, current_lat, this.listNode.get(dest_Node).getLongitude(), this.listNode.get(dest_Node).getLatitude()) ;
 					}
 				}
 	    	}
@@ -216,9 +224,9 @@ public class Graphe {
 			float minDist = Float.MAX_VALUE ;
 			int   noeud   = 0 ;
 	//TODO : correction !	
-			for (int num_Node = 0 ; num_Node < longitudes.length ; num_Node++) {
-				float londiff = (longitudes[num_Node] - lon) ;
-				float latdiff = (latitudes[num_Node] - lat) ;
+			for (int num_Node = 0 ; num_Node < this.listNode.size() ; num_Node++) {
+				float londiff = (this.listNode.get(num_Node).getLongitude() - lon) ;
+				float latdiff = (this.listNode.get(num_Node).getLatitude() - lat) ;
 				float dist = londiff*londiff + latdiff*latdiff ;
 				if (dist < minDist) {
 					noeud = num_Node ;
@@ -229,7 +237,7 @@ public class Graphe {
 			System.out.println("Noeud le plus proche : " + noeud) ;
 			System.out.println() ;
 			dessin.setColor(java.awt.Color.red) ;
-			dessin.drawPoint(longitudes[noeud], latitudes[noeud], 5) ;
+			dessin.drawPoint(this.listNode.get(noeud).getLongitude(), this.listNode.get(noeud).getLatitude(), 5) ;
 		}
     }
 
@@ -287,5 +295,8 @@ public class Graphe {
 	}
 
     }
+	public String getNomCarte() {
+		return nomCarte;
+	}
 
 }
