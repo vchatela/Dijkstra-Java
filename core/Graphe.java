@@ -7,6 +7,8 @@ package core;
 
 import java.io.* ;
 import java.util.*;
+
+import base.Couleur;
 import base.Dessin;
 import base.Utils;
 
@@ -36,7 +38,7 @@ public class Graphe {
      * Ces attributs constituent une structure ad-hoc pour stocker les informations du graphe.
      * Vous devez modifier et ameliorer ce choix de conception simpliste.
      */
-    //private Descripteur[] descripteurs ;
+    private Descripteur[] descripteurs ;
 
     
     private ArrayList<Node> listNode;
