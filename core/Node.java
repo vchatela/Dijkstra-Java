@@ -45,4 +45,7 @@ public class Node {
 	public void setNumberArc(int numberArc){
 		this.numberArc = numberArc;
 	}
+	public int getNumberArc(){
+		return this.numberArc;
+	}
 }

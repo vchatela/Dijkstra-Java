@@ -2,6 +2,8 @@ package core;
 
 import java.util.ArrayList;
 
+import base.Descripteur;
+
 public class Arc {
 
 	/*
