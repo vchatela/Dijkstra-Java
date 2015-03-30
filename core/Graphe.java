@@ -138,8 +138,8 @@ public class Graphe {
 					// Nombre de segments constituant l'arete
 					int nb_segm   = dis.readUnsignedShort() ;
 
-					Arc arc= new Arc(succ_zone, dest_Node, descr_num, longueur, nb_segm, descripteurs[descr_num]);
-					
+					Arc arc= new Arc(succ_zone, dest_Node, descr_num, longueur, nb_segm, descripteurs[descr_num],Node_tempo);
+					this.listNode.get(num_Node).getArrayListArc().add(arc);
 					
 					edges++;
 			//TODO : correction !
