@@ -114,7 +114,7 @@ public class Graphe {
 				if (0 == num_descr % (1 + nb_descripteurs / 400))
 					System.out.println("Descripteur " + num_descr + " = " + this.listNode.get(num_descr)) ;
 			}
-		
+		// on vérifie que la lecture des descripteurs est bonne (cf format .map)
 			Utils.checkByte(254, dis);
 			
 			// Lecture des successeurs
@@ -122,7 +122,6 @@ public class Graphe {
 				Node_tempo = this.listNode.get(num_Node);
 				// Lecture de tous les successeurs du noeud num_Node
 				for (int num_succ = 0; num_succ < Node_tempo.getNumberArc(); num_succ++) {
-					// on doit aller ajouté l'arc succ dans Node.listArcSuccesseur
 					
 					// zone du successeur
 					int succ_zone = dis.readUnsignedByte() ;
@@ -139,6 +138,9 @@ public class Graphe {
 					// Nombre de segments constituant l'arete
 					int nb_segm   = dis.readUnsignedShort() ;
 
+					Arc arc= new Arc(succ_zone, dest_Node, descr_num, longueur, nb_segm, descripteurs[descr_num]);
+					
+					
 					edges++;
 			//TODO : correction !
 					Couleur.set(dessin, descripteurs[descr_num].getType());

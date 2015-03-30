@@ -26,6 +26,17 @@ public class Arc {
 		this.setListSegment(new ArrayList<Segment>());
 	}
 	
+	public Arc(int nb_zone, int num_dest, int num_descripteur,
+			int lg_arete, int nb_segments, Descripteur descripteur, Node node_source){
+		this.num_zone = nb_zone;
+		this.num_dest = num_dest;
+		this.num_descripteur = num_descripteur;
+		this.lg_arete = lg_arete;
+		this.nb_segments = nb_segments;
+		this.descripteur = descripteur;
+		this.setListSegment(new ArrayList<Segment>());
+		this.node_source = node_source;
+	}
 	/*
 	 * Méthodes
 	*/
