@@ -6,11 +6,9 @@ package core;
  */
 
 import java.io.* ;
-
-
 import java.util.*;
-
-import base.*;
+import base.Dessin;
+import base.Utils;
 
 public class Graphe {
 
