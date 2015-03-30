@@ -7,7 +7,7 @@ public class Node {
 	/*
 	 * Declaration des variables
 	*/
-	
+	private int num;
 	private float longitude;		//Longitude du noeud
 	private float latitude;			//Latidute du noeud
 	private ArrayList<Arc> listArc;	//Liste des arcs du noeuds -> ses successeurs
@@ -66,5 +66,13 @@ public class Node {
 	}
 	public int getNumberArc(){
 		return this.numberArc;
+	}
+
+	public int getNum() {
+		return num;
+	}
+
+	public void setNum(int num) {
+		this.num = num;
 	}
 }

@@ -90,6 +90,7 @@ public class Graphe {
 			Node Node_tempo = new Node();
 			for (int num_Node = 0 ; num_Node < nb_Nodes ; num_Node++) {
 				// initialisation avec les bonnes valeurs
+				Node_tempo.setNum(num_Node);
 				longitude = ((float) dis.readInt ()) / 1E6f;
 				Node_tempo.setLongitude(longitude);
 				latitude = ((float) dis.readInt ()) / 1E6f;
@@ -138,13 +139,13 @@ public class Graphe {
 					// Nombre de segments constituant l'arete
 					int nb_segm   = dis.readUnsignedShort() ;
 
-					Arc arc= new Arc(succ_zone, dest_Node, descr_num, longueur, nb_segm, descripteurs[descr_num],this.listNode.get(dest_Node));
+					Arc arc= new Arc(succ_zone, dest_Node, descr_num, longueur, nb_segm, descripteurs[descr_num],this.listNode.get(num_Node));
 					this.listNode.get(num_Node).getArrayListArc().add(arc);
 					
 					edges++;
 					//si le sens n'est pas unique on doit ajouter une arête dans l'autre sens (noeud destinataire ->noeud actuel)
 	    			if(!descripteurs[descr_num].isSensUnique()&&(succ_zone==numzone)){
-	    				Arc arc_dest = new Arc(succ_zone, num_Node, descr_num, longueur, nb_segm, descripteurs[descr_num],Node_tempo);
+	    				Arc arc_dest = new Arc(succ_zone, num_Node, descr_num, longueur, nb_segm, descripteurs[descr_num],this.listNode.get(dest_Node));
 	    				this.listNode.get(dest_Node).getArrayListArc().add(arc_dest);
 	    			}
 					Couleur.set(dessin, descripteurs[descr_num].getType());
@@ -153,7 +154,7 @@ public class Graphe {
 					float current_lat  = this.listNode.get(num_Node).getLatitude();
 
 					// Chaque segment est dessine'
-					for (int i = 0 ; i < nb_segm ; i++) {
+					for (int i = 0 ; i < nb_segm ; i++){
 						float delta_lon = (dis.readShort()) / 2.0E5f ;
 						float delta_lat = (dis.readShort()) / 2.0E5f ;
 						
@@ -224,7 +225,7 @@ public class Graphe {
 			// On cherche le noeud le plus proche. O(n)
 			float minDist = Float.MAX_VALUE ;
 			int   noeud   = 0 ;
-	//TODO : correction !	
+
 			for (int num_Node = 0 ; num_Node < this.listNode.size() ; num_Node++) {
 				float londiff = (this.listNode.get(num_Node).getLongitude() - lon) ;
 				float latdiff = (this.listNode.get(num_Node).getLatitude() - lat) ;
