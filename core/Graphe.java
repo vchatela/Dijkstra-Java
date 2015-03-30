@@ -94,6 +94,7 @@ public class Graphe {
 				Node_tempo.setLongitude(((float) dis.readInt ()) / 1E6f); ;
 				Node_tempo.setLatitude(((float) dis.readInt ()) / 1E6f);
 				Node_tempo.setNumberSuccesseur(dis.readUnsignedByte());
+				this.listNode.add(Node_tempo);
 			}
 		
 			Utils.checkByte(255, dis) ;
