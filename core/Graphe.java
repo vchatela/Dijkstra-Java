@@ -275,6 +275,7 @@ public class Graphe {
 	    for (int i = 0 ; i < nb_noeuds ; i++) {
 			current_zone = dis.readUnsignedByte() ;
 			current_Node = Utils.read24bits(dis) ;
+	// TODO ajouter le noeud actuel du graphe ayant pour numero current_node au chemin 
 			System.out.println(" --> " + current_zone + ":" + current_Node) ;
 	    }
 
