@@ -14,7 +14,7 @@ public class Chemin {
 	private int version;
 	private int id;
 	private int nb_nodes;
-	private int num_noeud_origine;
+	private int num_noeud_origin;
 	private int num_noeud_dest;
 	private ArrayList<Node> listNode; 
 	
@@ -29,10 +29,106 @@ public class Chemin {
 	 * @param node_end fin du chemin
 	 */
 	
-	public Chemin(){
-		
+	public Chemin(int magic_number, int version, int id, int nb_nodes, int node_start, int node_end){
+		this.magic_number = magic_number;
+		this.version = version;
+		this.id = id;
+		this.nb_nodes = nb_nodes;
+		this.num_noeud_origin = node_start;
+		this.num_noeud_dest = node_end;
+		this.listNode=new ArrayList <Node>();
 	}
-
+	
+	/**
+	 * Cree un chemin allant d'un sommet origine a un sommet destination.
+	 * Utile pour l'algorithme de Dijikstra
+	 * @param node_start noeud origine
+	 * @param node_end noeud destination
+	 */
+	public Chemin(int node_start, int node_end){
+		this.num_noeud_origin=node_start;
+		this.num_noeud_dest=node_end;
+		this.listNode=new ArrayList <Node>();
+	}
+	
+	/**
+	 * Ajouter un sommet au chemin
+	 * @param node sommet a ajouter
+	 */
+	public void addNode(Node node){
+		this.listNode.add(node);
+	}
+	
+	/**
+	 * Entre 2 sommets du graphe il peut y avoir plusieurs aretes ayant des poids differents.
+	 * Cette fonction permet de choisir l'arete ayant le plus faible cout en distance.
+	 * @param noeud_dep sommet 1
+	 * @param noeud_arr sommet 2
+	 * @return un arc ayant le plus faible cout en distance
+	 */
+	
+	public Arc renvoi_arc_distance(Node noeud_dep, Node noeud_arr){
+		Arc arc=new Arc();
+		int num_dest=noeud_arr.getNum(); // on récupère le numéro du noeud de dest
+		int long_arete=0;
+		int nb_passage=0;
+		//pour chaque voisin du noeud noeud_dep
+		for(Arc A:noeud_dep.getArrayListArc()){
+			//On examine les arêtes correspondant joignant les 2 noeuds
+			//et on ne retient que celle qui a la plus petite largeur
+			if(A.getNum_dest()==num_dest){
+				nb_passage++;
+				if(nb_passage==1){
+					long_arete= A.getLg_arete();
+				};
+				if(long_arete>=A.getLg_arete()){
+					long_arete=A.getLg_arete();
+					arc=A;
+				}
+			}
+		}
+		if (arc.getNum_dest() != num_dest){  // si on ne l'a pas trouvé
+			System.out.println("Erreur chemin");
+			return null;
+		}
+		else return arc;
+}
+	
+	/**
+	 * Entre 2 sommets du graphe il peut y avoir plusieurs aretes ayant des poids differents.
+	 * Cette fonction permet de choisir l'arete ayant le plus faible cout en temps.
+	 * @param noeud_dep sommet 1
+	 * @param noeud_arr sommet 2
+	 * @return un arc ayant le plus faible cout en temps
+	 */
+	
+	public Arc renvoi_arc_temps(Node noeud_dep, Node noeud_arr){
+		Arc arc=new Arc();
+		int num_dest=noeud_arr.getNum(); // on récupère le numéro du noeud de dest
+		float temps_arete=0;
+		int nb_passage=0;
+		//pour chaque voisin du noeud noeud_dep
+		for(Arc A:noeud_dep.getArrayListArc()){
+			//On examine les arêtes correspondant joignant les 2 noeuds
+			//et on ne retient que celle qui a la plus petite largeur
+			if(A.getNum_dest()==num_dest){
+				nb_passage++;
+				if(nb_passage==1){
+					temps_arete=((float) A.getLg_arete()) / ((float) A.getDescripteur().getVitMax());
+				};
+				if(temps_arete>=((float) A.getLg_arete()) / ((float) A.getDescripteur().getVitMax())){
+					temps_arete=((float) A.getLg_arete()) / ((float) A.getDescripteur().getVitMax());
+					arc=A;
+				}
+			}
+		}
+		if (arc.getNum_dest() != num_dest){  // si on ne l'a pas trouvé
+			System.out.println("Erreur chemin");
+			return null;
+		}
+		else return arc;
+}
+	
 	public int getMagic_number() {
 		return magic_number;
 	}
@@ -65,12 +161,12 @@ public class Chemin {
 		this.num_noeud_dest = num_noeud_dest;
 	}
 
-	public int getNum_noeud_origine() {
-		return num_noeud_origine;
+	public int getNum_noeud_origin() {
+		return num_noeud_origin;
 	}
 
-	public void setNum_noeud_origine(int num_noeud_origine) {
-		this.num_noeud_origine = num_noeud_origine;
+	public void setNum_noeud_origin(int num_noeud_origin) {
+		this.num_noeud_origin = num_noeud_origin;
 	}
 
 	public int getNb_nodes() {

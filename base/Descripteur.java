@@ -39,7 +39,11 @@ public class Descripteur {
 
     // Vitesse max en hm/h
     private int vitMax ;
-
+    
+    public int getVitMax(){
+    	return vitMax;
+    }
+    
     private String nom ;
 
     public boolean isSensUnique() { return sensUnique ; }
