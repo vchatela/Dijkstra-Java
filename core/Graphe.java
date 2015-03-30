@@ -96,7 +96,7 @@ public class Graphe {
 				// initialisation avec les bonnes valeurs
 				Node_tempo.setLongitude(((float) dis.readInt ()) / 1E6f); ;
 				Node_tempo.setLatitude(((float) dis.readInt ()) / 1E6f);
-				Node_tempo.setNumberSuccesseur(dis.readUnsignedByte());
+				Node_tempo.setNumberArc(dis.readUnsignedByte());
 				this.listNode.add(Node_tempo);
 			}
 		
@@ -121,7 +121,7 @@ public class Graphe {
 			for (int num_Node = 0 ; num_Node < nb_Nodes ; num_Node++) {
 				Node_tempo = this.listNode.get(num_Node);
 				// Lecture de tous les successeurs du noeud num_Node
-				for (int num_succ = 0; num_succ < Node_tempo.getNumberSuccesseur(); num_succ++) {
+				for (int num_succ = 0; num_succ < Node_tempo.getNumberArc(); num_succ++) {
 					// on doit aller ajouté l'arc succ dans Node.listArcSuccesseur
 					
 					// zone du successeur
