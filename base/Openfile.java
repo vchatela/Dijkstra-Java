@@ -24,8 +24,11 @@ public class Openfile {
 	// Celui-ci pour les chemins
 	"/home/commetud/3eme Annee MIC/Graphes-et-Algorithmes/",
 
-        // On cherche aussi dans le sous-repertoire local "Maps" (s'il existe)
-	"Maps", 
+    // On cherche aussi dans le sous-repertoire local "Maps" (s'il existe)
+"Maps", 
+
+// On cherche aussi dans le sous-repertoire local "Maps" (s'il existe)
+"Chemins", 
 
 	// et dans le repertoire courant (Unix uniquement)
 	".",

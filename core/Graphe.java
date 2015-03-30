@@ -113,11 +113,10 @@ public class Graphe {
 		// on vérifie que la lecture des descripteurs est bonne (cf format .map)
 			Utils.checkByte(254, dis);
 			
-			// Lecture des successeurs
+			// Pour le noeud num_node,  des successeurs
 			for (int num_Node = 0 ; num_Node < nb_Nodes ; num_Node++) {
-				//Récupération du noeud n° num_node
 				
-				System.out.println("******Débug nombre arc pour le noeud "+num_Node+" : "+this.listNode.get(num_Node).getNumberArc());
+				//System.out.println("******Débug nombre arc pour le noeud "+num_Node+" : "+this.listNode.get(num_Node).getNumberArc());
 				//Initialisation de tous ces arcs (successeurs)
 				for (int num_succ = 0; num_succ < this.listNode.get(num_Node).getNumberArc(); num_succ++) {
 					
