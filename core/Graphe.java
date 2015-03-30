@@ -223,7 +223,7 @@ public class Graphe {
 			// On cherche le noeud le plus proche. O(n)
 			float minDist = Float.MAX_VALUE ;
 			int   noeud   = 0 ;
-	//TODO : correction !	
+
 			for (int num_Node = 0 ; num_Node < this.listNode.size() ; num_Node++) {
 				float londiff = (this.listNode.get(num_Node).getLongitude() - lon) ;
 				float latdiff = (this.listNode.get(num_Node).getLatitude() - lat) ;
