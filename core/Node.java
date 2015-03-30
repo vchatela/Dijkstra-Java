@@ -3,10 +3,22 @@ package core;
 import java.util.ArrayList;
 
 public class Node {
-	private float longitude;
-	private float latitude;
-	private ArrayList<Arc> listArc;
-	private int numberArc;
+
+	/*
+	 * Declaration des variables
+	*/
+	
+	private float longitude;		//Longitude du noeud
+	private float latitude;			//Latidute du noeud
+	private ArrayList<Arc> listArc;	//Liste des arcs du noeuds -> ses successeurs
+	private int numberArc;			//Nombre d'arcs du noeuds
+	
+	
+	
+	/*
+	 * Constructeurs
+	*/
+	
 	public Node(){
 		this.longitude = 0;
 		this.latitude = 0;
@@ -21,24 +33,32 @@ public class Node {
 		this.numberArc = 0;
 	}
 	
-	public void setLongitude(float f){
-		this.longitude = f;
+	
+
+	/*
+	 * Méthodes
+	*/
+	
+	//Returne la liste des arcs successeurs du noeud
+	public ArrayList<Arc> getArrayListArc(){
+		return this.listArc;
 	}
 	
-	public void setLatitude(float f){
-		this.latitude = f;
+	//GETTEURS ET SETTEURS GENERES :
+	public void setLongitude(float longitude){
+		this.longitude = longitude;
 	}
 	
 	public float getLongitude(){
 		return this.longitude;
 	}
 	
-	public float getLatitude(){
-		return this.latitude;
+	public void setLatitude(float latitude){
+		this.latitude = latitude;
 	}
 	
-	public ArrayList<Arc> getArrayListArc(){
-		return this.listArc;
+	public float getLatitude(){
+		return this.latitude;
 	}
 	
 	public void setNumberArc(int numberArc){

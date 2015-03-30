@@ -10,52 +10,70 @@ public class Arc {
 	 * Declaration des variables
 	*/
 	
-	private int num_zone;
-	private int num_dest;
-	private int num_descripteur;
-	private int lg_arete;
-	private int nb_segments;
-	private Node node_source;
-	private Descripteur descripteur;
-	private ArrayList<Segment> listSegment;
+	private int num_zone; 			//Numéro de la zone
+	private int num_dest; 			//Numéro du destinataire
+	private int num_descripteur; 	//Numéro du descripteur
+	private int lg_arete;			//Longueur de l'arête
+	private int nb_segments;		//Nombre de segments représentant l'arc (affichage)
+	private Node node_source;		//Noeud source de l'arc
+	private Descripteur descripteur;		//Descripteur de l'arc
+	private ArrayList<Segment> listSegment;	//Liste des segments représentant l'arc (affichage)
+	
+	
 	
 	/*
 	 * Constructeurs
 	*/
+	
 	public Arc(){
+		this.num_zone = 0;
+		this.num_dest = 0;
+		this.num_descripteur = 0;
+		this.lg_arete = 0;
+		this.nb_segments = 0;
+		this.node_source = null;
+		this.descripteur = null;
 		this.setListSegment(new ArrayList<Segment>());
 	}
 	
-	public Arc(int nb_zone, int num_dest, int num_descripteur,
-			int lg_arete, int nb_segments, Descripteur descripteur, Node node_source){
+	public Arc(int nb_zone, int num_dest, int num_descripteur, int lg_arete, int nb_segments, Descripteur descripteur, Node node_source){
 		this.num_zone = nb_zone;
 		this.num_dest = num_dest;
 		this.num_descripteur = num_descripteur;
 		this.lg_arete = lg_arete;
 		this.nb_segments = nb_segments;
+		this.node_source = node_source;
 		this.descripteur = descripteur;
 		this.setListSegment(new ArrayList<Segment>());
-		this.node_source = node_source;
 	}
+	
+	
+	
 	/*
 	 * Méthodes
 	*/
+	
+	//Ajouter le descripteur de l'arc
+	public void addDescripteur(Descripteur descripteur) {
+		this.descripteur = descripteur;
+	}
+	
+	//Affichage : Ajouter un segment pour la représentation de l'arc -> un arc peut contenir plusieurs segments
 	public void addSegment(Segment segment) {
 		this.listSegment.add(segment);
 	}
 	
-	public void addDescripteur(Descripteur descripteur) {
-		this.descripteur = descripteur;
-	}
-
+	//Récupérer tous les segments caractérisant un arc
 	public ArrayList<Segment> getListSegment() {
 		return listSegment;
 	}
-
+	
+	//Initialisation de la liste des segments de l'arc
 	public void setListSegment(ArrayList<Segment> listSegment) {
 		this.listSegment = listSegment;
 	}
 
+	//GETTEURS ET SETTEURS GENERES :
 	public Descripteur getDescripteur() {
 		return descripteur;
 	}
