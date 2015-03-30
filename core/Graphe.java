@@ -120,29 +120,26 @@ public class Graphe {
 			
 			// Lecture des successeurs
 			for (int num_Node = 0 ; num_Node < nb_Nodes ; num_Node++) {
+				//Récupération du noeud n° num_node
 				Node_tempo = this.listNode.get(num_Node);
-				// Lecture de tous les successeurs du noeud num_Node
+				
+				//Initialisation de tous ces arcs (successeurs)
 				for (int num_succ = 0; num_succ < Node_tempo.getNumberArc(); num_succ++) {
 					
-					// zone du successeur
-					int succ_zone = dis.readUnsignedByte() ;
+					// Lecture de tous les successeurs du noeud num_Node
+					int succ_zone = dis.readUnsignedByte() ; 	// zone du successeur
+					int dest_Node = Utils.read24bits(dis) ; 	// numero de noeud du successeur
+					int descr_num = Utils.read24bits(dis) ; 	// descripteur de l'arete
+					int longueur  = dis.readUnsignedShort() ; 	// longueur de l'arete en metres
+					int nb_segm   = dis.readUnsignedShort() ; 	// Nombre de segments constituant l'arete
 
-					// numero de noeud du successeur
-					int dest_Node = Utils.read24bits(dis) ;
-
-					// descripteur de l'arete
-					int descr_num = Utils.read24bits(dis) ;
-
-					// longueur de l'arete en metres
-					int longueur  = dis.readUnsignedShort() ;
-
-					// Nombre de segments constituant l'arete
-					int nb_segm   = dis.readUnsignedShort() ;
-
+					// Création d'un arc initialisé avec toutes les lectures précédentes et ajout dans la liste des arcs du noeud num_node
 					Arc arc= new Arc(succ_zone, dest_Node, descr_num, longueur, nb_segm, descripteurs[descr_num],this.listNode.get(num_Node));
 					this.listNode.get(num_Node).getArrayListArc().add(arc);
 					
+					//Incrémentation du nombre de noeuds
 					edges++;
+					
 					//si le sens n'est pas unique on doit ajouter une arête dans l'autre sens (noeud destinataire ->noeud actuel)
 	    			if(!descripteurs[descr_num].isSensUnique()&&(succ_zone==numzone)){
 	    				Arc arc_dest = new Arc(succ_zone, num_Node, descr_num, longueur, nb_segm, descripteurs[descr_num],this.listNode.get(dest_Node));
@@ -153,7 +150,7 @@ public class Graphe {
 					float current_long = this.listNode.get(num_Node).getLongitude();
 					float current_lat  = this.listNode.get(num_Node).getLatitude();
 
-					// Chaque segment est dessine'
+					// Chaque segment est dessiné
 					for (int i = 0 ; i < nb_segm ; i++){
 						float delta_lon = (dis.readShort()) / 2.0E5f ;
 						float delta_lat = (dis.readShort()) / 2.0E5f ;
