@@ -5,18 +5,16 @@ import java.util.ArrayList;
 public class Node {
 	private float longitude;
 	private float latitude;
-	private int number_Successeur;
-	private ArrayList<Successeur> listSuccesseur;
+	private ArrayList<Arc> listArc;
 	
 	public Node(){
-		this.listSuccesseur = new ArrayList<Arc>();
+		this.listArc = new ArrayList<Arc>();
 	}
 	
 	public Node(float longitude, float latitude){
 		this.longitude=longitude;
 		this.latitude=latitude;
-		this.number_Successeur = 0;
-		this.listSuccesseur = new ArrayList<Successeur>();
+		this.listArc = new ArrayList<Arc>();
 	}
 	
 	public void setLongitude(float f){
@@ -35,15 +33,7 @@ public class Node {
 		return this.latitude;
 	}
 	
-	public void setNumberSuccesseur(int i){
-		this.number_Successeur=i;
-	}
-	
-	public int getNumberSuccesseur(){
-		return this.number_Successeur;
-	}
-	
-	public ArrayList<Successeur> getArrayListSuccesseur(){
-		return this.listSuccesseur;
+	public ArrayList<Arc> getArrayListArc(){
+		return this.listArc;
 	}
 }
