@@ -9,6 +9,7 @@ import java.io.* ;
 import java.util.*;
 
 import base.Couleur;
+import base.Descripteur;
 import base.Dessin;
 import base.Utils;
 
@@ -38,8 +39,6 @@ public class Graphe {
      * Ces attributs constituent une structure ad-hoc pour stocker les informations du graphe.
      * Vous devez modifier et ameliorer ce choix de conception simpliste.
      */
-    private Descripteur[] descripteurs ;
-
     
     private ArrayList<Node> listNode;
     
@@ -82,36 +81,34 @@ public class Graphe {
 			int nb_descripteurs = dis.readInt () ;
 			int nb_Nodes = dis.readInt () ;
 
-			// Nombre de successeurs enregistés dans le fichier.
-			//int[] nsuccesseurs_a_lire = new int[nb_Nodes];
-		
-			// En fonction de vos choix de conception, vous devrez certainement adapter la suite.
-			/*
-			this.longitudes = new float[nb_Nodes];
-			this.latitudes = new float[nb_Nodes];
-			this.descripteurs = new Descripteur[nb_descripteurs] ;
-*/
-			// pas d'initialisation de la taille car arraylist
+			// stocke la latitude et longitude d'un noeud
+			float latitude, longitude;
+			// nombre de successeurs d'un noeud
+			int nb_successeur;
 			
 			// Lecture des noeuds
 			Node Node_tempo = new Node();
 			for (int num_Node = 0 ; num_Node < nb_Nodes ; num_Node++) {
 				// initialisation avec les bonnes valeurs
-				Node_tempo.setLongitude(((float) dis.readInt ()) / 1E6f); ;
-				Node_tempo.setLatitude(((float) dis.readInt ()) / 1E6f);
-				Node_tempo.setNumberArc(dis.readUnsignedByte());
+				longitude = ((float) dis.readInt ()) / 1E6f;
+				Node_tempo.setLongitude(longitude);
+				latitude = ((float) dis.readInt ()) / 1E6f;
+				Node_tempo.setLatitude(latitude);
+				nb_successeur=dis.readUnsignedByte();
+				Node_tempo.setNumberArc(nb_successeur);
 				this.listNode.add(Node_tempo);
 			}
-		
+		// Vérification de la lecture des noeuds ! cf format fichier .map
 			Utils.checkByte(255, dis) ;
 		
+			// Les noeuds sont chargés, passons aux successeurs
+			
 			// Lecture des descripteurs
-			ArrayList<Arc> listArc = new ArrayList<Arc>();
+			Descripteur[] descripteurs = new Descripteur[nb_descripteurs] ;
 // TODO : récupéré Node dest
 			for (int num_descr = 0 ; num_descr < nb_descripteurs ; num_descr++) {
 				// Lecture du descripteur numero num_descr
-				listArc.get(num_descr).setDescripteur(new Descripteur(dis));
-				//descripteurs[num_descr] = new Descripteur(dis) ;
+				descripteurs[num_descr]= new Descripteur(dis);
 
 				// On affiche quelques descripteurs parmi tous.
 				if (0 == num_descr % (1 + nb_descripteurs / 400))
