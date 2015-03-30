@@ -42,6 +42,8 @@ public class Graphe {
     
     private ArrayList<Node> listNode;
     
+    private Chemin chemin; // afin de charger le fichier path du chemin
+    
     // Deux malheureux getters.
     public Dessin getDessin() {
     	return dessin ;
@@ -272,9 +274,11 @@ public class Graphe {
 
 	    // Tous les noeuds du chemin
 	    for (int i = 0 ; i < nb_noeuds ; i++) {
-			current_zone = dis.readUnsignedByte() ;
-			current_Node = Utils.read24bits(dis) ;
+			current_zone = dis.readUnsignedByte();
+			current_Node = Utils.read24bits(dis);
 	// TODO ajouter le noeud actuel du graphe ayant pour numero current_node au chemin 
+			this.chemin.addNode(this.listNode.get(current_Node));
+			
 			System.out.println(" --> " + current_zone + ":" + current_Node) ;
 	    }
 
