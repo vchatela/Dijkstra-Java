@@ -137,12 +137,14 @@ public class Chemin {
 	 */
 	public void tracerChemin(Dessin dessin){
 		float current_long,current_lat;
+		//Arc arc=new Arc();
     	System.out.println("Nbre noeud du chemin ="+this.getNb_nodes());
     	//Pour chaque noeud du chemin
     	for(int node=0;node<this.getListNode().size()-1;node++){
     		current_long = this.getListNode().get(node).getLongitude() ;
 			current_lat  = this.getListNode().get(node).getLatitude();
-			//Pour chaque successeur du noeud numero node
+			//Pour chaque arc du noeud numero node
+			//arc = renvoi_arc_temps(this.getListNode().get(node),this.getListNode().get(node+1));
 					//on règle la largeur des traits et la couleur de l'affichage
 					dessin.setWidth(4);
 					dessin.setColor(Color.green);
