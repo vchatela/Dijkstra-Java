@@ -5,8 +5,12 @@ package core;
  *   A vous de completer selon vos choix de conception.
  */
 
+import java.awt.Dimension;
 import java.io.* ;
 import java.util.*;
+
+import javax.swing.JFrame;
+import javax.swing.JProgressBar;
 
 import base.Couleur;
 import base.Descripteur;
@@ -63,6 +67,18 @@ public class Graphe {
 		this.dessin = dessin ;
 		Utils.calibrer(nomCarte, dessin) ;
 	
+		
+		//Petit outil pour vérifier le chargement des cartes qui sont parfois longues
+		JProgressBar pb=new JProgressBar();
+		pb.setStringPainted(true);
+		JFrame frame = new JFrame("Affichage...");
+		frame.setUndecorated(true);
+		frame.setPreferredSize(new Dimension(150,30));
+		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		frame.setContentPane(pb);
+		frame.pack();
+		frame.setVisible(true);
+		
 		// Lecture du fichier MAP. 
 		// Voir le fichier "FORMAT" pour le detail du format binaire.
 		try {
@@ -82,7 +98,11 @@ public class Graphe {
 			// Lecture du nombre de descripteurs, nombre de noeuds.
 			int nb_descripteurs = dis.readInt () ;
 			int nb_Nodes = dis.readInt () ;
-
+			
+			//reglage de la barre de progression
+		    pb.setMinimum(0);
+		    pb.setMaximum(nb_Nodes);
+		    
 			// stocke la latitude et longitude d'un noeud
 			float latitude, longitude;
 			// nombre de successeurs d'un noeud
@@ -118,6 +138,9 @@ public class Graphe {
 			// Pour le noeud num_node,  des successeurs
 			for (int num_Node = 0 ; num_Node < nb_Nodes ; num_Node++) {
 				
+				//Mise à jour de la barre de progression
+		    	pb.setValue(num_Node);
+		    	
 				//System.out.println("******Débug nombre arc pour le noeud "+num_Node+" : "+this.listNode.get(num_Node).getNumberArc());
 				//Initialisation de tous ces arcs (successeurs)
 				for (int num_succ = 0; num_succ < this.listNode.get(num_Node).getNumberArc(); num_succ++) {
@@ -168,7 +191,12 @@ public class Graphe {
 					}
 				}
 	    	}
-	    
+			
+			//Fin du chargement des données de notre graphe
+		    //On fait disparaître la barre de progression
+		    frame.setVisible(false);
+		    frame.dispose();
+		    
 	    	Utils.checkByte(253, dis) ;
 
 	    	System.out.println("Fichier lu : " + nb_Nodes + " Nodes, " + edges + " aretes, " 
@@ -289,7 +317,7 @@ public class Graphe {
 			current_Node = Utils.read24bits(dis);
 	// TODO ajouter le noeud actuel du graphe ayant pour numero current_node au chemin 
 			chemin1.addNode(this.listNode.get(current_Node));
-			this.chemin=chemin1;
+			this.setChemin(chemin1);
 			System.out.println(" --> " + current_zone + ":" + current_Node) ;
 	    }
 
@@ -306,6 +334,12 @@ public class Graphe {
     }
 	public String getNomCarte() {
 		return nomCarte;
+	}
+	public Chemin getChemin() {
+		return chemin;
+	}
+	public void setChemin(Chemin chemin) {
+		this.chemin = chemin;
 	}
 
 }
