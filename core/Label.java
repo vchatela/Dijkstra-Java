@@ -8,7 +8,19 @@ public class Label {
 	
 	public Label() {
 	}
-
+	
+	public Label(Node node) {
+		this.num_node = node.getNum();
+		this.marque = false;//marquage à faux
+		this.cout =Float.POSITIVE_INFINITY;// infini
+		this.pere = -1;//pas de pere
+	}
+	
+	public String toString(){
+		return "Sommet N° "+this.num_node+" Cout: "+this.cout;
+		
+	}
+	
 	public int getNum_node() {
 		return num_node;
 	}
