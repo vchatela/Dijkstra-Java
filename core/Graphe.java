@@ -250,8 +250,18 @@ public class Graphe {
 	    Utils.checkVersion(magic, magic_number_path, version, version_path, nom_chemin, ".path") ;
 
 	    // Lecture de l'identifiant de carte
+	    /**
+	     * 1)0x100 INSA
+	     * 2)0x300 Réunion
+	     * 3)0x400 midip
+	     * 4)0x800 carte fractale
+	     * 5)0x801 carte spirale
+	     * 6)0X801 carte spirale
+	     * 7)0x851 carre dense
+	     */
 	    int path_carte = dis.readInt () ;
-
+	    System.out.println("ID chemin= "+path_carte);
+	    
 	    if (path_carte != this.idcarte) {
 			System.out.println("Le chemin du fichier " + nom_chemin + " n'appartient pas a la carte actuellement chargee." ) ;
 			System.exit(1) ;
@@ -271,14 +281,15 @@ public class Graphe {
 
 	    int current_zone = 0 ;
 	    int current_Node = 0 ;
-
+	    Chemin chemin1 = new Chemin(magic, version, path_carte,nb_noeuds, first_Node, last_Node);
+	    
 	    // Tous les noeuds du chemin
 	    for (int i = 0 ; i < nb_noeuds ; i++) {
 			current_zone = dis.readUnsignedByte();
 			current_Node = Utils.read24bits(dis);
 	// TODO ajouter le noeud actuel du graphe ayant pour numero current_node au chemin 
-			this.chemin.addNode(this.listNode.get(current_Node));
-			
+			chemin1.addNode(this.listNode.get(current_Node));
+			this.chemin=chemin1;
 			System.out.println(" --> " + current_zone + ":" + current_Node) ;
 	    }
 
