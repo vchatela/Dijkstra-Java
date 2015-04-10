@@ -23,27 +23,38 @@ public class BinaryHeap<E extends Comparable<E>> {
     // We have to use an ArrayList
     private ArrayList<E> array; // The heap array
 
+    // Integer et pas int !
+    // On veut donner a la table de hashage l'élément et elle nous retourne l'index de l'élément (dans le tableau)
+    private HashMap<E,Integer> map; 
+    
     /**
      * Construct the binary heap.
      */
     public BinaryHeap() {
         this.currentSize = 0;
         this.array = new ArrayList<E>() ;
+        this.map= new HashMap<E,Integer>();
     }
 
     // Constructor used for debug.
     private BinaryHeap(BinaryHeap<E> heap) {
-	this.currentSize = heap.currentSize ;
-	this.array = new ArrayList<E>(heap.array) ;
+    	this.currentSize = heap.currentSize ;
+    	this.array = new ArrayList<E>(heap.array) ;
+    	this.map= new HashMap<E,Integer>();
+    	for(int i=0;i<this.currentSize;i++){
+    		this.map.put(this.array.get(i),i);
+    	}
     }
 
     // Sets an element in the array
     private void arraySet(int index, E value) {
 	if (index == this.array.size()) {
 	    this.array.add(value) ;
+	    this.map.put( value,index);
 	}
 	else {
 	    this.array.set(index, value) ;
+	    this.map.put(value, index);
 	}
     }
 
@@ -98,7 +109,6 @@ public class BinaryHeap<E extends Comparable<E>> {
 
         this.arraySet(index, x) ;
     }
-
     /**
      * Internal method to percolate down in the heap.
      * @param index the index at which the percolate begins.
@@ -193,7 +203,12 @@ public class BinaryHeap<E extends Comparable<E>> {
 	System.out.println() ;
 	}
 
-
+    public void update(E newElem){
+    	int index;
+    	index = map.get(newElem);  // on lui donne l'élément, la table de hashage nous retourne son index
+    	this.percolateUp(index);
+    	this.percolateDown(index);
+    }
     
     // Test program : compare with the reference implementation PriorityQueue.
     public static void main(String [] args) {
@@ -247,4 +262,12 @@ public class BinaryHeap<E extends Comparable<E>> {
 	    }
 	}
     }
+
+	public HashMap<E,Integer> getMap() {
+		return map;
+	}
+
+	public void setMap(HashMap<E,Integer> map) {
+		this.map = map;
+	}
 }

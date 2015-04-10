@@ -27,7 +27,7 @@ public class Pcc extends Algo {
 	//Afficher ou non le déroulement de l'algo
 	protected int choixAffichage;
 	//fait correspondre un noeud à un label
-	protected HashMap< Node,E> mapLab;
+	protected HashMap< Node,Label> mapLab;
 	//durée d'exécution
 	protected long duree;
 	//Nombre maximum d'elemnt dans le tas

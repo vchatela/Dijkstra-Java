@@ -1,13 +1,10 @@
 package core;
 
-public class Label {
+public class Label implements Comparable<Label>{
 	private int num_node; //numéro du noeud actuel
 	private boolean marque;
 	private double cout;
 	private int pere;//numéro du noeud père
-	
-	public Label() {
-	}
 	
 	public Label(Node node) {
 		this.num_node = node.getNum();
@@ -52,4 +49,30 @@ public class Label {
 	public void setPere(int pere) {
 		this.pere = pere;
 	}
+
+
+	@Override
+	// comparaison des Label par rapport à leurs coûts respectifs
+	public int compareTo(Label o) {
+		if (this.cout < o.cout)
+			return -1;
+		else {
+			if (this.cout == o.cout)
+				return 0;
+				else return 1;
+		}
+	}
+	
+	public int hashCode() {
+	    return num_node;
+	}
+	public boolean equals(Object o) {
+	    if (o instanceof Label) {
+	    	Label other = (Label) o;
+	      return (this.cout == other.cout && this.marque == other.marque && this.num_node == other.num_node && this.pere == other.pere);
+	    }
+	    return false;
+	}
+	
+	
 }
