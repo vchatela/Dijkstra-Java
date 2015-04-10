@@ -1,6 +1,9 @@
 package core ;
 
 import java.io.* ;
+import java.util.ArrayList;
+import java.util.HashMap;
+
 import base.Readarg ;
 
 public class Pcc extends Algo {
@@ -12,6 +15,29 @@ public class Pcc extends Algo {
     protected int zoneDestination ;
     protected int destination ;
 
+    
+  //liste de tous les labels
+    protected ArrayList <Label> lab;
+    //Le tas
+	protected  BinaryHeap <Label> tas;
+	//label destinataire
+	protected E dest ;
+	//en temps (choix=1),  en distance (choix=0)
+	protected int choix;
+	//Afficher ou non le déroulement de l'algo
+	protected int choixAffichage;
+	//fait correspondre un noeud à un label
+	protected HashMap< Node,E> mapLab;
+	//durée d'exécution
+	protected long duree;
+	//Nombre maximum d'elemnt dans le tas
+	protected int maxTas;
+	//Nombre d'element explorés
+	protected int nb_elements_tas;
+	//contient le résultat à enregister dans un fichier
+	protected String sortieAlgo; 
+	
+	
     public Pcc(Graphe gr, PrintStream sortie, Readarg readarg) {
 		super(gr, sortie, readarg) ;
 

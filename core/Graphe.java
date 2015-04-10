@@ -82,7 +82,7 @@ public class Graphe {
 		// Lecture du fichier MAP. 
 		// Voir le fichier "FORMAT" pour le detail du format binaire.
 		try {
-
+			
 			// Nombre d'aretes
 			int edges = 0 ;
 
