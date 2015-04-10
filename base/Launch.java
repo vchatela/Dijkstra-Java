@@ -128,3 +128,5 @@ public class Launch {
     }
 
 }
+
+//TODO affichage menu sur sortie graphique (avec menu deroulant des cartes, chemins) et affichage temps, longueurs... 

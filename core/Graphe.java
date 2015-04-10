@@ -279,13 +279,14 @@ public class Graphe {
 
 	    // Lecture de l'identifiant de carte
 	    /**
-	     * 1)0x100 INSA
-	     * 2)0x300 Réunion
-	     * 3)0x400 midip
-	     * 4)0x800 carte fractale
-	     * 5)0x801 carte spirale
-	     * 6)0X801 carte spirale
-	     * 7)0x851 carre dense
+	     * 1)0x100 INSA -> chemin_0x100_2_139
+	     * 				-> chemin_0x110_268_418
+	     * 2)0x300 Réunion	-> chemin_0x300_0_500
+	     * 3)0x400 midip	-> chemin_0x400_119963_96676
+	     * 4)0x800 carte fractale	-> chemin_0x800_0_999999
+	     * 5)0x801 carte spirale	-> chemin_0x801_0_999998
+	     * 6)0X801 carte spirale	-> chemin_0x801_0_999999
+	     * 7)0x851 carre dense		-> chemin_0x851_53328_161696
 	     */
 	    int path_carte = dis.readInt () ;
 	    System.out.println("ID chemin= "+path_carte);
