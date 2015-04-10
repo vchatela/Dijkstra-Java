@@ -16,12 +16,12 @@ public class Pcc extends Algo {
     protected int destination ;
 
     
-  //liste de tous les labels
+    //liste de tous les labels
     protected ArrayList <Label> lab;
     //Le tas
 	protected  BinaryHeap <Label> tas;
 	//label destinataire
-	protected E dest ;
+	protected Label dest ;
 	//en temps (choix=1),  en distance (choix=0)
 	protected int choix;
 	//Afficher ou non le déroulement de l'algo
@@ -53,7 +53,17 @@ public class Pcc extends Algo {
 
 		System.out.println("Run PCC de " + zoneOrigine + ":" + origine + " vers " + zoneDestination + ":" + destination) ;
 
-		// A vous d'implementer la recherche de plus court chemin.
+		/*Algorithme (à améliorer)
+		 * On part du noeud d'origine
+		 * On parcourt tous ses successeurs
+		 * Si ils sont pas marqué alors on met a jour leur valeur du cout : valeur du cout du noeud + cout de l'arc
+		 * Si ils sont déjà marqué, alors testé si cette valeur est inférieure à la valeur qu'a déjà ce noeud
+		 * 			si < alors update sinon rien
+		 * 
+		 * 
+		 * A réfléchir : est il possible qu'un noeud déjà traité soit modifié et qu'il faille modifier les cout
+		 * de tous les noeuds qui utilise sur leur chemin ce noeud ?
+		 */
     }
 
 }

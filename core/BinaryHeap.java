@@ -25,6 +25,8 @@ public class BinaryHeap<E extends Comparable<E>> {
 
     // Integer et pas int !
     // On veut donner a la table de hashage l'élément et elle nous retourne l'index de l'élément (dans le tableau)
+    // question de rapidité : non linéaire comme l'aurait été une recherche et du coup perte de l'intérêt
+    // du tas
     private HashMap<E,Integer> map; 
     
     /**
@@ -207,7 +209,8 @@ public class BinaryHeap<E extends Comparable<E>> {
     	int index;
     	index = map.get(newElem);  // on lui donne l'élément, la table de hashage nous retourne son index
     	this.percolateUp(index);
-    	this.percolateDown(index);
+    	//this.percolateDown(index); dans le cas de dikjstra pas utile car on va
+    	// seulement réduire les couts et donc augmenter la priorité
     }
     
     // Test program : compare with the reference implementation PriorityQueue.
