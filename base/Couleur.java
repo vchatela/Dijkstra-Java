@@ -1,4 +1,4 @@
-package base ;
+package base;
 
 /**
  *   Choix des couleurs pour l'affichage.

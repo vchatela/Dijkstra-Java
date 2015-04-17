@@ -4,6 +4,8 @@ import java.io.* ;
 import java.util.ArrayList;
 import java.util.HashMap;
 
+import javax.swing.JOptionPane;
+
 import base.Readarg ;
 
 public class Pcc extends Algo {
@@ -51,11 +53,11 @@ public class Pcc extends Algo {
 		this.zoneOrigine = gr.getZone () ;
 		this.destination = readarg.lireInt ("Numero du sommet destination ? ");
 	// Si le numéro des noeuds n'est pas dans le graphe on doit arréter l'algo
-	if((origine<=0)||(origine>graphe.getNode().size())){
+	if((origine<=0)||(origine>graphe.getArrayList().size())){
 	    System.out.println(" Le numero de sommet saisi n'appartient pas au graphe");
 	    System.exit(-1);
 	}
-	if((destination<=0)||(destination>graphe.getNode().size())){
+	if((destination<=0)||(destination>graphe.getArrayList().size())){
 	    System.out.println(" Le numero de sommet saisi n'appartient pas au graphe");
 	    System.exit(-1);
 	}
@@ -73,7 +75,7 @@ public class Pcc extends Algo {
 		this.lab = new ArrayList<Label>();
 		this.tas = new BinaryHeap<Label>();
 		// Nombre max des éléments et ceux explorés
-		this.maxTas = tas.getCurrentSize();
+		this.maxTas = tas.size();
 		nb_elements_tas=1;
 		double new_cout = 0;
 		// afin de mesurer le temps d'éxécution on mettra une durée
@@ -104,21 +106,21 @@ public class Pcc extends Algo {
 		    min = this.tas.deleteMin();
 		    min.setMarque(true);
 		    // pour chaque successeurs / arc
-		    for(Arc arc:this.graphe.getNode().get(min).getNum_node().getArcs()){
-			node_suc = this.graphe.getNode().get(arc.getNum_dest());
+		    for(Arc arc:this.graphe.getArrayList().get(min.getNum_node()).getArrayListArc()){
+			node_suc = this.graphe.getArrayList().get(arc.getNum_dest());
 			// Label correspondant au noeud destinataire
 			label_succ=mapLabel.get(node_suc);
 			// si le noeud n'est pas marqué
 			if (!(label_succ.isMarque())){
 			    // on met alors le cout a jour
-			    new_cout= (choix==0)?succ.getLg_arete()+ min.getCout():60.0f*((float)succ.getLg_arete())/(1000.0f*(float)succ.getDescripteur().getVitMax())+ min.getCout();
+			    new_cout= (choix==0)?arc.getLg_arete()+ min.getCout():60.0f*((float)arc.getLg_arete())/(1000.0f*(float)arc.getDescripteur().getVitMax())+ min.getCout();
 			    // on vérifie alors que ce cout est bien inférieur au précédent
-			    if(new_cout<lab_succ.getCout()){
-						lab_succ.setCout(new_cout);
-						lab_succ.setPere(min.getNum_node());
+			    if(new_cout<label_succ.getCout()){
+						label_succ.setCout(new_cout);
+						label_succ.setPere(min.getNum_node());
 			    }
 			    // maintenant si le sommet n'est pas dans le tas il faut l'ajouter
-			    if (!(this.tas.getMap().get(lab_succ)!=null)){
+			    if (!(this.tas.getMap().get(label_succ)!=null)){
 				// on insère le sommet dans le tas 
 				this.tas.insert(label_succ);
 				nb_elements_tas++;
@@ -136,8 +138,8 @@ public class Pcc extends Algo {
 			}
 		    }
 		// on met a jours la valeur max du tas
-		if (maxTas<tas.getCurrentSize();
-		    maxTas=tas.getCurrentSize();
+		if (maxTas<tas.size()){
+		    maxTas=tas.size();
 		}
     }
     // pour terminer on affichera le temps de calcul
@@ -162,13 +164,13 @@ public class Pcc extends Algo {
 public void chemin(){
   // on construit le chemin du dest->origine
   Chemin chemin=new Chemin(origine, destination);
-  chemin.addNode(this.graphe.getNode().get(destination));
+  chemin.addNode(this.graphe.getArrayList().get(destination));
   Label label_en_cours = dest;
   Node node;
   // On remonte avec l'aide du pere !
   // Tant qu'on n'atteint pas le sommet d'origine qui a pour père -1 
   while (label_en_cours.getPere()!=-1){
-      node = this.graphe.getNode().get(label_en_cours.getPere());
+      node = this.graphe.getArrayList().get(label_en_cours.getPere());
       chemin.addNode(node);
       label_en_cours = mapLabel.get(node);
   }
@@ -178,4 +180,5 @@ public void chemin(){
   // cout et affichage du chemin
   chemin.cout_chemin_distance(); // je crois que c'est ca ...)
   chemin.tracerChemin(this.graphe.getDessin()); // ca doit exister aussi ...
+}
 }
