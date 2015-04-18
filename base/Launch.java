@@ -50,12 +50,22 @@ public class Launch {
 	    System.out.println ("** Programme de test des algorithmes de graphe.");
 	    System.out.println ("**") ;
 	    System.out.println () ;
-
+	    JOptionPane.showMessageDialog(null,"Bienvenue" +
+	    	    "\nVersion 1.0\nde Mangel - Chatelard");
+	    	    
 	    // On obtient ici le nom de la carte a utiliser.
-	    String nomcarte = this.readarg.lireString ("Nom du fichier .map a utiliser ? ") ;
-	    DataInputStream mapdata = Openfile.open (nomcarte) ;
-
-	    boolean display = (1 == this.readarg.lireInt ("Voulez-vous une sortie graphique (0 = non, 1 = oui) ? ")) ;	    
+	    String cartes[]={"insa","insa.0","insa.1","insa.2","midip","midip.0","midip.1",
+	    		"france","pfrance.0","pfrance.1","pfrance.2","pfrance.3","pfrance.4","pfrance.5","fractal",
+	    		"reunion","carre-dense","carre","fractal-spiral"};
+	    String nomcarte=(String) JOptionPane.showInputDialog(null, "Nom du fichier .map à utiliser?", "Choix de la carte", 
+	    		JOptionPane.QUESTION_MESSAGE, null, cartes, cartes[0]);
+	    if(nomcarte==null){
+	    	nomcarte = this.readarg.lireString("Nom du fichier .map a utiliser ? ");
+	    }
+	    DataInputStream mapdata = Openfile.open (nomcarte);
+	    boolean display = (0 ==JOptionPane.showConfirmDialog(null,"Voulez-vous une sortie graphique "
+	    		,"Type Affichage",JOptionPane.YES_NO_OPTION)) ;
+	    		
 	    Dessin dessin = (display) ? new DessinVisible(800,600) : new DessinInvisible() ;
 
 	    Graphe graphe = new Graphe(nomcarte, mapdata, dessin) ;
@@ -85,15 +95,24 @@ public class Launch {
 		case 4 : graphe.situerClick() ; break ;
 
 		case 5 :
-		    String nom_chemin = this.readarg.lireString ("Nom du fichier .path contenant le chemin ? ") ;
+		    //String nom_chemin = this.readarg.lireString ("Nom du fichier .path contenant le chemin ? ") ;
+		    String chemins[]={"chemin_insa","chemin_midip","chemin_fractal","chemin_reunion","chemin_carre-dense","chemin_spiral",
+					"chemin_spiral2"};
+		    String nom_chemin=(String) JOptionPane.showInputDialog(null, "Nom du chemin .path à utiliser?", "Choix de la carte", 
+		    		JOptionPane.QUESTION_MESSAGE, null, chemins, chemins[0]);
+		    if(nom_chemin==null){
+		    	nom_chemin = this.readarg.lireString ("Nom du fichier .path contenant le chemin ? ") ;
+		    }
+		    
 		    graphe.verifierChemin(Openfile.open (nom_chemin), nom_chemin) ;
-		    graphe.getChemin().tracerChemin(dessin);
+		    graphe.getChemin().tracerChemin(graphe.getdessin());
 		    graphe.getChemin().cout_chemin_distance();
 		    graphe.getChemin().cout_chemin_temps();
 		    break ;
 
 		default:
-		    System.out.println ("Choix de menu incorrect : " + choix) ;
+		    System.out.println ("Choix de menu incorrect : " + choix);
+		    JOptionPane.showMessageDialog(null, "Choix de menu incorrect", "Choix menu", JOptionPane.ERROR_MESSAGE);
 		    System.exit(1) ;
 		}
 		
