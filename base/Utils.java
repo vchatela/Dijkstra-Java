@@ -30,7 +30,7 @@ public class Utils {
 	    dessin.setBB (1.462, 1.473, 43.567, 43.5744) ;
 	}
 	else if (nomCarte.startsWith("paris")) {
-	    // Ile de la Cité, Paris
+	    // Ile de la Cite, Paris
 	    dessin.setBB (2.329, 2.372, 48.839, 48.867) ;
 	}
 	else if (nomCarte.startsWith("mayot")) {
@@ -38,7 +38,7 @@ public class Utils {
 	    dessin.setBB (44.5, 45.5, -13.25, -12.25) ;
 	}
 	else if (nomCarte.startsWith("reuni")) {
-	    // La Réunion
+	    // La Reunion
 	    dessin.setBB (55.0, 56.0, -21.5, -20.5) ;
 	}
 	else if (nomCarte.startsWith("midip")) {

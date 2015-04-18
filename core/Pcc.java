@@ -3,7 +3,7 @@ package core ;
 import java.io.* ;
 import java.util.ArrayList;
 import java.util.HashMap;
-
+import java.awt.Color;
 import javax.swing.JOptionPane;
 
 import base.Readarg ;
@@ -27,30 +27,30 @@ public class Pcc extends Algo {
 	//en temps (choix=1),  en distance (choix=0)
 	protected int choix;
 	
-	//Afficher ou non le déroulement de l'algo
+	//Afficher ou non le deroulement de l'algo
 	//protected int choixAffichage;
 	
-	//fait correspondre un noeud à un label
+	//fait correspondre un noeud a un label
 	protected HashMap<Node,Label> mapLabel;
-	//durée d'exécution
+	//duree d'execution
 	protected long duree;
 	//Nombre maximum d'elemnt dans le tas
 	protected int maxTas;
-	//Nombre d'element explorés
+	//Nombre d'element explores
 	protected int nb_elements_tas;
-	//contient le résultat à enregister dans un fichier
+	//contient le resultat a enregister dans un fichier
 	protected String sortieAlgo; 
 	
 	
     public Pcc(Graphe gr, PrintStream sortie, Readarg readarg) {
 		super(gr, sortie, readarg) ;
-		// On veut stocker le résultat dans le fichier de sortie de la forme
+		// On veut stocker le resultat dans le fichier de sortie de la forme
 		/*Carte: france
 				Dijsktra de 12 -> 11111 en temps
 				cout: 59659.546845 mn
 				Temps de Calcul: 261 ms
-				Nombre maximum d'éléments dans le tas: 25235
-				Nombre d'éléments explorés: 54653
+				Nombre maximum d'elements dans le tas: 25235
+				Nombre d'elements explores: 54653
 		*/
 		mapLabel = new HashMap<Node,Label>();
 		// a voir si on demande la zone ou le sommet directement
@@ -60,7 +60,7 @@ public class Pcc extends Algo {
 		// Demander la zone et le sommet destination.
 		this.zoneOrigine = gr.getZone () ;
 		this.destination = readarg.lireInt ("Numero du sommet destination ? ");
-	// Si le numéro des noeuds n'est pas dans le graphe on doit arréter l'algo
+	// Si le numero des noeuds n'est pas dans le graphe on doit arreter l'algo
 	if((origine<=0)||(origine>graphe.getArrayList().size())){
 	    System.out.println(" Le numero de sommet saisi n'appartient pas au graphe");
 	    System.exit(-1);
@@ -70,11 +70,12 @@ public class Pcc extends Algo {
 	    System.exit(-1);
 	}
 	
-	// Enfin on demande le type choisi : temps ou distance  - TODO : A améliorer
+	// Enfin on demande le type choisi : temps ou distance  - TODO : A ameliorer
 	this.choix = Integer.parseInt(JOptionPane.showInputDialog("Plus court en:\n0 : Distance\n1 : Temps"));
-	sortieAlgo="Carte: "+graphe.nomCarte+"\n"+"Dijkstra version standard de " +origine+ " -> "+destination+" en "+str;
+	String chaine=(choix==0)?"distance":"temps";
+	sortieAlgo="Carte: "+graphe.getNomCarte()+"\n"+"Dijkstra de " +origine+ " -> "+destination+" en "+chaine;
 	//L'affichage du deroulement de l'algo est faite en vert
-	this.graphe.getDessin().setColor(Color.vert);
+	this.graphe.getDessin().setColor(Color.magenta);
 		
 	// a voir si on fait le choix de l'affichage avec choixAffichage
 	//choixAffichage=JOptionPane.showConfirmDialog(null, "Voulez vous afficher le deroulement de l'algo","Choix de l'affichage", JOptionPane.YES_NO_OPTION);
@@ -86,31 +87,31 @@ public class Pcc extends Algo {
 // Initialisation de nos champs
 		this.lab = new ArrayList<Label>();
 		this.tas = new BinaryHeap<Label>();
-		// Nombre max des éléments et ceux explorés
+		// Nombre max des elements et ceux explores
 		this.maxTas = tas.size();
 		nb_elements_tas=1;
 		double new_cout = 0;
-		// afin de mesurer le temps d'éxécution on mettra une durée
+		// afin de mesurer le temps d'execution on mettra une duree
 		this.duree = System.currentTimeMillis();
 		
 		// A verifier s'il faut Initialiser l'algo ou pas
 		
 		
-		/*Algorithme (à améliorer)
+		/*Algorithme (a ameliorer)
 		 * On part du noeud d'origine
 		 * On parcourt tous ses successeurs
-		 * Si ils sont pas marqué alors on met a jour leur valeur du cout : valeur du cout du noeud + cout de l'arc
-		 * Si ils sont déjà marqué, alors testé si cette valeur est inférieure à la valeur qu'a déjà ce noeud
+		 * Si ils sont pas marque alors on met a jour leur valeur du cout : valeur du cout du noeud + cout de l'arc
+		 * Si ils sont deja marque, alors teste si cette valeur est inferieure a la valeur qu'a deja ce noeud
 		 * 			si < alors update sinon rien
 		 * 
 		 * 
-		 * A réfléchir : est il possible qu'un noeud déjà traité soit modifié et qu'il faille modifier les cout
+		 * A reflechir : est il possible qu'un noeud deja traite soit modifie et qu'il faille modifier les cout
 		 * de tous les noeuds qui utilise sur leur chemin ce noeud ?
 		 */
 		 
 		/* Boucle principale
-		  TODO : condition très moche : comment faire mieux ?
-		  TODO : nom des fonctions a vérifier .... de mémoire sans éclipse
+		  TODO : condition tres moche : comment faire mieux ?
+		  TODO : nom des fonctions a verifier .... de memoire sans eclipse
 		*/
 		Label min , label_succ;
 		Node node_suc;
@@ -122,18 +123,18 @@ public class Pcc extends Algo {
 			node_suc = this.graphe.getArrayList().get(arc.getNum_dest());
 			// Label correspondant au noeud destinataire
 			label_succ=mapLabel.get(node_suc);
-			// si le noeud n'est pas marqué
+			// si le noeud n'est pas marque
 			if (!(label_succ.isMarque())){
 			    // on met alors le cout a jour
 			    new_cout= (choix==0)?arc.getLg_arete()+ min.getCout():60.0f*((float)arc.getLg_arete())/(1000.0f*(float)arc.getDescripteur().getVitMax())+ min.getCout();
-			    // on vérifie alors que ce cout est bien inférieur au précédent
+			    // on verifie alors que ce cout est bien inferieur au precedent
 			    if(new_cout<label_succ.getCout()){
 						label_succ.setCout(new_cout);
 						label_succ.setPere(min.getNum_node());
 			    }
 			    // maintenant si le sommet n'est pas dans le tas il faut l'ajouter
 			    if (!(this.tas.getMap().get(label_succ)!=null)){
-				// on insère le sommet dans le tas 
+				// on insere le sommet dans le tas 
 				this.tas.insert(label_succ);
 				nb_elements_tas++;
 				// On peut afficher le sommet sur la carte 
@@ -158,13 +159,13 @@ public class Pcc extends Algo {
     
     duree = (System.currentTimeMillis() - duree);
     System.out.println("Duree= "+duree+" ms");
-    //Afficher le résultat du calcul - ou rediriger sur fichier ?
+    //Afficher le resultat du calcul - ou rediriger sur fichier ?
     // Fonction de retour a faire ? Avec JOptionPane ?
     /* comme ca ?
     if(choix==0){
-    		JOptionPane.showMessageDialog(null, "Le coût est de "+ dest.getCout()/1000+ "km\n"+
+    		JOptionPane.showMessageDialog(null, "Le cout est de "+ dest.getCout()/1000+ "km\n"+
     				"Temps de Calcul: "+duree+ " ms\n"+
-    				"Nb max d'element: "+maxTas+"\nNb élements explorés: "+nb_elements_tas);
+    				"Nb max d'element: "+maxTas+"\nNb elements explores: "+nb_elements_tas);
     }
     else ...
     */
@@ -180,13 +181,13 @@ public void chemin(){
   Label label_en_cours = dest;
   Node node;
   // On remonte avec l'aide du pere !
-  // Tant qu'on n'atteint pas le sommet d'origine qui a pour père -1 
+  // Tant qu'on n'atteint pas le sommet d'origine qui a pour pere -1 
   while (label_en_cours.getPere()!=-1){
       node = this.graphe.getArrayList().get(label_en_cours.getPere());
       chemin.addNode(node);
       label_en_cours = mapLabel.get(node);
   }
-  // Il faut inverser l'ordre des éléments dans le chemin !
+  // Il faut inverser l'ordre des elements dans le chemin !
   // comment faire un reverse ? Collections ?
   
   // cout et affichage du chemin

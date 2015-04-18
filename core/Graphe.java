@@ -11,6 +11,7 @@ import java.util.*;
 
 import javax.swing.JFrame;
 import javax.swing.JProgressBar;
+import javax.swing.JOptionPane;
 
 import base.Couleur;
 import base.Descripteur;
@@ -21,7 +22,7 @@ public class Graphe {
 
     // Nom de la carte utilisee pour construire ce graphe
     private final String nomCarte ;
-
+    
     // Fenetre graphique
     private final Dessin dessin ;
 
@@ -68,7 +69,7 @@ public class Graphe {
 		Utils.calibrer(nomCarte, dessin) ;
 	
 		
-		//Petit outil pour vérifier le chargement des cartes qui sont parfois longues
+		//Petit outil pour verifier le chargement des cartes qui sont parfois longues
 		JProgressBar pb=new JProgressBar();
 		pb.setStringPainted(true);
 		JFrame frame = new JFrame("Affichage en cours");
@@ -117,10 +118,10 @@ public class Graphe {
 				this.listNode.add(new Node(num_Node, longitude, latitude, nb_successeur));
 			}
 			
-		// Vérification de la lecture des noeuds ! cf format fichier .map
+		// Verification de la lecture des noeuds ! cf format fichier .map
 			Utils.checkByte(255, dis) ;
 		
-			// Les noeuds sont chargés, passons aux successeurs
+			// Les noeuds sont charges, passons aux successeurs
 			
 			// Lecture des descripteurs
 			Descripteur[] descripteurs = new Descripteur[nb_descripteurs] ;
@@ -132,16 +133,16 @@ public class Graphe {
 				//if (0 == num_descr % (1 + nb_descripteurs / 400))
 				//	System.out.println("Descripteur " + num_descr + " = " + this.listNode.get(num_descr)) ;
 			}
-		// on vérifie que la lecture des descripteurs est bonne (cf format .map)
+		// on verifie que la lecture des descripteurs est bonne (cf format .map)
 			Utils.checkByte(254, dis);
 			
 			// Pour le noeud num_node,  des successeurs
 			for (int num_Node = 0 ; num_Node < nb_Nodes ; num_Node++) {
 				
-				//Mise à jour de la barre de progression
+				//Mise a jour de la barre de progression
 		    	pb.setValue(num_Node);
 		    	
-				//System.out.println("******Débug nombre arc pour le noeud "+num_Node+" : "+this.listNode.get(num_Node).getNumberArc());
+				//System.out.println("******Debug nombre arc pour le noeud "+num_Node+" : "+this.listNode.get(num_Node).getNumberArc());
 				//Initialisation de tous ces arcs (successeurs)
 				for (int num_succ = 0; num_succ < this.listNode.get(num_Node).getNumberArc(); num_succ++) {
 					
@@ -152,14 +153,14 @@ public class Graphe {
 					int longueur  = dis.readUnsignedShort() ; 	// longueur de l'arete en metres
 					int nb_segm   = dis.readUnsignedShort() ; 	// Nombre de segments constituant l'arete
 
-					// Création d'un arc initialisé avec toutes les lectures précédentes et ajout dans la liste des arcs du noeud num_node
+					// Creation d'un arc initialise avec toutes les lectures precedentes et ajout dans la liste des arcs du noeud num_node
 					Arc arc = new Arc(succ_zone, dest_Node, descr_num, longueur, nb_segm, descripteurs[descr_num], this.listNode.get(num_Node));
 					this.listNode.get(num_Node).getArrayListArc().add(arc);
 					
-					//Incrémentation du nombre d'arrêtes
+					//Incrementation du nombre d'arretes
 					edges++;
 					
-					//si le sens n'est pas unique on doit ajouter une arête dans l'autre sens (noeud destinataire ->noeud actuel)
+					//si le sens n'est pas unique on doit ajouter une arete dans l'autre sens (noeud destinataire ->noeud actuel)
 	    			if(!descripteurs[descr_num].isSensUnique()&&(succ_zone==numzone)){
 	    				Arc arc_dest = new Arc(succ_zone, num_Node, descr_num, longueur, nb_segm, descripteurs[descr_num],this.listNode.get(dest_Node));
 	    				this.listNode.get(dest_Node).getArrayListArc().add(arc_dest);
@@ -169,7 +170,7 @@ public class Graphe {
 					float current_long = this.listNode.get(num_Node).getLongitude();
 					float current_lat  = this.listNode.get(num_Node).getLatitude();
 
-					// Chaque segment est dessiné
+					// Chaque segment est dessine
 					for (int i = 0 ; i < nb_segm ; i++){
 						float delta_lon = (dis.readShort()) / 2.0E5f ;
 						float delta_lat = (dis.readShort()) / 2.0E5f ;
@@ -192,8 +193,8 @@ public class Graphe {
 				}
 	    	}
 			
-			//Fin du chargement des données de notre graphe
-		    //On fait disparaître la barre de progression
+			//Fin du chargement des donnees de notre graphe
+		    //On fait disparaitre la barre de progression
 		    frame.setVisible(false);
 		    frame.dispose();
 		    
@@ -202,7 +203,7 @@ public class Graphe {
 	    	System.out.println("Fichier lu : " + nb_Nodes + " Nodes, " + edges + " aretes, " 
 			       + nb_descripteurs + " descripteurs.") ;
 		//Affichage graphique 
-		JOptionPane.showMessageDialog(null, "Fichier lu : " + nb_nodes + " sommets\n" + edges + " aretes\n" 
+		JOptionPane.showMessageDialog(null, "Fichier lu : " + nb_Nodes + " sommets\n" + edges + " aretes\n" 
 	       + nb_descripteurs + " descripteurs");
 
 		} catch (IOException e) {
@@ -216,13 +217,13 @@ public class Graphe {
     private static final double rayon_terre = 6378137.0 ;
 
     /**
-     *  Calcule de la distance orthodromique - plus court chemin entre deux points à la surface d'une sphère
+     *  Calcule de la distance orthodromique - plus court chemin entre deux points a la surface d'une sphere
      *  @param long1 longitude du premier point.
      *  @param lat1 latitude du premier point.
      *  @param long2 longitude du second point.
      *  @param lat2 latitude du second point.
      *  @return la distance entre les deux points en metres.
-     *  Methode Ã©crite par Thomas Thiebaud, mai 2013
+     *  Methode ecrite par Thomas Thiebaud, mai 2013
      */
     public static double distance(double long1, double lat1, double long2, double lat2) {
         double sinLat = Math.sin(Math.toRadians(lat1))*Math.sin(Math.toRadians(lat2));
@@ -285,7 +286,7 @@ public class Graphe {
 	    /**
 	     * 1)0x100 INSA -> chemin_0x100_2_139
 	     * 				-> chemin_0x110_268_418
-	     * 2)0x300 Réunion	-> chemin_0x300_0_500
+	     * 2)0x300 Reunion	-> chemin_0x300_0_500
 	     * 3)0x400 midip	-> chemin_0x400_119963_96676
 	     * 4)0x800 carte fractale	-> chemin_0x800_0_999999
 	     * 5)0x801 carte spirale	-> chemin_0x801_0_999998

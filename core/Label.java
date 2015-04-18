@@ -1,20 +1,20 @@
 package core;
 
 public class Label implements Comparable<Label>{
-	private int num_node; //numéro du noeud actuel
+	private int num_node; //numero du noeud actuel
 	private boolean marque;
 	private double cout;
-	private int pere;//numéro du noeud père
+	private int pere;//numero du noeud pere
 	
 	public Label(Node node) {
 		this.num_node = node.getNum();
-		this.marque = false;//marquage à faux
+		this.marque = false;//marquage a faux
 		this.cout =Float.POSITIVE_INFINITY;// infini
 		this.pere = -1;//pas de pere
 	}
 	
 	public String toString(){
-		return "Sommet N° "+this.num_node+" Cout: "+this.cout;
+		return "Sommet N"+this.num_node+" Cout: "+this.cout;
 		
 	}
 	
@@ -52,7 +52,7 @@ public class Label implements Comparable<Label>{
 
 
 	@Override
-	// comparaison des Label par rapport à leurs coûts respectifs
+	// comparaison des Label par rapport a leurs couts respectifs
 	public int compareTo(Label o) {
 		if (this.cout < o.cout)
 			return -1;

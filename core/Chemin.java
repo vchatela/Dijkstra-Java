@@ -72,12 +72,12 @@ public class Chemin {
 	
 	public Arc renvoi_arc_distance(Node noeud_dep, Node noeud_arr){
 		Arc arc=new Arc();
-		int num_dest=noeud_arr.getNum(); // on récupère le numéro du noeud de dest
+		int num_dest=noeud_arr.getNum(); // on recupere le numero du noeud de dest
 		int long_arete=0;
 		int nb_passage=0;
 		//pour chaque voisin du noeud noeud_dep
 		for(Arc A:noeud_dep.getArrayListArc()){
-			//On examine les arêtes correspondant joignant les 2 noeuds
+			//On examine les aretes correspondant joignant les 2 noeuds
 			//et on ne retient que celle qui a la plus petite largeur
 			if(A.getNum_dest()==num_dest){
 				nb_passage++;
@@ -90,7 +90,7 @@ public class Chemin {
 				}
 			}
 		}
-		if (arc.getNum_dest() != num_dest){  // si on ne l'a pas trouvé
+		if (arc.getNum_dest() != num_dest){  // si on ne l'a pas trouve
 			System.out.println("Erreur chemin");
 			return null;
 		}
@@ -107,12 +107,12 @@ public class Chemin {
 	
 	public Arc renvoi_arc_temps(Node noeud_dep, Node noeud_arr){
 		Arc arc=new Arc();
-		int num_dest=noeud_arr.getNum(); // on récupère le numéro du noeud de dest
+		int num_dest=noeud_arr.getNum(); // on recupere le numero du noeud de dest
 		float temps_arete=0;
 		int nb_passage=0;
 		//pour chaque voisin du noeud noeud_dep
 		for(Arc A:noeud_dep.getArrayListArc()){
-			//On examine les arêtes correspondant joignant les 2 noeuds
+			//On examine les aretes correspondant joignant les 2 noeuds
 			//et on ne retient que celle qui a la plus petite largeur
 			if(A.getNum_dest()==num_dest){
 				nb_passage++;
@@ -125,7 +125,7 @@ public class Chemin {
 				}
 			}
 		}
-		if (arc.getNum_dest() != num_dest){  // si on ne l'a pas trouvé
+		if (arc.getNum_dest() != num_dest){  // si on ne l'a pas trouve
 			System.out.println("Erreur chemin");
 			return null;
 		}
@@ -145,10 +145,10 @@ public class Chemin {
 			current_lat  = this.getListNode().get(node).getLatitude();
 			//Pour chaque arc du noeud numero node
 			//arc = renvoi_arc_temps(this.getListNode().get(node),this.getListNode().get(node+1));
-					//on règle la largeur des traits et la couleur de l'affichage
+					//on regle la largeur des traits et la couleur de l'affichage
 					dessin.setWidth(4);
 					dessin.setColor(Color.green);
-					//On joint les sommets deux à deux
+					//On joint les sommets deux a deux
 					dessin.drawLine(current_long, current_lat, this.getListNode().get(node+1).getLongitude(), this.getListNode().get(node+1).getLatitude()) ;		
     		}
 	}

@@ -41,7 +41,7 @@ public class Openfile {
     private static final String[] extensions = { ".map", ".gz", ".map.gz", ".path", ".path.gz", "" } ;
 
     /** 
-     * Ouvre le fichier indiqué et renvoie un DataInputStream sur ce fichier.
+     * Ouvre le fichier indique et renvoie un DataInputStream sur ce fichier.
      * Le fichier ne sera pas ferme avant la fin de l'application.
      * @param filename  Nom du fichier a ouvrir (sans chemin)
      */

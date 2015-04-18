@@ -10,14 +10,14 @@ public class Arc {
 	 * Declaration des variables
 	*/
 	
-	private int num_zone; 			//Numéro de la zone
-	private int num_dest; 			//Numéro du destinataire
-	private int num_descripteur; 	//Numéro du descripteur
-	private int lg_arete;			//Longueur de l'arête
-	private int nb_segments;		//Nombre de segments représentant l'arc (affichage)
+	private int num_zone; 			//Numero de la zone
+	private int num_dest; 			//Numero du destinataire
+	private int num_descripteur; 	//Numero du descripteur
+	private int lg_arete;			//Longueur de l'arete
+	private int nb_segments;		//Nombre de segments representant l'arc (affichage)
 	private Node node_source;		//Noeud source de l'arc
 	private Descripteur descripteur;		//Descripteur de l'arc
-	private ArrayList<Segment> listSegment;	//Liste des segments représentant l'arc (affichage)
+	private ArrayList<Segment> listSegment;	//Liste des segments representant l'arc (affichage)
 	
 	
 	
@@ -50,7 +50,7 @@ public class Arc {
 	
 	
 	/*
-	 * Méthodes
+	 * Methodes
 	*/
 	
 	//Ajouter le descripteur de l'arc
@@ -58,12 +58,12 @@ public class Arc {
 		this.descripteur = descripteur;
 	}
 	
-	//Affichage : Ajouter un segment pour la représentation de l'arc -> un arc peut contenir plusieurs segments
+	//Affichage : Ajouter un segment pour la representation de l'arc -> un arc peut contenir plusieurs segments
 	public void addSegment(Segment segment) {
 		this.listSegment.add(segment);
 	}
 	
-	//Récupérer tous les segments caractérisant un arc
+	//Recuperer tous les segments caracterisant un arc
 	public ArrayList<Segment> getListSegment() {
 		return listSegment;
 	}

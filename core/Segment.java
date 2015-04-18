@@ -23,7 +23,7 @@ public class Segment {
 	}
 	
 	/*
-	 * Méthodes
+	 * Methodes
 	*/
 	public float getDeltaLong() {
 		return this.delta_long;

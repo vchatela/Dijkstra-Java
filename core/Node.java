@@ -7,7 +7,7 @@ public class Node {
 	/*
 	 * Declaration des variables
 	*/
-	private int num;				//Numéro du noeud
+	private int num;				//Numero du noeud
 	private float longitude;		//Longitude du noeud
 	private float latitude;			//Latidute du noeud
 	private ArrayList<Arc> listArc;	//Liste des arcs du noeuds -> ses successeurs
@@ -38,7 +38,7 @@ public class Node {
 	
 
 	/*
-	 * Méthodes
+	 * Methodes
 	*/
 	
 	//Returne la liste des arcs successeurs du noeud

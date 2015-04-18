@@ -15,6 +15,7 @@ package base ;
 
 import core.* ;
 import java.io.* ;
+import javax.swing.JOptionPane;
 
 public class Launch {
 
@@ -57,7 +58,7 @@ public class Launch {
 	    String cartes[]={"insa","insa.0","insa.1","insa.2","midip","midip.0","midip.1",
 	    		"france","pfrance.0","pfrance.1","pfrance.2","pfrance.3","pfrance.4","pfrance.5","fractal",
 	    		"reunion","carre-dense","carre","fractal-spiral"};
-	    String nomcarte=(String) JOptionPane.showInputDialog(null, "Nom du fichier .map à utiliser?", "Choix de la carte", 
+	    String nomcarte=(String) JOptionPane.showInputDialog(null, "Nom du fichier .map a utiliser?", "Choix de la carte", 
 	    		JOptionPane.QUESTION_MESSAGE, null, cartes, cartes[0]);
 	    if(nomcarte==null){
 	    	nomcarte = this.readarg.lireString("Nom du fichier .map a utiliser ? ");
@@ -98,14 +99,14 @@ public class Launch {
 		    //String nom_chemin = this.readarg.lireString ("Nom du fichier .path contenant le chemin ? ") ;
 		    String chemins[]={"chemin_insa","chemin_midip","chemin_fractal","chemin_reunion","chemin_carre-dense","chemin_spiral",
 					"chemin_spiral2"};
-		    String nom_chemin=(String) JOptionPane.showInputDialog(null, "Nom du chemin .path à utiliser?", "Choix de la carte", 
+		    String nom_chemin=(String) JOptionPane.showInputDialog(null, "Nom du chemin .path a utiliser?", "Choix de la carte", 
 		    		JOptionPane.QUESTION_MESSAGE, null, chemins, chemins[0]);
 		    if(nom_chemin==null){
 		    	nom_chemin = this.readarg.lireString ("Nom du fichier .path contenant le chemin ? ") ;
 		    }
 		    
 		    graphe.verifierChemin(Openfile.open (nom_chemin), nom_chemin) ;
-		    graphe.getChemin().tracerChemin(graphe.getdessin());
+		    graphe.getChemin().tracerChemin(graphe.getDessin());
 		    graphe.getChemin().cout_chemin_distance();
 		    graphe.getChemin().cout_chemin_temps();
 		    break ;
@@ -119,7 +120,7 @@ public class Launch {
 		if (algo != null) { algo.run() ; }
 	    }
 	    
-	    System.out.println ("Programme terminé.") ;
+	    System.out.println ("Programme termine.") ;
 	    System.exit(0) ;
 	    
 	    
