@@ -44,6 +44,14 @@ public class Pcc extends Algo {
 	
     public Pcc(Graphe gr, PrintStream sortie, Readarg readarg) {
 		super(gr, sortie, readarg) ;
+		// On veut stocker le résultat dans le fichier de sortie de la forme
+		/*Carte: france
+				Dijsktra de 12 -> 11111 en temps
+				cout: 59659.546845 mn
+				Temps de Calcul: 261 ms
+				Nombre maximum d'éléments dans le tas: 25235
+				Nombre d'éléments explorés: 54653
+		*/
 		mapLabel = new HashMap<Node,Label>();
 		// a voir si on demande la zone ou le sommet directement
 		this.zoneOrigine = gr.getZone () ;
@@ -64,7 +72,11 @@ public class Pcc extends Algo {
 	
 	// Enfin on demande le type choisi : temps ou distance  - TODO : A améliorer
 	this.choix = Integer.parseInt(JOptionPane.showInputDialog("Plus court en:\n0 : Distance\n1 : Temps"));
-	// a voir si on fait le choxi de l'affichage avec choixAffichage
+	sortieAlgo="Carte: "+graphe.nomCarte+"\n"+"Dijkstra version standard de " +origine+ " -> "+destination+" en "+str;
+	//L'affichage du deroulement de l'algo est faite en vert
+	this.graphe.getDessin().setColor(Color.vert);
+		
+	// a voir si on fait le choix de l'affichage avec choixAffichage
 	//choixAffichage=JOptionPane.showConfirmDialog(null, "Voulez vous afficher le deroulement de l'algo","Choix de l'affichage", JOptionPane.YES_NO_OPTION);
 }
 

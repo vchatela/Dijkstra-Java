@@ -71,7 +71,7 @@ public class Graphe {
 		//Petit outil pour vérifier le chargement des cartes qui sont parfois longues
 		JProgressBar pb=new JProgressBar();
 		pb.setStringPainted(true);
-		JFrame frame = new JFrame("Affichage...");
+		JFrame frame = new JFrame("Affichage en cours");
 		frame.setUndecorated(true);
 		frame.setPreferredSize(new Dimension(150,30));
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -128,9 +128,9 @@ public class Graphe {
 				// Lecture du descripteur numero num_descr
 				descripteurs[num_descr]= new Descripteur(dis);
 
-				// On affiche quelques descripteurs parmi tous.
-				if (0 == num_descr % (1 + nb_descripteurs / 400))
-					System.out.println("Descripteur " + num_descr + " = " + this.listNode.get(num_descr)) ;
+				// On affiche quelques descripteurs parmi tous. - DEBUG
+				//if (0 == num_descr % (1 + nb_descripteurs / 400))
+				//	System.out.println("Descripteur " + num_descr + " = " + this.listNode.get(num_descr)) ;
 			}
 		// on vérifie que la lecture des descripteurs est bonne (cf format .map)
 			Utils.checkByte(254, dis);
@@ -201,6 +201,9 @@ public class Graphe {
 
 	    	System.out.println("Fichier lu : " + nb_Nodes + " Nodes, " + edges + " aretes, " 
 			       + nb_descripteurs + " descripteurs.") ;
+		//Affichage graphique 
+		JOptionPane.showMessageDialog(null, "Fichier lu : " + nb_nodes + " sommets\n" + edges + " aretes\n" 
+	       + nb_descripteurs + " descripteurs");
 
 		} catch (IOException e) {
 			e.printStackTrace() ;
@@ -261,6 +264,7 @@ public class Graphe {
 			System.out.println() ;
 			dessin.setColor(java.awt.Color.red) ;
 			dessin.drawPoint(this.listNode.get(noeud).getLongitude(), this.listNode.get(noeud).getLatitude(), 5) ;
+			JOptionPane.showMessageDialog(null,"Noeud le plus proche: "+noeud);
 		}
     }
 
