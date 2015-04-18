@@ -81,6 +81,28 @@ public class Pcc extends Algo {
 	//choixAffichage=JOptionPane.showConfirmDialog(null, "Voulez vous afficher le deroulement de l'algo","Choix de l'affichage", JOptionPane.YES_NO_OPTION);
 }
 
+	 /**
+	 * Initialisation de l'algo de Dijikstra
+	 */
+	public void initialisation(){
+			//Crée des labels correspondant aux noeuds et le stocke dans mapLab
+			for(Noeud node:this.graphe.getNoeuds()){
+				Label_Dijikstra l=new Label_Dijikstra(node);
+				mapLab.put(node,l);
+					if((node.getNumero()==origine)&&(graphe.getZone()==zoneOrigine)){
+						l.setCout(0);
+						//Initialisation du tas avec le label sommet origine 
+						tas.insert(l);
+					}
+					lab.add(l);
+					
+					//Noeud destinataire
+					if((node.getNumero()==destination)&&(graphe.getZone()==zoneDestination)){
+						dest= l;
+					}
+			}
+	}
+
     public void run() {
 
 		System.out.println("Run PCC de " + zoneOrigine + ":" + origine + " vers " + zoneDestination + ":" + destination) ;
@@ -94,8 +116,8 @@ public class Pcc extends Algo {
 		// afin de mesurer le temps d'execution on mettra une duree
 		this.duree = System.currentTimeMillis();
 		
-		// A verifier s'il faut Initialiser l'algo ou pas
-		
+		// Il faut Initialiser l'algo ou pas
+		initialisation();
 		
 		/*Algorithme (a ameliorer)
 		 * On part du noeud d'origine
@@ -170,7 +192,7 @@ public class Pcc extends Algo {
     else ...
     */
     // on pourra aussi tracer le chemin ! cf en dessous
-    //chemin();
+    chemin();
     
 }
 
