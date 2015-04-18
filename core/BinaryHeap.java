@@ -213,59 +213,6 @@ public class BinaryHeap<E extends Comparable<E>> {
     	// seulement réduire les couts et donc augmenter la priorité
     }
     
-    // Test program : compare with the reference implementation PriorityQueue.
-    public static void main(String [] args) {
-        BinaryHeap<Integer> heap = new BinaryHeap<Integer>() ;
-	PriorityQueue<Integer> queue = new PriorityQueue<Integer>() ;
-
-	int count = 0 ;
-	int blocksize = 10000 ;
-
-	System.out.println("Interrupt to stop the test.") ;
-	
-	while (true) {
-
-	    // Insert up to blocksize elements
-	    int nb_insert = (int)(Math.random() * (blocksize + 1)) ;
-	    
-	    for (int i = 0 ; i < nb_insert ; i++) {
-		Integer obj = new Integer(i) ;
-		heap.insert(obj) ;
-		queue.add(obj) ;
-	    }
-
-	    // Remove up to blocksize elements
-	    int nb_remove = (int)(Math.random() * blocksize * 1.1) ;
-	    
-	    if (nb_remove > queue.size()) {
-		nb_remove = queue.size() ;
-	    }
-
-	    for (int i = 0 ; i < nb_remove ; i++) {
-
-		int removed1 = queue.poll().intValue() ;
-		int removed2 = heap.deleteMin().intValue() ;
-		
-		if (removed1 != removed2) {
-		    System.out.println("Ouch : expected " + removed1 + "  .. but got " + removed2) ;
-		    System.exit(1) ;
-		}
-	    }
-
-	    if (heap.size() != queue.size()) {
-		    System.out.println("Ouch : heap size = " + heap.size() + "  queue size = " + queue.size() ) ;
-		    System.exit(1) ;
-		}
-
-	    count += nb_remove ;
-	    
-	    if (count > 1000000) {
-		System.out.println("" + count + " items successfully compared. Heap size : " + heap.size()) ;
-		count = 0 ;
-	    }
-	}
-    }
-
 	public HashMap<E,Integer> getMap() {
 		return map;
 	}

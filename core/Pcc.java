@@ -157,7 +157,7 @@ public class Pcc extends Algo {
     else ...
     */
     // on pourra aussi tracer le chemin ! cf en dessous
-    chemin();
+    //chemin();
     
 }
 
