@@ -85,11 +85,11 @@ public class Pcc extends Algo {
 	 * Initialisation de l'algo de Dijikstra
 	 */
 	public void initialisation(){
-			//Crée des labels correspondant aux noeuds et le stocke dans mapLab
-			for(Noeud node:this.graphe.getNoeuds()){
-				Label_Dijikstra l=new Label_Dijikstra(node);
-				mapLab.put(node,l);
-					if((node.getNumero()==origine)&&(graphe.getZone()==zoneOrigine)){
+			//Associe des labels correspondant aux noeuds et le stocke dans la map !
+			for(Node node:this.graphe.getArrayList()){
+				Label l=new Label(node);
+				mapLabel.put(node,l);
+					if((node.getNum()==origine)&&(graphe.getZone()==zoneOrigine)){
 						l.setCout(0);
 						//Initialisation du tas avec le label sommet origine 
 						tas.insert(l);
@@ -97,7 +97,7 @@ public class Pcc extends Algo {
 					lab.add(l);
 					
 					//Noeud destinataire
-					if((node.getNumero()==destination)&&(graphe.getZone()==zoneDestination)){
+					if((node.getNum()==destination)&&(graphe.getZone()==zoneDestination)){
 						dest= l;
 					}
 			}
