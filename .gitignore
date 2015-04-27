@@ -40,3 +40,5 @@ core/.metadata/.mylyn/.taskListIndex/segments_1
 core/.metadata/.plugins/org.eclipse.jdt.core/assumedExternalFilesCache
 core/.metadata/.plugins/org.eclipse.jdt.core/nonChainingJarsCache
 *.gz
+*.name
+Dijkstra-Java.iml
