@@ -56,11 +56,13 @@ public class Pcc_Generique<E extends Comparable<E>> extends Algo {
         mapLabel = new HashMap<Node, E>();
         // a voir si on demande la zone ou le sommet directement
         this.zoneOrigine = gr.getZone();
-        this.origine = readarg.lireInt("Numero du sommet d'origine ? ");
+        this.origine = Integer.parseInt(JOptionPane.showInputDialog(null, "Numero du sommet d'origine ?"));
+        // this.origine = readarg.lireInt("Numero du sommet d'origine ? ");
 
         // Demander la zone et le sommet destination.
         this.zoneOrigine = gr.getZone();
-        this.destination = readarg.lireInt("Numero du sommet destination ? ");
+        // this.destination = readarg.lireInt("Numero du sommet destination ? ");
+        this.destination = Integer.parseInt(JOptionPane.showInputDialog(null, "Numero du sommet de destination ?"));
         // Si le numero des noeuds n'est pas dans le graphe on doit arreter l'algo
         if ((origine <= 0) || (origine > graphe.getArrayList().size())) {
             System.out.println(" Le numero de sommet saisi n'appartient pas au graphe");

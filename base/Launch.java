@@ -13,7 +13,10 @@ package base;
  * ecrit le resultat dans le fichier '/tmp/sortie', puis quitte le programme.
  */
 
-import core.*;
+import core.Algo;
+import core.Graphe;
+import core.PccStar;
+import core.Pcc_Dijkstra;
 
 import javax.swing.*;
 import java.io.DataInputStream;
@@ -32,19 +35,17 @@ public class Launch {
         launch.go();
     }
 
-    public void afficherMenu() {
-        System.out.println();
-        System.out.println("MENU");
-        System.out.println();
-        System.out.println("0 - Quitter");
-        System.out.println("1 - Composantes Connexes");
-        System.out.println("2 - Plus court chemin standard");
-        System.out.println("3 - Plus court chemin A-star");
-        System.out.println("4 - Cliquer sur la carte pour obtenir un numero de sommet.");
-        System.out.println("5 - Charger un fichier de chemin (.path) et le verifier.");
-        System.out.println("6 - Reinitialiser la carte");
+    public int afficherMenu() {
+        int choix = -1;
+        String menu[] = {"Quitter", "Plus court chemin Standard", "Plus court chemin A-star",
+                "Cliquer sur la carte pour obtenir un numero de sommet ", "Charger un fichier de chemin"
+                , "Reinitialiser la carte"};
+        String selection = (String) JOptionPane.showInputDialog(null, "Que voulez-vous faire ?", "Votre choix", JOptionPane.QUESTION_MESSAGE, null, menu, menu[0]);
+        if (selection != null)
+            for (int i = 0; i < menu.length; i++)
+                if (selection.equals(menu[i])) choix = i;
 
-        System.out.println();
+        return choix;
     }
 
     public void go() {
@@ -64,7 +65,7 @@ public class Launch {
             String nomcarte = (String) JOptionPane.showInputDialog(null, "Nom du fichier .map a utiliser?", "Choix de la carte",
                     JOptionPane.QUESTION_MESSAGE, null, cartes, cartes[0]);
             if (nomcarte == null) {
-                nomcarte = this.readarg.lireString("Nom du fichier .map a utiliser ? ");
+                System.exit(1);
             }
             DataInputStream mapdata = Openfile.open(nomcarte);
             boolean display = (0 == JOptionPane.showConfirmDialog(null, "Voulez-vous une sortie graphique "
@@ -80,8 +81,8 @@ public class Launch {
             int choix;
 
             while (continuer) {
-                this.afficherMenu();
-                choix = this.readarg.lireInt("Votre choix ? ");
+                choix = this.afficherMenu();
+                //choix = this.readarg.lireInt("Votre choix ? ");
 
                 // Algorithme a executer
                 Algo algo = null;
@@ -89,33 +90,34 @@ public class Launch {
                 // Le choix correspond au numero du menu.
                 switch (choix) {
                     case 0:
+                        //quitter
                         continuer = false;
                         break;
 
-                    case 1:
+                    /*case 1:
                         algo = new Connexite(graphe, this.fichierSortie(), this.readarg);
-                        break;
+                        break;*/
 
-                    case 2:
+                    case 1:
                         algo = new Pcc_Dijkstra(graphe, this.fichierSortie(), this.readarg);
                         break;
 
-                    case 3:
+                    case 2:
                         algo = new PccStar(graphe, this.fichierSortie(), this.readarg);
                         break;
 
-                    case 4:
+                    case 3:
                         graphe.situerClick();
                         break;
 
-                    case 5:
+                    case 4:
                         //String nom_chemin = this.readarg.lireString ("Nom du fichier .path contenant le chemin ? ") ;
                         String chemins[] = {"chemin_insa", "chemin_insa1", "chemin_midip", "chemin_fractal", "chemin_reunion", "chemin_carre-dense", "chemin_spiral",
                                 "chemin_spiral2"};
                         String nom_chemin = (String) JOptionPane.showInputDialog(null, "Nom du chemin .path a utiliser?", "Choix de la carte",
                                 JOptionPane.QUESTION_MESSAGE, null, chemins, chemins[0]);
                         if (nom_chemin == null) {
-                            nom_chemin = this.readarg.lireString("Nom du fichier .path contenant le chemin ? ");
+                            System.exit(1);
                         }
 
                         graphe.verifierChemin(Openfile.open(nom_chemin), nom_chemin);
@@ -123,7 +125,7 @@ public class Launch {
                         graphe.getChemin().cout_chemin_distance();
                         graphe.getChemin().cout_chemin_temps();
                         break;
-                    case 6:
+                    case 5:
 /*
             for (Node noeud : graphe.getArrayList()){
 				Descripteur[] descripteurs = new Descripteur[graphe.nb_descripteurs] ;
@@ -163,8 +165,8 @@ public class Launch {
     public PrintStream fichierSortie() {
         PrintStream result = System.out;
 
-        String nom = this.readarg.lireString("Nom du fichier de sortie ? ");
-
+        //String nom = this.readarg.lireString("Nom du fichier de sortie ? ");
+        String nom = (String) JOptionPane.showInputDialog(null, "Nom du fichier de sortie ?");
         if ("".equals(nom)) {
             nom = "/dev/null";
         }
@@ -172,7 +174,8 @@ public class Launch {
         try {
             result = new PrintStream(nom);
         } catch (Exception e) {
-            System.err.println("Erreur a l'ouverture du fichier " + nom);
+            JOptionPane.showMessageDialog(null, "Erreur ? l'ouverture du fichier" + nom);
+            //System.err.println("Erreur a l'ouverture du fichier " + nom);
             System.exit(1);
         }
 
