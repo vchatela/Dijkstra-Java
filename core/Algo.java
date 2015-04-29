@@ -1,21 +1,22 @@
-package core ;
+package core;
 
-import java.io.* ;
-import base.* ;
+import base.Readarg;
+
+import java.io.PrintStream;
 
 /**
  * Classe abstraite representant un algorithme (connexite, plus court chemin, etc.)
  */
 public abstract class Algo {
 
-    protected PrintStream sortie ;
-    protected Graphe graphe ;
-    
+    protected PrintStream sortie;
+    protected Graphe graphe;
+
     protected Algo(Graphe gr, PrintStream fichierSortie, Readarg readarg) {
-		this.graphe = gr ;
-		this.sortie = fichierSortie ;	
+        this.graphe = gr;
+        this.sortie = fichierSortie;
     }
-    
-    public abstract void run() ;
+
+    public abstract void run();
 
 }

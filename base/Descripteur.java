@@ -1,10 +1,11 @@
-package base ;
+package base;
 
-import java.io.* ;
+import java.io.DataInputStream;
+import java.io.IOException;
 
 /**
- *   Classe representant un descripteur de chemin, i.e,
- *   le nom et le type de la voie, la vitesse max, etc.
+ * Classe representant un descripteur de chemin, i.e,
+ * le nom et le type de la voie, la vitesse max, etc.
  */
 public class Descripteur {
 
@@ -33,68 +34,88 @@ public class Descripteur {
     */
 
 
-    private char type ;
+    private char type;
 
-    private boolean sensUnique ;
+    private boolean sensUnique;
 
     // Vitesse max en hm/h
-    private int vitMax ;
-    
-    public int getVitMax(){
-    	return vitMax;
+    private int vitMax;
+    private String nom;
+
+    public Descripteur(DataInputStream dis) throws IOException {
+
+        this.type = (char) dis.readUnsignedByte();
+        int x = dis.readUnsignedByte();
+        this.sensUnique = (x & 0x80) > 0;
+        this.vitMax = (x & 0x7F) * 5;
+        this.nom = dis.readUTF();
     }
-    
-    private String nom ;
 
-    public boolean isSensUnique() { return sensUnique ; }
+    public int getVitMax() {
+        return vitMax;
+    }
 
-    /** @return Vitesse maximale sur cette voie, en km/h */
-    public int vitesseMax() { return vitMax ; }
+    public boolean isSensUnique() {
+        return sensUnique;
+    }
 
-    /** @return Le nom de la voie (e.g. Rue Casimir, Avenue du Ptit Kawa) */
-    public String getNom() { return nom ; }
+    /**
+     * @return Vitesse maximale sur cette voie, en km/h
+     */
+    public int vitesseMax() {
+        return vitMax;
+    }
 
-    public char getType() { return type ; }
+    /**
+     * @return Le nom de la voie (e.g. Rue Casimir, Avenue du Ptit Kawa)
+     */
+    public String getNom() {
+        return nom;
+    }
 
-    public Descripteur (DataInputStream dis) throws IOException {
-	
-	this.type = (char)dis.readUnsignedByte() ;
-	int x = dis.readUnsignedByte() ;
-	this.sensUnique = (x & 0x80) > 0 ;
-	this.vitMax = (x & 0x7F) * 5 ;
-	this.nom = dis.readUTF() ;
+    public char getType() {
+        return type;
     }
 
     public String toString() {
-	String oneway = "" ;
-	
-	if (this.sensUnique) { oneway = " (oneway) " ; }
-	return showType() + " : " + nom + " " + oneway + vitMax + " km/h max " ;
+        String oneway = "";
+
+        if (this.sensUnique) {
+            oneway = " (oneway) ";
+        }
+        return showType() + " : " + nom + " " + oneway + vitMax + " km/h max ";
     }
 
     public String showType() {
-	String result = "unknown" ;
-	switch (this.type) {
-	case 'a': result = "autoroute" ; break ;
-	case 'b':
-	case 'c':
-	case 'd':
-	case 'e':
-	case 'f':
-	case 'g':
-	case 'h':
-	case 'i':
-	case 'j':
-	case 'k':
-	case 'l':
-	case 'm':
-	case 'n':
-	case 'o': result = "route" ; break ;
-	case 'z': result = "cote" ; break ;
-	default : break ;
-	}
+        String result = "unknown";
+        switch (this.type) {
+            case 'a':
+                result = "autoroute";
+                break;
+            case 'b':
+            case 'c':
+            case 'd':
+            case 'e':
+            case 'f':
+            case 'g':
+            case 'h':
+            case 'i':
+            case 'j':
+            case 'k':
+            case 'l':
+            case 'm':
+            case 'n':
+            case 'o':
+                result = "route";
+                break;
+            case 'z':
+                result = "cote";
+                break;
+            default:
+                break;
+        }
 
-	return result ;
+        return result;
     }
 
 }
