@@ -74,7 +74,7 @@ public class Pcc extends Algo {
 	this.choix = Integer.parseInt(JOptionPane.showInputDialog("Plus court en:\n0 : Distance\n1 : Temps"));
 	String chaine=(choix==0)?"distance":"temps";
 	sortieAlgo="Carte: "+graphe.getNomCarte()+"\n"+"Dijkstra de " +origine+ " -> "+destination+" en "+chaine;
-	//L'affichage du deroulement de l'algo est faite en vert
+	//L'affichage du deroulement de l'algo est faite en magenta
 	this.graphe.getDessin().setColor(Color.magenta);
 		
 	// a voir si on fait le choix de l'affichage avec choixAffichage
@@ -112,11 +112,11 @@ public class Pcc extends Algo {
 		// Nombre max des elements et ceux explores
 		this.maxTas = tas.size();
 		nb_elements_tas=1;
-		double new_cout = 0;
+		double new_cout;
 		// afin de mesurer le temps d'execution on mettra une duree
 		this.duree = System.currentTimeMillis();
 		
-		// Il faut Initialiser l'algo ou pas
+		// Il faut Initialiser l'algo
 		initialisation();
 		
 		/*Algorithme (a ameliorer)
@@ -135,6 +135,7 @@ public class Pcc extends Algo {
 		  TODO : condition tres moche : comment faire mieux ?
 		  TODO : nom des fonctions a verifier .... de memoire sans eclipse
 		*/
+
 		Label min , label_succ;
 		Node node_suc;
 		while(!(this.tas.isEmpty() || dest.isMarque())){
@@ -168,7 +169,7 @@ public class Pcc extends Algo {
 			    }
 			    // sinon il ne faut pas oublier de mettre a jour le tas !
 			    else {
-				this.tas.update(label_succ);
+				    this.tas.update(label_succ);
 			    }
 			}
 		    }
@@ -192,7 +193,7 @@ public class Pcc extends Algo {
     else ...
     */
     // on pourra aussi tracer le chemin ! cf en dessous
-    chemin();
+    //chemin();
     
 }
 

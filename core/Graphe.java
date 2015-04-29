@@ -203,7 +203,7 @@ public class Graphe {
 	    	System.out.println("Fichier lu : " + nb_Nodes + " Nodes, " + edges + " aretes, " 
 			       + nb_descripteurs + " descripteurs.") ;
 		//Affichage graphique 
-		JOptionPane.showMessageDialog(null, "Fichier lu : " + nb_Nodes + " sommets\n" + edges + " aretes\n" 
+		JOptionPane.showMessageDialog(null, "Fichier lu : " + nb_Nodes + " sommets\n" + edges + " aretes\n"
 	       + nb_descripteurs + " descripteurs");
 
 		} catch (IOException e) {
