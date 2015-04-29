@@ -149,6 +149,7 @@ public class Pcc extends Algo {
 			// si le noeud n'est pas marque
 			if (!(label_succ.isMarque())){
 			    // on met alors le cout a jour
+                // TODO : verifier temps !
 			    new_cout= (choix==0)?arc.getLg_arete()+ min.getCout():60.0f*((float)arc.getLg_arete())/(1000.0f*(float)arc.getDescripteur().getVitMax())+ min.getCout();
 			    // on verifie alors que ce cout est bien inferieur au precedent
 			    if(new_cout<label_succ.getCout()){
@@ -220,6 +221,9 @@ public void chemin(){
   // cout et affichage du chemin
 //  chemin.cout_chemin_distance(); // je crois que c'est ca ...)
     Collections.reverse(chemin.getListNode());
-  chemin.tracerChemin(this.graphe.getDessin()); // ca doit exister aussi ...
+    //TODO : traiter la difference suivant le choix ?
+    chemin.cout_chemin_distance();
+    chemin.cout_chemin_temps();
+    chemin.tracerChemin(this.graphe.getDessin());
 }
 }
