@@ -32,7 +32,7 @@ public class Pcc_Generique<E extends Comparable<E>> extends Algo {
     protected int choixAffichage;
 
     //fait correspondre un noeud a un Label_Dijkstra
-    protected HashMap<Node, E> mapLabel_Dijkstra;
+    protected HashMap<Node, E> mapLabel;
     //duree d'execution
     protected long duree;
     //Nombre maximum d'elemnt dans le tas
@@ -53,7 +53,7 @@ public class Pcc_Generique<E extends Comparable<E>> extends Algo {
 				Nombre maximum d'elements dans le tas: 25235
 				Nombre d'elements explores: 54653
 		*/
-        mapLabel_Dijkstra = new HashMap<Node, E>();
+        mapLabel = new HashMap<Node, E>();
         // a voir si on demande la zone ou le sommet directement
         this.zoneOrigine = gr.getZone();
         this.origine = readarg.lireInt("Numero du sommet d'origine ? ");
@@ -75,7 +75,7 @@ public class Pcc_Generique<E extends Comparable<E>> extends Algo {
         this.choix = Integer.parseInt(JOptionPane.showInputDialog("Plus court en:\n0 : Distance\n1 : Temps"));
         String chaine = (choix == 0) ? "distance" : "temps";
         sortieAlgo = "Carte: " + graphe.getNomCarte() + "\n" + "Dijkstra de " + origine + " -> " + destination + " en " + chaine;
-        //L'affichage du deroulement de l'algo est faite en vert
+        //L'affichage du deroulement de l'algo est faite en magenta
         this.graphe.getDessin().setColor(Color.magenta);
 
         // a voir si on fait le choix de l'affichage avec choixAffichage
@@ -86,9 +86,11 @@ public class Pcc_Generique<E extends Comparable<E>> extends Algo {
      * Initialisation de l'algo de Dijikstra
      */
     public void initialisation() {
+        // impl?ment?es dans les sous classes
     }
 
     public void run() {
+
 
         System.out.println("Run PCC de " + zoneOrigine + ":" + origine + " vers " + zoneDestination + ":" + destination);
 // Initialisation de nos champs
@@ -129,7 +131,7 @@ public class Pcc_Generique<E extends Comparable<E>> extends Algo {
             for (Arc arc : this.graphe.getArrayList().get(((Label) min).getNum_node()).getArrayListArc()) {
                 node_suc = this.graphe.getArrayList().get(arc.getNum_dest());
                 // Label_Dijkstra correspondant au noeud destinataire
-                E_succ = mapLabel_Dijkstra.get(node_suc);
+                E_succ = mapLabel.get(node_suc);
                 // si le noeud n'est pas marque
                 if (!(((Label) E_succ).isMarque())) {
                     // on met alors le cout a jour
@@ -195,7 +197,7 @@ public class Pcc_Generique<E extends Comparable<E>> extends Algo {
         while (((Label) E_en_cours).getPere() != -1) {
             node = this.graphe.getArrayList().get(((Label) E_en_cours).getPere());
             chemin.addNode(node);
-            E_en_cours = mapLabel_Dijkstra.get(node);
+            E_en_cours = mapLabel.get(node);
         }
         // cout et affichage du chemin
 //  chemin.cout_chemin_distance(); // je crois que c'est ca ...)

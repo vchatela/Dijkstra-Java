@@ -20,7 +20,7 @@ public class Pcc_Dijkstra extends Pcc_Generique<Label_Dijkstra> {
         //Associe des Label_Dijkstras correspondant aux noeuds et le stocke dans la map !
         for (Node node : this.graphe.getArrayList()) {
             Label_Dijkstra l = new Label_Dijkstra(node);
-            mapLabel_Dijkstra.put(node, l);
+            mapLabel.put(node, l);
             if ((node.getNum() == origine) && (graphe.getZone() == zoneOrigine)) {
                 l.setCout(0);
                 //Initialisation du tas avec le Label_Dijkstra sommet origine

@@ -30,7 +30,7 @@ public class Graphe {
     private final String nomCarte;
     // Fenetre graphique
     private final Dessin dessin;
-    public int nb_descripteurs;
+
 
     /*
      * Ces attributs constituent une structure ad-hoc pour stocker les informations du graphe.
@@ -81,7 +81,6 @@ public class Graphe {
 
             // Lecture du nombre de descripteurs, nombre de noeuds.
             int nb_descripteurs = dis.readInt();
-            this.nb_descripteurs = nb_descripteurs;
 
             int nb_Nodes = dis.readInt();
 
