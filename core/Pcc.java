@@ -28,7 +28,7 @@ public class Pcc extends Algo {
 	protected int choix;
 	
 	//Afficher ou non le deroulement de l'algo
-	//protected int choixAffichage;
+	protected int choixAffichage;
 	
 	//fait correspondre un noeud a un label
 	protected HashMap<Node,Label> mapLabel;
@@ -78,7 +78,7 @@ public class Pcc extends Algo {
 	this.graphe.getDessin().setColor(Color.magenta);
 		
 	// a voir si on fait le choix de l'affichage avec choixAffichage
-	//choixAffichage=JOptionPane.showConfirmDialog(null, "Voulez vous afficher le deroulement de l'algo","Choix de l'affichage", JOptionPane.YES_NO_OPTION);
+	choixAffichage=JOptionPane.showConfirmDialog(null, "Voulez vous afficher le deroulement de l'algo","Choix de l'affichage", JOptionPane.YES_NO_OPTION);
 }
 
 	 /**
@@ -157,15 +157,14 @@ public class Pcc extends Algo {
 			    }
 			    // maintenant si le sommet n'est pas dans le tas il faut l'ajouter
 			    if (!(this.tas.getMap().get(label_succ)!=null)){
-				// on insere le sommet dans le tas 
-				this.tas.insert(label_succ);
-				nb_elements_tas++;
-				// On peut afficher le sommet sur la carte 
-				/*if(choixAffichage==JOptionPane.OK_OPTION){
-							graphe.getDessin().setColor(Color.magenta);
-							this.graphe.getDessin().drawPoint(noeud_succ.getLongitude(),noeud_succ.getLatitude(), 3);
-						}
-				*/
+                    // on insere le sommet dans le tas
+                    this.tas.insert(label_succ);
+                    nb_elements_tas++;
+                    // On peut afficher le sommet sur la carte
+                    if(choixAffichage==JOptionPane.OK_OPTION) {
+                        graphe.getDessin().setColor(Color.magenta);
+                        this.graphe.getDessin().drawPoint(node_suc.getLongitude(), node_suc.getLatitude(), 3);
+                    }
 			    }
 			    // sinon il ne faut pas oublier de mettre a jour le tas !
 			    else {
@@ -184,14 +183,18 @@ public class Pcc extends Algo {
     System.out.println("Duree= "+duree+" ms");
     //Afficher le resultat du calcul - ou rediriger sur fichier ?
     // Fonction de retour a faire ? Avec JOptionPane ?
-    /* comme ca ?
+    //comme ca ?
     if(choix==0){
     		JOptionPane.showMessageDialog(null, "Le cout est de "+ dest.getCout()/1000+ "km\n"+
     				"Temps de Calcul: "+duree+ " ms\n"+
     				"Nb max d'element: "+maxTas+"\nNb elements explores: "+nb_elements_tas);
     }
-    else ...
-    */
+    else {
+        JOptionPane.showMessageDialog(null, "Le cout est de "+ dest.getCout()+ "min\n"+
+                "Temps de Calcul: "+duree+ " ms\n"+
+                "Nb max d'element: "+maxTas+"\nNb elements explores: "+nb_elements_tas);
+    }
+
     // on pourra aussi tracer le chemin ! cf en dessous
     //chemin();
     
