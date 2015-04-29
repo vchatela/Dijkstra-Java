@@ -9,7 +9,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
 
-public class Pcc extends Algo {
+public class Pcc_Generique<E extends Comparable<E>> extends Algo {
 
     // Numero des sommets origine et destination
     protected int zoneOrigine;
@@ -20,11 +20,11 @@ public class Pcc extends Algo {
 
 
     //liste de tous les Label_Dijkstras
-    protected ArrayList<Label_Dijkstra> lab;
+    protected ArrayList<E> lab;
     //Le tas
-    protected BinaryHeap<Label_Dijkstra> tas;
+    protected BinaryHeap<E> tas;
     //Label_Dijkstra destinataire
-    protected Label_Dijkstra dest;
+    protected E dest;
     //en temps (choix=1),  en distance (choix=0)
     protected int choix;
 
@@ -32,7 +32,7 @@ public class Pcc extends Algo {
     protected int choixAffichage;
 
     //fait correspondre un noeud a un Label_Dijkstra
-    protected HashMap<Node, Label_Dijkstra> mapLabel_Dijkstra;
+    protected HashMap<Node, E> mapLabel_Dijkstra;
     //duree d'execution
     protected long duree;
     //Nombre maximum d'elemnt dans le tas
@@ -43,7 +43,7 @@ public class Pcc extends Algo {
     protected String sortieAlgo;
 
 
-    public Pcc(Graphe gr, PrintStream sortie, Readarg readarg) {
+    public Pcc_Generique(Graphe gr, PrintStream sortie, Readarg readarg) {
         super(gr, sortie, readarg);
         // On veut stocker le resultat dans le fichier de sortie de la forme
         /*Carte: france
@@ -53,7 +53,7 @@ public class Pcc extends Algo {
 				Nombre maximum d'elements dans le tas: 25235
 				Nombre d'elements explores: 54653
 		*/
-        mapLabel_Dijkstra = new HashMap<Node, Label_Dijkstra>();
+        mapLabel_Dijkstra = new HashMap<Node, E>();
         // a voir si on demande la zone ou le sommet directement
         this.zoneOrigine = gr.getZone();
         this.origine = readarg.lireInt("Numero du sommet d'origine ? ");
@@ -86,30 +86,14 @@ public class Pcc extends Algo {
      * Initialisation de l'algo de Dijikstra
      */
     public void initialisation() {
-        //Associe des Label_Dijkstras correspondant aux noeuds et le stocke dans la map !
-        for (Node node : this.graphe.getArrayList()) {
-            Label_Dijkstra l = new Label_Dijkstra(node);
-            mapLabel_Dijkstra.put(node, l);
-            if ((node.getNum() == origine) && (graphe.getZone() == zoneOrigine)) {
-                l.setCout(0);
-                //Initialisation du tas avec le Label_Dijkstra sommet origine
-                tas.insert(l);
-            }
-            lab.add(l);
-
-            //Noeud destinataire
-            if ((node.getNum() == destination) && (graphe.getZone() == zoneDestination)) {
-                dest = l;
-            }
-        }
     }
 
     public void run() {
 
         System.out.println("Run PCC de " + zoneOrigine + ":" + origine + " vers " + zoneDestination + ":" + destination);
 // Initialisation de nos champs
-        this.lab = new ArrayList<Label_Dijkstra>();
-        this.tas = new BinaryHeap<Label_Dijkstra>();
+        this.lab = new ArrayList<E>();
+        this.tas = new BinaryHeap<E>();
         // Nombre max des elements et ceux explores
         this.maxTas = tas.size();
         nb_elements_tas = 1;
@@ -136,30 +120,30 @@ public class Pcc extends Algo {
 		  TODO : condition tres moche : comment faire mieux ?
 		  TODO : nom des fonctions a verifier .... de memoire sans eclipse
 		*/
-        Label_Dijkstra min, Label_Dijkstra_succ;
+        E min, E_succ;
         Node node_suc;
-        while (!(this.tas.isEmpty() || dest.isMarque())) {
+        while (!(this.tas.isEmpty() || ((Label) dest).isMarque())) {
             min = this.tas.deleteMin();
-            min.setMarque(true);
+            ((Label) min).setMarque(true);
             // pour chaque successeurs / arc
-            for (Arc arc : this.graphe.getArrayList().get(min.getNum_node()).getArrayListArc()) {
+            for (Arc arc : this.graphe.getArrayList().get(((Label) min).getNum_node()).getArrayListArc()) {
                 node_suc = this.graphe.getArrayList().get(arc.getNum_dest());
                 // Label_Dijkstra correspondant au noeud destinataire
-                Label_Dijkstra_succ = mapLabel_Dijkstra.get(node_suc);
+                E_succ = mapLabel_Dijkstra.get(node_suc);
                 // si le noeud n'est pas marque
-                if (!(Label_Dijkstra_succ.isMarque())) {
+                if (!(((Label) E_succ).isMarque())) {
                     // on met alors le cout a jour
                     // TODO : verifier temps !
-                    new_cout = (choix == 0) ? arc.getLg_arete() + min.getCout() : 60.0f * ((float) arc.getLg_arete()) / (1000.0f * (float) arc.getDescripteur().getVitMax()) + min.getCout();
+                    new_cout = (choix == 0) ? arc.getLg_arete() + ((Label) min).getCout() : 60.0f * ((float) arc.getLg_arete()) / (1000.0f * (float) arc.getDescripteur().getVitMax()) + ((Label) min).getCout();
                     // on verifie alors que ce cout est bien inferieur au precedent
-                    if (new_cout < Label_Dijkstra_succ.getCout()) {
-                        Label_Dijkstra_succ.setCout(new_cout);
-                        Label_Dijkstra_succ.setPere(min.getNum_node());
+                    if (new_cout < ((Label) E_succ).getCout()) {
+                        ((Label) E_succ).setCout(new_cout);
+                        ((Label) E_succ).setPere(((Label) min).getNum_node());
                     }
                     // maintenant si le sommet n'est pas dans le tas il faut l'ajouter
-                    if (!(this.tas.getMap().get(Label_Dijkstra_succ) != null)) {
+                    if (!(this.tas.getMap().get(E_succ) != null)) {
                         // on insere le sommet dans le tas
-                        this.tas.insert(Label_Dijkstra_succ);
+                        this.tas.insert(E_succ);
                         nb_elements_tas++;
                         // On peut afficher le sommet sur la carte
                         if (choixAffichage == JOptionPane.OK_OPTION) {
@@ -169,7 +153,7 @@ public class Pcc extends Algo {
                     }
                     // sinon il ne faut pas oublier de mettre a jour le tas !
                     else {
-                        this.tas.update(Label_Dijkstra_succ);
+                        this.tas.update(E_succ);
                     }
                 }
             }
@@ -186,11 +170,11 @@ public class Pcc extends Algo {
         // Fonction de retour a faire ? Avec JOptionPane ?
         //comme ca ?
         if (choix == 0) {
-            JOptionPane.showMessageDialog(null, "Le cout est de " + dest.getCout() / 1000 + "km\n" +
+            JOptionPane.showMessageDialog(null, "Le cout est de " + ((Label) dest).getCout() / 1000 + "km\n" +
                     "Temps de Calcul: " + duree + " ms\n" +
                     "Nb max d'element: " + maxTas + "\nNb elements explores: " + nb_elements_tas);
         } else {
-            JOptionPane.showMessageDialog(null, "Le cout est de " + dest.getCout() + "min\n" +
+            JOptionPane.showMessageDialog(null, "Le cout est de " + ((Label) dest).getCout() + "min\n" +
                     "Temps de Calcul: " + duree + " ms\n" +
                     "Nb max d'element: " + maxTas + "\nNb elements explores: " + nb_elements_tas);
         }
@@ -204,19 +188,15 @@ public class Pcc extends Algo {
         // on construit le chemin du dest->origine
         Chemin chemin = new Chemin(origine, destination);
         chemin.addNode(this.graphe.getArrayList().get(destination));
-        Label_Dijkstra Label_Dijkstra_en_cours = dest;
+        E E_en_cours = dest;
         Node node;
         // On remonte avec l'aide du pere !
         // Tant qu'on n'atteint pas le sommet d'origine qui a pour pere -1
-        while (Label_Dijkstra_en_cours.getPere() != -1) {
-            node = this.graphe.getArrayList().get(Label_Dijkstra_en_cours.getPere());
+        while (((Label) E_en_cours).getPere() != -1) {
+            node = this.graphe.getArrayList().get(((Label) E_en_cours).getPere());
             chemin.addNode(node);
-            Label_Dijkstra_en_cours = mapLabel_Dijkstra.get(node);
+            E_en_cours = mapLabel_Dijkstra.get(node);
         }
-
-        // Il faut inverser l'ordre des elements dans le chemin !
-        // comment faire un reverse ? Collections ?
-
         // cout et affichage du chemin
 //  chemin.cout_chemin_distance(); // je crois que c'est ca ...)
         Collections.reverse(chemin.getListNode());
