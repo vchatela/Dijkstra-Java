@@ -1,6 +1,9 @@
 package core;
 
-public class Label implements Comparable<Label> {
+/**
+ * Created by valentin on 4/29/15.
+ */
+public class Label {
     private int num_node; //numero du noeud actuel
     private boolean marque;
     private double cout;
@@ -48,31 +51,6 @@ public class Label implements Comparable<Label> {
 
     public void setPere(int pere) {
         this.pere = pere;
-    }
-
-
-    @Override
-    // comparaison des Label par rapport a leurs couts respectifs
-    public int compareTo(Label o) {
-        if (this.cout < o.cout)
-            return -1;
-        else {
-            if (this.cout == o.cout)
-                return 0;
-            else return 1;
-        }
-    }
-
-    public int hashCode() {
-        return num_node;
-    }
-
-    public boolean equals(Object o) {
-        if (o instanceof Label) {
-            Label other = (Label) o;
-            return (this.cout == other.cout && this.marque == other.marque && this.num_node == other.num_node && this.pere == other.pere);
-        }
-        return false;
     }
 
 

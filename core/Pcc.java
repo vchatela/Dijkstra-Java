@@ -19,20 +19,20 @@ public class Pcc extends Algo {
     protected int destination;
 
 
-    //liste de tous les labels
-    protected ArrayList<Label> lab;
+    //liste de tous les Label_Dijkstras
+    protected ArrayList<Label_Dijkstra> lab;
     //Le tas
-    protected BinaryHeap<Label> tas;
-    //label destinataire
-    protected Label dest;
+    protected BinaryHeap<Label_Dijkstra> tas;
+    //Label_Dijkstra destinataire
+    protected Label_Dijkstra dest;
     //en temps (choix=1),  en distance (choix=0)
     protected int choix;
 
     //Afficher ou non le deroulement de l'algo
     protected int choixAffichage;
 
-    //fait correspondre un noeud a un label
-    protected HashMap<Node, Label> mapLabel;
+    //fait correspondre un noeud a un Label_Dijkstra
+    protected HashMap<Node, Label_Dijkstra> mapLabel_Dijkstra;
     //duree d'execution
     protected long duree;
     //Nombre maximum d'elemnt dans le tas
@@ -53,7 +53,7 @@ public class Pcc extends Algo {
 				Nombre maximum d'elements dans le tas: 25235
 				Nombre d'elements explores: 54653
 		*/
-        mapLabel = new HashMap<Node, Label>();
+        mapLabel_Dijkstra = new HashMap<Node, Label_Dijkstra>();
         // a voir si on demande la zone ou le sommet directement
         this.zoneOrigine = gr.getZone();
         this.origine = readarg.lireInt("Numero du sommet d'origine ? ");
@@ -86,13 +86,13 @@ public class Pcc extends Algo {
      * Initialisation de l'algo de Dijikstra
      */
     public void initialisation() {
-        //Associe des labels correspondant aux noeuds et le stocke dans la map !
+        //Associe des Label_Dijkstras correspondant aux noeuds et le stocke dans la map !
         for (Node node : this.graphe.getArrayList()) {
-            Label l = new Label(node);
-            mapLabel.put(node, l);
+            Label_Dijkstra l = new Label_Dijkstra(node);
+            mapLabel_Dijkstra.put(node, l);
             if ((node.getNum() == origine) && (graphe.getZone() == zoneOrigine)) {
                 l.setCout(0);
-                //Initialisation du tas avec le label sommet origine
+                //Initialisation du tas avec le Label_Dijkstra sommet origine
                 tas.insert(l);
             }
             lab.add(l);
@@ -108,8 +108,8 @@ public class Pcc extends Algo {
 
         System.out.println("Run PCC de " + zoneOrigine + ":" + origine + " vers " + zoneDestination + ":" + destination);
 // Initialisation de nos champs
-        this.lab = new ArrayList<Label>();
-        this.tas = new BinaryHeap<Label>();
+        this.lab = new ArrayList<Label_Dijkstra>();
+        this.tas = new BinaryHeap<Label_Dijkstra>();
         // Nombre max des elements et ceux explores
         this.maxTas = tas.size();
         nb_elements_tas = 1;
@@ -136,7 +136,7 @@ public class Pcc extends Algo {
 		  TODO : condition tres moche : comment faire mieux ?
 		  TODO : nom des fonctions a verifier .... de memoire sans eclipse
 		*/
-        Label min, label_succ;
+        Label_Dijkstra min, Label_Dijkstra_succ;
         Node node_suc;
         while (!(this.tas.isEmpty() || dest.isMarque())) {
             min = this.tas.deleteMin();
@@ -144,22 +144,22 @@ public class Pcc extends Algo {
             // pour chaque successeurs / arc
             for (Arc arc : this.graphe.getArrayList().get(min.getNum_node()).getArrayListArc()) {
                 node_suc = this.graphe.getArrayList().get(arc.getNum_dest());
-                // Label correspondant au noeud destinataire
-                label_succ = mapLabel.get(node_suc);
+                // Label_Dijkstra correspondant au noeud destinataire
+                Label_Dijkstra_succ = mapLabel_Dijkstra.get(node_suc);
                 // si le noeud n'est pas marque
-                if (!(label_succ.isMarque())) {
+                if (!(Label_Dijkstra_succ.isMarque())) {
                     // on met alors le cout a jour
                     // TODO : verifier temps !
                     new_cout = (choix == 0) ? arc.getLg_arete() + min.getCout() : 60.0f * ((float) arc.getLg_arete()) / (1000.0f * (float) arc.getDescripteur().getVitMax()) + min.getCout();
                     // on verifie alors que ce cout est bien inferieur au precedent
-                    if (new_cout < label_succ.getCout()) {
-                        label_succ.setCout(new_cout);
-                        label_succ.setPere(min.getNum_node());
+                    if (new_cout < Label_Dijkstra_succ.getCout()) {
+                        Label_Dijkstra_succ.setCout(new_cout);
+                        Label_Dijkstra_succ.setPere(min.getNum_node());
                     }
                     // maintenant si le sommet n'est pas dans le tas il faut l'ajouter
-                    if (!(this.tas.getMap().get(label_succ) != null)) {
+                    if (!(this.tas.getMap().get(Label_Dijkstra_succ) != null)) {
                         // on insere le sommet dans le tas
-                        this.tas.insert(label_succ);
+                        this.tas.insert(Label_Dijkstra_succ);
                         nb_elements_tas++;
                         // On peut afficher le sommet sur la carte
                         if (choixAffichage == JOptionPane.OK_OPTION) {
@@ -169,7 +169,7 @@ public class Pcc extends Algo {
                     }
                     // sinon il ne faut pas oublier de mettre a jour le tas !
                     else {
-                        this.tas.update(label_succ);
+                        this.tas.update(Label_Dijkstra_succ);
                     }
                 }
             }
@@ -204,14 +204,14 @@ public class Pcc extends Algo {
         // on construit le chemin du dest->origine
         Chemin chemin = new Chemin(origine, destination);
         chemin.addNode(this.graphe.getArrayList().get(destination));
-        Label label_en_cours = dest;
+        Label_Dijkstra Label_Dijkstra_en_cours = dest;
         Node node;
         // On remonte avec l'aide du pere !
         // Tant qu'on n'atteint pas le sommet d'origine qui a pour pere -1
-        while (label_en_cours.getPere() != -1) {
-            node = this.graphe.getArrayList().get(label_en_cours.getPere());
+        while (Label_Dijkstra_en_cours.getPere() != -1) {
+            node = this.graphe.getArrayList().get(Label_Dijkstra_en_cours.getPere());
             chemin.addNode(node);
-            label_en_cours = mapLabel.get(node);
+            Label_Dijkstra_en_cours = mapLabel_Dijkstra.get(node);
         }
 
         // Il faut inverser l'ordre des elements dans le chemin !
