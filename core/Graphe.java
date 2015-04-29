@@ -187,8 +187,8 @@ public class Graphe {
             System.out.println("Fichier lu : " + nb_Nodes + " Nodes, " + edges + " aretes, "
                     + nb_descripteurs + " descripteurs.");
             //Affichage graphique
-            JOptionPane.showMessageDialog(null, "Fichier lu : " + nb_Nodes + " sommets\n" + edges + " aretes\n"
-                    + nb_descripteurs + " descripteurs");
+            //JOptionPane.showMessageDialog(null, "Fichier lu : " + nb_Nodes + " sommets\n" + edges + " aretes\n"
+            //      + nb_descripteurs + " descripteurs");
 
         } catch (IOException e) {
             e.printStackTrace();
@@ -239,7 +239,8 @@ public class Graphe {
             float lon = dessin.getClickLon();
             float lat = dessin.getClickLat();
 
-            System.out.println("Clic aux coordonnees lon = " + lon + "  lat = " + lat);
+            JOptionPane.showMessageDialog(null, "Clic aux coordonnees lon = " + lon + "  lat = " + lat);
+            //System.out.println("Clic aux coordonnees lon = " + lon + "  lat = " + lat);
 
             // On cherche le noeud le plus proche. O(n)
             float minDist = Float.MAX_VALUE;
@@ -255,8 +256,10 @@ public class Graphe {
                 }
             }
 
+            System.out.println();
             System.out.println("Noeud le plus proche : " + noeud);
             System.out.println();
+
             dessin.setColor(java.awt.Color.red);
             dessin.drawPoint(this.listNode.get(noeud).getLongitude(), this.listNode.get(noeud).getLatitude(), 5);
             JOptionPane.showMessageDialog(null, "Noeud le plus proche: " + noeud);
@@ -291,8 +294,8 @@ public class Graphe {
             System.out.println("ID chemin= " + path_carte);
 
             if (path_carte != this.idcarte) {
-                System.out.println("Le chemin du fichier " + nom_chemin + " n'appartient pas a la carte actuellement chargee.");
-                System.exit(1);
+                JOptionPane.showMessageDialog(null, "Le chemin du fichier " + nom_chemin + " n'appartient pas a la carte actuellement chargee.");
+                return;
             }
 
             int nb_noeuds = dis.readInt();
@@ -305,6 +308,7 @@ public class Graphe {
             int last_zone = dis.readUnsignedByte();
             int last_Node = Utils.read24bits(dis);
 
+            System.out.println();
             System.out.println("Chemin de " + first_zone + ":" + first_Node + " vers " + last_zone + ":" + last_Node);
 
             int current_zone = 0;

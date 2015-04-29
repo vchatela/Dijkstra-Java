@@ -55,29 +55,33 @@ public class Pcc_Generique<E extends Comparable<E>> extends Algo {
 		*/
         mapLabel = new HashMap<Node, E>();
         // a voir si on demande la zone ou le sommet directement
-        this.zoneOrigine = gr.getZone();
-        this.origine = Integer.parseInt(JOptionPane.showInputDialog(null, "Numero du sommet d'origine ?"));
-        // this.origine = readarg.lireInt("Numero du sommet d'origine ? ");
+        try {
+            this.zoneOrigine = gr.getZone();
+            this.origine = Integer.parseInt(JOptionPane.showInputDialog(null, "Numero du sommet d'origine ?"));
+            // this.origine = readarg.lireInt("Numero du sommet d'origine ? ");
 
-        // Demander la zone et le sommet destination.
-        this.zoneOrigine = gr.getZone();
-        // this.destination = readarg.lireInt("Numero du sommet destination ? ");
-        this.destination = Integer.parseInt(JOptionPane.showInputDialog(null, "Numero du sommet de destination ?"));
-        // Si le numero des noeuds n'est pas dans le graphe on doit arreter l'algo
-        if ((origine <= 0) || (origine > graphe.getArrayList().size())) {
-            System.out.println(" Le numero de sommet saisi n'appartient pas au graphe");
-            System.exit(-1);
-        }
-        if ((destination <= 0) || (destination > graphe.getArrayList().size())) {
-            System.out.println(" Le numero de sommet saisi n'appartient pas au graphe");
-            System.exit(-1);
-        }
+            // Demander la zone et le sommet destination.
+            this.zoneOrigine = gr.getZone();
+            // this.destination = readarg.lireInt("Numero du sommet destination ? ");
+            this.destination = Integer.parseInt(JOptionPane.showInputDialog(null, "Numero du sommet de destination ?"));
+            // Si le numero des noeuds n'est pas dans le graphe on doit arreter l'algo
+            if ((origine <= 0) || (origine > graphe.getArrayList().size())) {
+                System.out.println(" Le numero de sommet saisi n'appartient pas au graphe");
+                return;
+            }
+            if ((destination <= 0) || (destination > graphe.getArrayList().size())) {
+                System.out.println(" Le numero de sommet saisi n'appartient pas au graphe");
+                return;
+            }
 
-        // Enfin on demande le type choisi : temps ou distance  - TODO : A ameliorer
-        this.choix = Integer.parseInt(JOptionPane.showInputDialog("Plus court en:\n0 : Distance\n1 : Temps"));
+            // Enfin on demande le type choisi : temps ou distance  - TODO : A ameliorer
+            this.choix = Integer.parseInt(JOptionPane.showInputDialog("Plus court en:\n0 : Distance\n1 : Temps"));
 
         // a voir si on fait le choix de l'affichage avec choixAffichage
         choixAffichage = JOptionPane.showConfirmDialog(null, "Voulez vous afficher le deroulement de l'algo", "Choix de l'affichage", JOptionPane.YES_NO_OPTION);
+        } catch (NumberFormatException n) {
+            System.out.println("Erreur du type " + n);
+        }
     }
 
     /**
@@ -88,7 +92,11 @@ public class Pcc_Generique<E extends Comparable<E>> extends Algo {
     }
 
     public void run() {
-
+        if ((origine <= 0) || (origine > graphe.getArrayList().size()) || (destination <= 0) || (destination > graphe.getArrayList().size())
+                || this.origine == -1 || this.destination == -1) {
+            JOptionPane.showMessageDialog(null, "Un des sommets n'appartient pas au graphe.");
+            return;
+        }
 
         System.out.println("Run PCC de " + zoneOrigine + ":" + origine + " vers " + zoneDestination + ":" + destination);
 // Initialisation de nos champs

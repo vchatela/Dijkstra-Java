@@ -168,7 +168,8 @@ public class Launch {
         //String nom = this.readarg.lireString("Nom du fichier de sortie ? ");
         String nom = (String) JOptionPane.showInputDialog(null, "Nom du fichier de sortie ?");
         if ("".equals(nom)) {
-            nom = "/dev/null";
+            //nom = "/dev/null";
+            nom = "sortie";
         }
 
         try {
