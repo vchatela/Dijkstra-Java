@@ -56,7 +56,7 @@ public class Launch {
             System.out.println("**");
             System.out.println();
             JOptionPane.showMessageDialog(null, "Bienvenue" +
-                    "\nVersion 1.0\nde Mangel - Chatelard");
+                    "\nVersion 2.0\nde Mangel - Chatelard");
 
             // On obtient ici le nom de la carte a utiliser.
             String cartes[] = {"insa", "insa.0", "insa.1", "insa.2", "midip", "midip.0", "midip.1",

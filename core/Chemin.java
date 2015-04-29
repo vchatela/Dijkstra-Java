@@ -145,7 +145,7 @@ public class Chemin {
     public void tracerChemin(Dessin dessin) {
         float current_long, current_lat;
         //Arc arc=new Arc();
-        System.out.println("Nbre noeud du chemin = " + this.getNb_nodes());
+        //System.out.println(" DEBUG -- Nbre noeud du chemin = " + this.getNb_nodes());
         //Pour chaque noeud du chemin
         for (int node = 0; node < this.getListNode().size() - 1; node++) {
             current_long = this.getListNode().get(node).getLongitude();

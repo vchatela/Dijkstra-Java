@@ -98,7 +98,7 @@ public class Pcc_Generique<E extends Comparable<E>> extends Algo {
             return;
         }
 
-        System.out.println("Run PCC de " + zoneOrigine + ":" + origine + " vers " + zoneDestination + ":" + destination);
+        System.out.println("Lancement de l'algorithme de (zone,noeud) : (" + zoneOrigine + "," + origine + ") vers (" + zoneDestination + "," + destination + ")");
 // Initialisation de nos champs
         this.lab = new ArrayList<E>();
         this.tas = new BinaryHeap<E>();
@@ -174,9 +174,8 @@ public class Pcc_Generique<E extends Comparable<E>> extends Algo {
 
         duree = (System.currentTimeMillis() - duree);
         System.out.println("Duree= " + duree + " ms");
-        //Afficher le resultat du calcul - ou rediriger sur fichier ?
-        // Fonction de retour a faire ? Avec JOptionPane ?
-        //comme ca ?
+        //Afficher le resultat du calcul - ou rediriger sur fichier
+        chemin();
         if (choix == 0) {
             JOptionPane.showMessageDialog(null, "Le cout est de " + ((Label) dest).getCout() / 1000 + "km\n" +
                     "Temps de Calcul: " + duree + " ms\n" +
@@ -188,7 +187,7 @@ public class Pcc_Generique<E extends Comparable<E>> extends Algo {
         }
 
         // on pourra aussi tracer le chemin ! cf en dessous
-        chemin();
+
 
     }
 
@@ -206,9 +205,10 @@ public class Pcc_Generique<E extends Comparable<E>> extends Algo {
             E_en_cours = mapLabel.get(node);
         }
         // cout et affichage du chemin
-//  chemin.cout_chemin_distance(); // je crois que c'est ca ...)
         Collections.reverse(chemin.getListNode());
         //TODO : traiter la difference suivant le choix ?
+        System.out.println();
+        System.out.println("Calcul sur le Chemin");
         chemin.cout_chemin_distance();
         chemin.cout_chemin_temps();
         chemin.tracerChemin(this.graphe.getDessin());
