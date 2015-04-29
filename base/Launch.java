@@ -35,8 +35,9 @@ public class Launch {
 	System.out.println ("3 - Plus court chemin A-star") ;
 	System.out.println ("4 - Cliquer sur la carte pour obtenir un numero de sommet.") ;
 	System.out.println ("5 - Charger un fichier de chemin (.path) et le verifier.") ;
+		System.out.println("6 - R?initialiser la carte");
 	
-	System.out.println () ;
+	System.out.println() ;
     }
 
     public static void main(String[] args) {
@@ -110,7 +111,21 @@ public class Launch {
 		    graphe.getChemin().cout_chemin_distance();
 		    graphe.getChemin().cout_chemin_temps();
 		    break ;
-
+			case 6 :
+/*
+			for (Node noeud : graphe.getArrayList()){
+				Descripteur[] descripteurs = new Descripteur[graphe.nb_descripteurs] ;
+				for (int num_descr = 0 ; num_descr < graphe.nb_descripteurs ; num_descr++) {
+					// Lecture du descripteur numero num_descr
+					descripteurs[num_descr]= new Descripteur(mapdata);
+					Couleur.set(dessin, descripteurs[num_descr].getType());
+					// On affiche quelques descripteurs parmi tous. - DEBUG
+					//if (0 == num_descr % (1 + nb_descripteurs / 400))
+					//	System.out.println("Descripteur " + num_descr + " = " + this.listNode.get(num_descr)) ;
+				}
+			}*/
+				JOptionPane.showMessageDialog(null, "Fonctionnalite a venir");
+				break;
 		default:
 		    System.out.println ("Choix de menu incorrect : " + choix);
 		    JOptionPane.showMessageDialog(null, "Choix de menu incorrect", "Choix menu", JOptionPane.ERROR_MESSAGE);

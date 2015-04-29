@@ -46,7 +46,8 @@ public class Graphe {
      */
     
     private ArrayList<Node> listNode;
-    
+    public int nb_descripteurs;
+
     private Chemin chemin; // afin de charger le fichier path du chemin
     
     // Deux malheureux getters.
@@ -98,6 +99,8 @@ public class Graphe {
 
 			// Lecture du nombre de descripteurs, nombre de noeuds.
 			int nb_descripteurs = dis.readInt () ;
+			this.nb_descripteurs = nb_descripteurs;
+
 			int nb_Nodes = dis.readInt () ;
 			
 			//reglage de la barre de progression
