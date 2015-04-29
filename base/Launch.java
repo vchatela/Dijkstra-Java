@@ -35,7 +35,7 @@ public class Launch {
 	System.out.println ("3 - Plus court chemin A-star") ;
 	System.out.println ("4 - Cliquer sur la carte pour obtenir un numero de sommet.") ;
 	System.out.println ("5 - Charger un fichier de chemin (.path) et le verifier.") ;
-	System.out.println("6 - R?initialiser la carte");
+	System.out.println("6 - Reinitialiser la carte");
 	
 	System.out.println() ;
     }

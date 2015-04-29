@@ -2,6 +2,7 @@ package core ;
 
 import java.io.* ;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
 import java.awt.Color;
 import javax.swing.JOptionPane;
@@ -212,11 +213,13 @@ public void chemin(){
       chemin.addNode(node);
       label_en_cours = mapLabel.get(node);
   }
+
   // Il faut inverser l'ordre des elements dans le chemin !
   // comment faire un reverse ? Collections ?
   
   // cout et affichage du chemin
 //  chemin.cout_chemin_distance(); // je crois que c'est ca ...)
+    Collections.reverse(chemin.getListNode());
   chemin.tracerChemin(this.graphe.getDessin()); // ca doit exister aussi ...
 }
 }

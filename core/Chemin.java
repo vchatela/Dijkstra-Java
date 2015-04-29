@@ -60,8 +60,9 @@ public class Chemin {
 	 */
 	public void addNode(Node node){
 		this.listNode.add(node);
+		this.nb_nodes+=1;
 	}
-	
+
 	/**
 	 * Entre 2 sommets du graphe il peut y avoir plusieurs aretes ayant des poids differents.
 	 * Cette fonction permet de choisir l'arete ayant le plus faible cout en distance.
@@ -138,7 +139,7 @@ public class Chemin {
 	public void tracerChemin(Dessin dessin){
 		float current_long,current_lat;
 		//Arc arc=new Arc();
-    	System.out.println("Nbre noeud du chemin ="+this.getNb_nodes());
+    	System.out.println("Nbre noeud du chemin = "+this.getNb_nodes());
     	//Pour chaque noeud du chemin
     	for(int node=0;node<this.getListNode().size()-1;node++){
     		current_long = this.getListNode().get(node).getLongitude() ;
@@ -149,6 +150,7 @@ public class Chemin {
 					dessin.setWidth(4);
 					dessin.setColor(Color.green);
 					//On joint les sommets deux a deux
+            // TODO : joindre segment et pas noeud ?
 					dessin.drawLine(current_long, current_lat, this.getListNode().get(node+1).getLongitude(), this.getListNode().get(node+1).getLatitude()) ;		
     		}
 	}
