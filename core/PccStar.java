@@ -4,7 +4,7 @@ import base.Readarg;
 
 import java.io.PrintStream;
 
-public class PccStar extends Pcc {
+public class PccStar extends Pcc_Generique<Label_Star> {
 
     public PccStar(Graphe gr, PrintStream sortie, Readarg readarg) {
         super(gr, sortie, readarg);

@@ -97,7 +97,7 @@ public class Launch {
                         break;
 
                     case 2:
-                        algo = new Pcc(graphe, this.fichierSortie(), this.readarg);
+                        algo = new Pcc_Dijkstra(graphe, this.fichierSortie(), this.readarg);
                         break;
 
                     case 3:
