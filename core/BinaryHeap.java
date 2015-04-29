@@ -7,11 +7,13 @@ package core;
 // ******************ERRORS********************************
 // Throws RuntimeException for findMin and deleteMin when empty
 
-import java.util.* ;
+import java.util.ArrayList;
+import java.util.HashMap;
 
 /**
  * Implements a binary heap.
  * Note that all "matching" is based on the compareTo method.
+ *
  * @author Mark Allen Weiss
  * @author DLB
  */
@@ -27,162 +29,172 @@ public class BinaryHeap<E extends Comparable<E>> {
     // On veut donner a la table de hashage l'element et elle nous retourne l'index de l'element (dans le tableau)
     // question de rapidite : non lineaire comme l'aurait ete une recherche et du coup perte de l'interet
     // du tas
-    private HashMap<E,Integer> map; 
-    
+    private HashMap<E, Integer> map;
+
     /**
      * Construct the binary heap.
      */
     public BinaryHeap() {
         this.currentSize = 0;
-        this.array = new ArrayList<E>() ;
-        this.map= new HashMap<E,Integer>();
+        this.array = new ArrayList<E>();
+        this.map = new HashMap<E, Integer>();
     }
 
     // Constructor used for debug.
     private BinaryHeap(BinaryHeap<E> heap) {
-    	this.currentSize = heap.currentSize ;
-    	this.array = new ArrayList<E>(heap.array) ;
-    	this.map= new HashMap<E,Integer>();
-    	for(int i=0;i<this.currentSize;i++){
-    		this.map.put(this.array.get(i),i);
-    	}
+        this.currentSize = heap.currentSize;
+        this.array = new ArrayList<E>(heap.array);
+        this.map = new HashMap<E, Integer>();
+        for (int i = 0; i < this.currentSize; i++) {
+            this.map.put(this.array.get(i), i);
+        }
     }
 
     // Sets an element in the array
     private void arraySet(int index, E value) {
-	if (index == this.array.size()) {
-	    this.array.add(value) ;
-	    this.map.put( value,index);
-	}
-	else {
-	    this.array.set(index, value) ;
-	    this.map.put(value, index);
-	}
+        if (index == this.array.size()) {
+            this.array.add(value);
+            this.map.put(value, index);
+        } else {
+            this.array.set(index, value);
+            this.map.put(value, index);
+        }
     }
 
     /**
      * Test if the heap is logically empty.
+     *
      * @return true if empty, false otherwise.
      */
-    public boolean isEmpty() { return this.currentSize == 0; }
-    
+    public boolean isEmpty() {
+        return this.currentSize == 0;
+    }
+
     /**
      * Returns size.
+     *
      * @return current size.
      */
-    public int size() { return this.currentSize; }
-        
-    
+    public int size() {
+        return this.currentSize;
+    }
+
+
     /**
      * Returns index of parent.
      */
     private int index_parent(int index) {
-	return (index - 1) / 2 ;
+        return (index - 1) / 2;
     }
 
     /**
      * Returns index of left child.
      */
     private int index_left(int index) {
-	return index * 2 + 1 ;
+        return index * 2 + 1;
     }
 
     /**
      * Insert into the heap.
+     *
      * @param x the item to insert.
      */
     public void insert(E x) {
-	int index = this.currentSize++ ;
-	this.arraySet(index, x) ;
-	this.percolateUp(index) ;
+        int index = this.currentSize++;
+        this.arraySet(index, x);
+        this.percolateUp(index);
     }
 
     /**
      * Internal method to percolate up in the heap.
+     *
      * @param index the index at which the percolate begins.
      */
     private void percolateUp(int index) {
-	E x = this.array.get(index) ;
+        E x = this.array.get(index);
 
-        for( ; index > 0 && x.compareTo(this.array.get(index_parent(index)) ) < 0; index = index_parent(index) ) {
-	    E moving_val = this.array.get(index_parent(index)) ;
-            this.arraySet(index, moving_val) ;
-	}
+        for (; index > 0 && x.compareTo(this.array.get(index_parent(index))) < 0; index = index_parent(index)) {
+            E moving_val = this.array.get(index_parent(index));
+            this.arraySet(index, moving_val);
+        }
 
-        this.arraySet(index, x) ;
+        this.arraySet(index, x);
     }
+
     /**
      * Internal method to percolate down in the heap.
+     *
      * @param index the index at which the percolate begins.
      */
     private void percolateDown(int index) {
-	int ileft = index_left(index) ;
-	int iright = ileft + 1 ;
+        int ileft = index_left(index);
+        int iright = ileft + 1;
 
-	if (ileft < this.currentSize) {
-	    E current = this.array.get(index) ;
-	    E left = this.array.get(ileft) ;
-	    boolean hasRight = iright < this.currentSize ;
-	    E right = (hasRight)?this.array.get(iright):null ;
-	    
-	    if (!hasRight || left.compareTo(right) < 0) {
-		// Left is smaller
-		if (left.compareTo(current) < 0) {
-		    this.arraySet(index, left) ;
-		    this.arraySet(ileft, current) ;
-		    this.percolateDown( ileft ) ;
-		}
-	    }
-	    else {
-		// Right is smaller
-		if (right.compareTo(current) < 0) {
-		    this.arraySet(index, right) ;
-		    this.arraySet(iright, current) ;
-		    this.percolateDown( iright ) ;
-		}		
-	    }
-	}
+        if (ileft < this.currentSize) {
+            E current = this.array.get(index);
+            E left = this.array.get(ileft);
+            boolean hasRight = iright < this.currentSize;
+            E right = (hasRight) ? this.array.get(iright) : null;
+
+            if (!hasRight || left.compareTo(right) < 0) {
+                // Left is smaller
+                if (left.compareTo(current) < 0) {
+                    this.arraySet(index, left);
+                    this.arraySet(ileft, current);
+                    this.percolateDown(ileft);
+                }
+            } else {
+                // Right is smaller
+                if (right.compareTo(current) < 0) {
+                    this.arraySet(index, right);
+                    this.arraySet(iright, current);
+                    this.percolateDown(iright);
+                }
+            }
+        }
     }
 
     /**
      * Find the smallest item in the heap.
+     *
      * @return the smallest item.
      * @throws Exception if empty.
      */
-    public E findMin( ) {
-        if( isEmpty() )
-            throw new RuntimeException( "Empty binary heap" );
+    public E findMin() {
+        if (isEmpty())
+            throw new RuntimeException("Empty binary heap");
         return this.array.get(0);
     }
-    
+
     /**
      * Remove the smallest item from the heap.
+     *
      * @return the smallest item.
      * @throws Exception if empty.
      */
-    public E deleteMin( ) {
-        E minItem = findMin( );
-	E lastItem = this.array.get(--this.currentSize) ;
-        this.arraySet(0, lastItem) ;
-        this.percolateDown( 0 );
+    public E deleteMin() {
+        E minItem = findMin();
+        E lastItem = this.array.get(--this.currentSize);
+        this.arraySet(0, lastItem);
+        this.percolateDown(0);
         return minItem;
     }
-    
+
     /**
      * Prints the heap
      */
     public void print() {
-	System.out.println() ;
-	System.out.println("========  HEAP  (size = " + this.currentSize + ")  ========") ;
-	System.out.println() ;
+        System.out.println();
+        System.out.println("========  HEAP  (size = " + this.currentSize + ")  ========");
+        System.out.println();
 
-	for (E el : this.array) {
-	    System.out.println(el.toString()) ;
-	}
+        for (E el : this.array) {
+            System.out.println(el.toString());
+        }
 
-	System.out.println() ;
-	System.out.println("--------  End of heap  --------") ;
-	System.out.println() ;
+        System.out.println();
+        System.out.println("--------  End of heap  --------");
+        System.out.println();
     }
 
     /**
@@ -190,34 +202,34 @@ public class BinaryHeap<E extends Comparable<E>> {
      */
     public void printSorted() {
 
-	BinaryHeap<E> copy = new BinaryHeap<E>(this) ;
+        BinaryHeap<E> copy = new BinaryHeap<E>(this);
 
-	System.out.println() ;
-	System.out.println("========  Sorted HEAP  (size = " + this.currentSize + ")  ========") ;
-	System.out.println() ;
+        System.out.println();
+        System.out.println("========  Sorted HEAP  (size = " + this.currentSize + ")  ========");
+        System.out.println();
 
-	while (!copy.isEmpty()) {
-	    System.out.println(copy.deleteMin()) ;
-	}
+        while (!copy.isEmpty()) {
+            System.out.println(copy.deleteMin());
+        }
 
-	System.out.println() ;
-	System.out.println("--------  End of heap  --------") ;
-	System.out.println() ;
-	}
-
-    public void update(E newElem){
-    	int index;
-    	index = map.get(newElem);  // on lui donne l'element, la table de hashage nous retourne son index
-    	this.percolateUp(index);
-    	//this.percolateDown(index); dans le cas de dikjstra pas utile car on va
-    	// seulement reduire les couts et donc augmenter la priorite
+        System.out.println();
+        System.out.println("--------  End of heap  --------");
+        System.out.println();
     }
-    
-	public HashMap<E,Integer> getMap() {
-		return map;
-	}
 
-	public void setMap(HashMap<E,Integer> map) {
-		this.map = map;
-	}
+    public void update(E newElem) {
+        int index;
+        index = map.get(newElem);  // on lui donne l'element, la table de hashage nous retourne son index
+        this.percolateUp(index);
+        //this.percolateDown(index); dans le cas de dikjstra pas utile car on va
+        // seulement reduire les couts et donc augmenter la priorite
+    }
+
+    public HashMap<E, Integer> getMap() {
+        return map;
+    }
+
+    public void setMap(HashMap<E, Integer> map) {
+        this.map = map;
+    }
 }
