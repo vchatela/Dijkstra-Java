@@ -17,10 +17,6 @@ public class Label_Dijkstra extends Label implements Comparable<Label_Dijkstra> 
         }
     }
 
-    public int hashCode() {
-        return getNum_node();
-    }
-
     public boolean equals(Object o) {
         if (o instanceof Label_Dijkstra) {
             Label_Dijkstra other = (Label_Dijkstra) o;

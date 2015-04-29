@@ -7,9 +7,19 @@ public class Label_Star extends Label implements Comparable<Label_Star>{
 
     private double cout_oiseau;
 
-    public Label_Star(Node node) {
+    public Label_Star(Node node, Node node_dest) {
         super(node);
-        this.cout_oiseau = Float.POSITIVE_INFINITY;
+        // this.cout_oiseau = Float.POSITIVE_INFINITY;
+        // calcul du cout a vol d'oiseau
+        this.cout_oiseau = distance(node, node_dest);
+    }
+
+    public static double distance(Node node, Node node_dest) {
+        double rayon_terre = 6378137.0;
+        double sinLat = Math.sin(Math.toRadians(node.getLatitude())) * Math.sin(Math.toRadians(node_dest.getLatitude()));
+        double cosLat = Math.cos(Math.toRadians(node.getLatitude())) * Math.cos(Math.toRadians(node_dest.getLatitude()));
+        double cosLong = Math.cos(Math.toRadians(node.getLongitude() - node_dest.getLongitude()));
+        return rayon_terre * Math.acos(sinLat + cosLat * cosLong);
     }
 
     public String toString() {
@@ -27,17 +37,15 @@ public class Label_Star extends Label implements Comparable<Label_Star>{
     @Override
     // comparaison des Label par rapport a leurs couts respectifs
     public int compareTo(Label_Star o) {
-        if (this.getCout()+this.getCout_oiseau() < o.getCout()+this.getCout_oiseau())
+        if (this.getCout() + this.getCout_oiseau() < o.getCout() + this.getCout_oiseau())
             return -1;
         else {
-            if (this.getCout() +this.getCout_oiseau() == o.getCout() +this.getCout_oiseau() )
-                return 0;
-            else return 1;
+            if (this.getCout() + this.getCout_oiseau() == o.getCout() + o.getCout_oiseau()) {
+                if (this.getCout_oiseau() < o.getCout_oiseau())
+                    return -1;
+                else return 1;
+            } else return 1;
         }
-    }
-
-    public int hashCode() {
-        return getNum_node();
     }
 
     public boolean equals(Object o) {

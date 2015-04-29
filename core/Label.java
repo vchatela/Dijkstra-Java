@@ -21,6 +21,10 @@ public class Label {
 
     }
 
+    public int hashCode() {
+        return getNum_node();
+    }
+
     public int getNum_node() {
         return num_node;
     }
