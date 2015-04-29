@@ -97,7 +97,7 @@ public class Launch {
 
 		case 5 :
 		    //String nom_chemin = this.readarg.lireString ("Nom du fichier .path contenant le chemin ? ") ;
-		    String chemins[]={"chemin_insa","chemin_midip","chemin_fractal","chemin_reunion","chemin_carre-dense","chemin_spiral",
+		    String chemins[]={"chemin_insa", "chemin_insa1" ,"chemin_midip","chemin_fractal","chemin_reunion","chemin_carre-dense","chemin_spiral",
 					"chemin_spiral2"};
 		    String nom_chemin=(String) JOptionPane.showInputDialog(null, "Nom du chemin .path a utiliser?", "Choix de la carte", 
 		    		JOptionPane.QUESTION_MESSAGE, null, chemins, chemins[0]);
