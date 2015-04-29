@@ -2,6 +2,7 @@ package core;
 
 import base.Readarg;
 
+import java.awt.*;
 import java.io.PrintStream;
 
 /**
@@ -13,7 +14,10 @@ public class Pcc_Dijkstra extends Pcc_Generique<Label_Dijkstra> {
     public Pcc_Dijkstra(Graphe gr, PrintStream sortie, Readarg readarg) {
         super(gr, sortie, readarg);
 
-
+        String chaine = (choix == 0) ? "distance" : "temps";
+        sortieAlgo = "Carte: " + graphe.getNomCarte() + "\n" + "Dijkstra de " + origine + " -> " + destination + " en " + chaine;
+        //L'affichage du deroulement de l'algo est faite en magenta
+        this.graphe.getDessin().setColor(Color.magenta);
     }
 
     public void initialisation() {

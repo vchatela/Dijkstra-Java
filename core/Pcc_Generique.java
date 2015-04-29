@@ -73,10 +73,6 @@ public class Pcc_Generique<E extends Comparable<E>> extends Algo {
 
         // Enfin on demande le type choisi : temps ou distance  - TODO : A ameliorer
         this.choix = Integer.parseInt(JOptionPane.showInputDialog("Plus court en:\n0 : Distance\n1 : Temps"));
-        String chaine = (choix == 0) ? "distance" : "temps";
-        sortieAlgo = "Carte: " + graphe.getNomCarte() + "\n" + "Dijkstra de " + origine + " -> " + destination + " en " + chaine;
-        //L'affichage du deroulement de l'algo est faite en magenta
-        this.graphe.getDessin().setColor(Color.magenta);
 
         // a voir si on fait le choix de l'affichage avec choixAffichage
         choixAffichage = JOptionPane.showConfirmDialog(null, "Voulez vous afficher le deroulement de l'algo", "Choix de l'affichage", JOptionPane.YES_NO_OPTION);

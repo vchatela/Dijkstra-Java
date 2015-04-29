@@ -36,7 +36,7 @@ public class Label_Star extends Label implements Comparable<Label_Star>{
 
     @Override
     // comparaison des Label par rapport a leurs couts respectifs
-    public int compareTo(Label_Star o) {
+   /* public int compareTo(Label_Star o) {
         if (this.getCout() + this.getCout_oiseau() < o.getCout() + this.getCout_oiseau())
             return -1;
         else {
@@ -46,6 +46,16 @@ public class Label_Star extends Label implements Comparable<Label_Star>{
                 else return 1;
             } else return 1;
         }
+    }*/
+
+    public int compareTo(Label_Star lab) {
+
+        int res = (int) (1000.0 * (this.getCout() + this.getCout_oiseau()) - 1000.0 * (lab.getCout() + lab.getCout_oiseau()));
+// si ?galit? alors plus petite estimation
+        if (res == 0) {
+            res = (int) (1000.0 * this.getCout_oiseau() - 1000.0 * lab.getCout_oiseau());
+        }
+        return res;
     }
 
     public boolean equals(Object o) {

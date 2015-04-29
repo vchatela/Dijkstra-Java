@@ -10,8 +10,9 @@ public class PccStar extends Pcc_Generique<Label_Star> {
     public PccStar(Graphe gr, PrintStream sortie, Readarg readarg) {
         super(gr, sortie, readarg);
 
-        this.graphe.getDessin().setColor(Color.blue);
-        // retirer de pcc_generique le message de sortie d'algo ! le mettre dans les 2 pcc pour les differenciers
+        String chaine = (choix == 0) ? "distance" : "temps";
+        sortieAlgo = "Carte: " + graphe.getNomCarte() + "\n" + "Dijkstra A STAR de " + origine + " -> " + destination + " en " + chaine;
+        this.graphe.getDessin().setColor(Color.CYAN);// TODO : pourquoi ????
     }
 
     public void initialisation() {
