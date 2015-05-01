@@ -41,7 +41,28 @@ public class Pcc_Generique<E extends Comparable<E>> extends Algo {
     protected int nb_elements_tas;
     //contient le resultat a enregister dans un fichier
     protected String sortieAlgo;
+    protected boolean test;
 
+    public Pcc_Generique(Graphe gr, PrintStream sortie, Readarg readarg, boolean test, int origine, int dest) {
+        super(gr, sortie, readarg);
+        mapLabel = new HashMap<Node, E>();
+        this.zoneOrigine = gr.getZone();
+        this.origine = origine;
+        this.zoneDestination = gr.getZone();
+        this.destination = dest;
+
+        if ((origine <= 0) || (origine > graphe.getArrayList().size())) {
+            System.out.println(" Le numero de sommet saisi n'appartient pas au graphe");
+            return;
+        }
+        if ((destination <= 0) || (destination > graphe.getArrayList().size())) {
+            System.out.println(" Le numero de sommet saisi n'appartient pas au graphe");
+            return;
+        }
+        this.choix = Integer.parseInt(JOptionPane.showInputDialog("Plus court en:\n0 : Distance\n1 : Temps"));
+        // Ici on a d?j? donn? les num?ros des sommets, on demande simplement le graphisme et hop
+        choixAffichage = JOptionPane.showConfirmDialog(null, "Voulez vous afficher le deroulement de l'algo", "Choix de l'affichage", JOptionPane.YES_NO_OPTION);
+    }
 
     public Pcc_Generique(Graphe gr, PrintStream sortie, Readarg readarg) {
         super(gr, sortie, readarg);
@@ -53,6 +74,8 @@ public class Pcc_Generique<E extends Comparable<E>> extends Algo {
 				Nombre maximum d'elements dans le tas: 25235
 				Nombre d'elements explores: 54653
 		*/
+        // TODO !!!!!!
+        this.test = false;
         mapLabel = new HashMap<Node, E>();
         // a voir si on demande la zone ou le sommet directement
         try {
@@ -77,12 +100,13 @@ public class Pcc_Generique<E extends Comparable<E>> extends Algo {
             // Enfin on demande le type choisi : temps ou distance  - TODO : A ameliorer
             this.choix = Integer.parseInt(JOptionPane.showInputDialog("Plus court en:\n0 : Distance\n1 : Temps"));
 
-        // a voir si on fait le choix de l'affichage avec choixAffichage
-        choixAffichage = JOptionPane.showConfirmDialog(null, "Voulez vous afficher le deroulement de l'algo", "Choix de l'affichage", JOptionPane.YES_NO_OPTION);
+            // a voir si on fait le choix de l'affichage avec choixAffichage
+            choixAffichage = JOptionPane.showConfirmDialog(null, "Voulez vous afficher le deroulement de l'algo", "Choix de l'affichage", JOptionPane.YES_NO_OPTION);
         } catch (NumberFormatException n) {
             System.out.println("Erreur du type " + n);
         }
-    }
+
+        }
 
     /**
      * Initialisation de l'algo de Dijikstra
@@ -123,11 +147,8 @@ public class Pcc_Generique<E extends Comparable<E>> extends Algo {
 		 * A reflechir : est il possible qu'un noeud deja traite soit modifie et qu'il faille modifier les cout
 		 * de tous les noeuds qui utilise sur leur chemin ce noeud ?
 		 */
-		 
-		/* Boucle principale
-		  TODO : condition tres moche : comment faire mieux ?
-		  TODO : nom des fonctions a verifier .... de memoire sans eclipse
-		*/
+
+		/* Boucle principale*/
         E min, E_succ;
         Node node_suc;
         while (!(this.tas.isEmpty() || ((Label) dest).isMarque())) {
