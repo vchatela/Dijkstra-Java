@@ -198,13 +198,14 @@ public class Graphe {
     }
 
     /**
-     *  Calcule de la distance orthodromique - plus court chemin entre deux points a la surface d'une sphere
-     *  @param long1 longitude du premier point.
-     *  @param lat1 latitude du premier point.
-     *  @param long2 longitude du second point.
-     *  @param lat2 latitude du second point.
-     *  @return la distance entre les deux points en metres.
-     *  Methode ecrite par Thomas Thiebaud, mai 2013
+     * Calcule de la distance orthodromique - plus court chemin entre deux points a la surface d'une sphere
+     *
+     * @param long1 longitude du premier point.
+     * @param lat1  latitude du premier point.
+     * @param long2 longitude du second point.
+     * @param lat2  latitude du second point.
+     * @return la distance entre les deux points en metres.
+     * Methode ecrite par Thomas Thiebaud, mai 2013
      */
     public static double distance(double long1, double lat1, double long2, double lat2) {
         double sinLat = Math.sin(Math.toRadians(lat1)) * Math.sin(Math.toRadians(lat2));
@@ -227,9 +228,9 @@ public class Graphe {
     }
 
     /**
-     *  Attend un clic sur la carte et affiche le numero de Node le plus proche du clic.
-     *  A n'utiliser que pour faire du debug ou des tests ponctuels.
-     *  Ne pas utiliser automatiquement a chaque invocation des algorithmes.
+     * Attend un clic sur la carte et affiche le numero de Node le plus proche du clic.
+     * A n'utiliser que pour faire du debug ou des tests ponctuels.
+     * Ne pas utiliser automatiquement a chaque invocation des algorithmes.
      */
     public void situerClick() {
 
@@ -267,8 +268,8 @@ public class Graphe {
     }
 
     /**
-     *  Charge un chemin depuis un fichier .path (voir le fichier FORMAT_PATH qui decrit le format)
-     *  Verifie que le chemin est empruntable et calcule le temps de trajet.
+     * Charge un chemin depuis un fichier .path (voir le fichier FORMAT_PATH qui decrit le format)
+     * Verifie que le chemin est empruntable et calcule le temps de trajet.
      */
     public void verifierChemin(DataInputStream dis, String nom_chemin) {
 
