@@ -39,7 +39,7 @@ public class Launch {
         int choix = -1;
         String menu[] = {"Quitter", "Plus court chemin Standard", "Plus court chemin A-star",
                 "Cliquer sur la carte pour obtenir un numero de sommet ", "Charger un fichier de chemin"
-                , "Reinitialiser la carte"};
+                , "Reinitialiser la carte", "Tester les performances"};
         String selection = (String) JOptionPane.showInputDialog(null, "Que voulez-vous faire ?", "Votre choix", JOptionPane.QUESTION_MESSAGE, null, menu, menu[0]);
         if (selection != null)
             for (int i = 0; i < menu.length; i++)
@@ -139,6 +139,15 @@ public class Launch {
 				}
 			}*/
                         JOptionPane.showMessageDialog(null, "Fonctionnalite a venir");
+                        break;
+                    case 6:
+                        // Programme de test des 2 algos D + D A-Star
+                        int origine, dest;
+                        origine = 12;
+                        dest = 20;
+                        algo = new Pcc_Dijkstra(graphe, this.fichierSortie(), this.readarg, true, origine, dest);
+                        algo = new PccStar(graphe, this.fichierSortie(), this.readarg, true, origine, dest);
+
                         break;
                     default:
                         System.out.println("Choix de menu incorrect : " + choix);
