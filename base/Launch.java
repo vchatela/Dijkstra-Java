@@ -86,7 +86,7 @@ public class Launch {
 
                 // Algorithme a executer
                 Algo algo = null;
-
+                Algo algo1 = null;
                 // Le choix correspond au numero du menu.
                 switch (choix) {
                     case 0:
@@ -145,7 +145,8 @@ public class Launch {
                         int origine, dest;
                         origine = 12;
                         dest = 20;
-                        algo = new Pcc_Dijkstra(graphe, this.fichierSortie(), this.readarg, true, origine, dest);
+                        algo1 = new Pcc_Dijkstra(graphe, this.fichierSortie(), this.readarg, true, origine, dest);
+                        // TODO : PCCStar non assign?
                         algo = new PccStar(graphe, this.fichierSortie(), this.readarg, true, origine, dest);
 
                         break;
@@ -156,6 +157,9 @@ public class Launch {
                 }
 
                 if (algo != null) {
+                    //TODO
+                    if (algo1 != null)
+                        algo1.run();
                     algo.run();
                 }
             }
