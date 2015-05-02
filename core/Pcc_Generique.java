@@ -121,7 +121,7 @@ public class Pcc_Generique<E extends Comparable<E>> extends Algo {
             JOptionPane.showMessageDialog(null, "Un des sommets n'appartient pas au graphe.");
             return;
         }
-
+        System.out.println();
         System.out.println("Lancement de l'algorithme de (zone,noeud) : (" + zoneOrigine + "," + origine + ") vers (" + zoneDestination + "," + destination + ")");
 // Initialisation de nos champs
         this.lab = new ArrayList<E>();

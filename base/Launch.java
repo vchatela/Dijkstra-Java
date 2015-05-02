@@ -144,7 +144,8 @@ public class Launch {
                         // Programme de test des 2 algos D + D A-Star
                         int origine, dest;
                         origine = 12;
-                        dest = 20;
+                        origine = Integer.parseInt(JOptionPane.showInputDialog(null, "Numero du sommet d'origine'"));
+                        dest = Integer.parseInt(JOptionPane.showInputDialog(null, "Numero du sommet d'origine'"));
                         algo1 = new Pcc_Dijkstra(graphe, this.fichierSortie(), this.readarg, true, origine, dest);
                         // TODO : PCCStar non assign?
                         algo = new PccStar(graphe, this.fichierSortie(), this.readarg, true, origine, dest);
