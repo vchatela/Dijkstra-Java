@@ -19,27 +19,131 @@ import core.PccStar;
 import core.Pcc_Dijkstra;
 
 import javax.swing.*;
+import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.io.DataInputStream;
 import java.io.PrintStream;
 
-public class Launch {
+public class Launch extends JFrame{
 
+    /**
+     * Variable declarations
+     */
     private final Readarg readarg;
 
+    private JButton		loadButton;
+    private JPanel		controlPanel;
+    private JLabel		jLabelBienvenue;
+    private JLabel		jLabelChoixCarte;
+    private JCheckBox   jCheckBoxSortieGraphique;
+    private JLabel		jLabelSortieGraphique;
+    private JLabel      jLabelImage;
+    private JComboBox	jComboBoxCartes;
+    private ImageIcon   image;
+    private Container 	cp;
+
+    static private final String menu[] = {"Quitter", "Plus court chemin Standard", "Plus court chemin A-star",
+            "Cliquer sur la carte pour obtenir un numero de sommet ", "Charger un fichier de chemin"
+            , "Reinitialiser la carte", "Tester les performances"};
+
+
+    /**
+     * Default constructor
+     */
     public Launch(String[] args) {
+        this.setTitle("Dijkstra");
+        this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        this.setLocationRelativeTo(null);
+
         this.readarg = new Readarg(args);
-    }
+        this.loadButton = new JButton("CHARGER");
+        this.jLabelBienvenue = new JLabel("Bienvenue\nVersion 3.0\nde Mangel - Chatelard");
+        this.jLabelChoixCarte = new JLabel("Nom du fichier .map a utiliser");
+        this.jLabelSortieGraphique = new JLabel("Voulez-vous une sortie graphique");
+        this.jCheckBoxSortieGraphique = new JCheckBox();
+        this.jComboBoxCartes = new JComboBox();
+        this.jComboBoxCartes.addItem("insa");
+        this.jComboBoxCartes.addItem("midip");
+        this.jComboBoxCartes.addItem("france");
+        this.jComboBoxCartes.addItem("fractal");
+        this.jComboBoxCartes.addItem("reunion");
+        this.jComboBoxCartes.addItem("carre-dense");
+        this.jComboBoxCartes.addItem("carre");
+        this.jComboBoxCartes.addItem("fractal-spiral");
+
+        this.jLabelImage = new JLabel();
+        this.image = new ImageIcon("arbre.jpg");
+        this.jLabelImage.setIcon(image);
+
+        this.jCheckBoxSortieGraphique.setSelected(true);
+
+        // Make the panel of buttons
+        this.controlPanel = new JPanel();
+        this.controlPanel.setPreferredSize(new Dimension(350, 420));
+        this.controlPanel.setLayout(new FlowLayout());
+        //this.controlPanel.setBackground(new Color(225, 225, 123));
+
+        // Set up loadButton
+        this.loadButton.setPreferredSize(new Dimension(100, 25));
+        this.loadButton.setBackground(new Color(235, 235, 235));
+        this.loadButton.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent evt) {
+                go(jComboBoxCartes.getSelectedItem().toString(), jCheckBoxSortieGraphique.isSelected());
+            }
+        });
+
+        // Set the Layout
+        this.cp = getContentPane();
+        this.cp.setLayout(new GridBagLayout());
+        GridBagConstraints gbc = new GridBagConstraints();
+
+        // Add the components to the control panels
+        //On positionne la case de départ du composant
+        gbc.gridx = 0;
+        gbc.gridy = 0;
+        //La taille en hauteur et en largeur
+        gbc.gridheight = 1;
+        gbc.gridwidth = 2;
+        //Cette instruction informe le layout que c'est une fin de ligne
+        gbc.gridwidth = GridBagConstraints.REMAINDER;
+        this.controlPanel.add(jLabelBienvenue, gbc);
+        gbc.gridx = 1;
+        gbc.gridwidth = GridBagConstraints.REMAINDER;
+        this.controlPanel.add(jLabelImage, gbc);
+        gbc.gridx = 2;
+        gbc.gridwidth = 1;
+        this.controlPanel.add(jLabelChoixCarte, gbc);
+        gbc.gridy = 1;
+        gbc.gridwidth = GridBagConstraints.REMAINDER;
+        this.controlPanel.add(jComboBoxCartes, gbc);
+        gbc.gridx = 3;
+        gbc.gridy = 0;
+        this.controlPanel.add(jLabelSortieGraphique, gbc);
+        gbc.gridy = 1;
+        gbc.gridwidth = GridBagConstraints.REMAINDER;
+        this.controlPanel.add(jCheckBoxSortieGraphique, gbc);
+        gbc.gridx = 4;
+        gbc.gridy = 0;
+        gbc.gridwidth = 2;
+        gbc.gridwidth = GridBagConstraints.REMAINDER;
+        this.controlPanel.add(loadButton, gbc);
+
+        // Add the panels to the Launch
+        this.cp.add(controlPanel);
+
+        this.pack();
+        this.setResizable(false);
+        this.setVisible(true);
+    } // _________  end of constructor
 
     public static void main(String[] args) {
         Launch launch = new Launch(args);
-        launch.go();
+        //launch.go();
     }
 
     public int afficherMenu() {
         int choix = -1;
-        String menu[] = {"Quitter", "Plus court chemin Standard", "Plus court chemin A-star",
-                "Cliquer sur la carte pour obtenir un numero de sommet ", "Charger un fichier de chemin"
-                , "Reinitialiser la carte", "Tester les performances"};
         String selection = (String) JOptionPane.showInputDialog(null, "Que voulez-vous faire ?", "Votre choix", JOptionPane.QUESTION_MESSAGE, null, menu, menu[0]);
         if (selection != null)
             for (int i = 0; i < menu.length; i++)
@@ -48,28 +152,21 @@ public class Launch {
         return choix;
     }
 
-    public void go() {
+    public void go(String carte, boolean sortieGraphique) {
 
         try {
             System.out.println("**");
             System.out.println("** Programme de test des algorithmes de graphe.");
             System.out.println("**");
             System.out.println();
-            JOptionPane.showMessageDialog(null, "Bienvenue" +
-                    "\nVersion 2.0\nde Mangel - Chatelard");
 
             // On obtient ici le nom de la carte a utiliser.
-            String cartes[] = {"insa", "insa.0", "insa.1", "insa.2", "midip", "midip.0", "midip.1",
-                    "france", "pfrance.0", "pfrance.1", "pfrance.2", "pfrance.3", "pfrance.4", "pfrance.5", "fractal",
-                    "reunion", "carre-dense", "carre", "fractal-spiral"};
-            String nomcarte = (String) JOptionPane.showInputDialog(null, "Nom du fichier .map a utiliser?", "Choix de la carte",
-                    JOptionPane.QUESTION_MESSAGE, null, cartes, cartes[0]);
+            String nomcarte = carte;
             if (nomcarte == null) {
                 System.exit(1);
             }
             DataInputStream mapdata = Openfile.open(nomcarte);
-            boolean display = (0 == JOptionPane.showConfirmDialog(null, "Voulez-vous une sortie graphique "
-                    , "Type Affichage", JOptionPane.YES_NO_OPTION));
+            boolean display = sortieGraphique;
 
             Dessin dessin = (display) ? new DessinVisible(800, 600) : new DessinInvisible();
 
