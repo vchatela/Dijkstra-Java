@@ -25,7 +25,7 @@ import java.awt.event.ActionListener;
 import java.io.DataInputStream;
 import java.io.PrintStream;
 
-public class Launch extends JFrame{
+public class Launch {
 
     /**
      * Variable declarations
@@ -33,6 +33,7 @@ public class Launch extends JFrame{
     private final Readarg readarg;
 
     private JButton		loadButton;
+    private JFrame      frame;
     private JPanel		controlPanel;
     private JLabel		jLabelBienvenue;
     private JLabel		jLabelChoixCarte;
@@ -41,101 +42,82 @@ public class Launch extends JFrame{
     private JLabel      jLabelImage;
     private JComboBox	jComboBoxCartes;
     private ImageIcon   image;
-    private Container 	cp;
+    private String      nomcarte;
+    private Thread t;
+    private boolean     display;
 
     static private final String menu[] = {"Quitter", "Plus court chemin Standard", "Plus court chemin A-star",
             "Cliquer sur la carte pour obtenir un numero de sommet ", "Charger un fichier de chemin"
             , "Reinitialiser la carte", "Tester les performances"};
+
+    static private final String cartes[] = {"midip", "insa", "france",
+            "fractal", "reunion", "carre-dense", "carre",  "fractal-spiral"};
 
 
     /**
      * Default constructor
      */
     public Launch(String[] args) {
-        this.setTitle("Dijkstra");
-        this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        this.setLocationRelativeTo(null);
+        frame = new JFrame("Dijkstra");
+        frame.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
 
         this.readarg = new Readarg(args);
-        this.loadButton = new JButton("CHARGER");
-        this.jLabelBienvenue = new JLabel("Bienvenue\nVersion 3.0\nde Mangel - Chatelard");
-        this.jLabelChoixCarte = new JLabel("Nom du fichier .map a utiliser");
-        this.jLabelSortieGraphique = new JLabel("Voulez-vous une sortie graphique");
-        this.jCheckBoxSortieGraphique = new JCheckBox();
-        this.jComboBoxCartes = new JComboBox();
-        this.jComboBoxCartes.addItem("insa");
-        this.jComboBoxCartes.addItem("midip");
-        this.jComboBoxCartes.addItem("france");
-        this.jComboBoxCartes.addItem("fractal");
-        this.jComboBoxCartes.addItem("reunion");
-        this.jComboBoxCartes.addItem("carre-dense");
-        this.jComboBoxCartes.addItem("carre");
-        this.jComboBoxCartes.addItem("fractal-spiral");
 
-        this.jLabelImage = new JLabel();
-        this.image = new ImageIcon("arbre.jpg");
-        this.jLabelImage.setIcon(image);
+        jLabelBienvenue = new JLabel("Bienvenue\nVersion 3.0\nde Mangel - Chatelard");
+        jLabelChoixCarte = new JLabel("Nom du fichier .map a utiliser");
+        jLabelSortieGraphique = new JLabel("Voulez-vous une sortie graphique");
 
-        this.jCheckBoxSortieGraphique.setSelected(true);
+        jCheckBoxSortieGraphique = new JCheckBox();
+        jCheckBoxSortieGraphique.setSelected(true);
 
-        // Make the panel of buttons
-        this.controlPanel = new JPanel();
-        this.controlPanel.setPreferredSize(new Dimension(350, 420));
-        this.controlPanel.setLayout(new FlowLayout());
-        //this.controlPanel.setBackground(new Color(225, 225, 123));
+        jComboBoxCartes = new JComboBox();
+        for (String carte : cartes)
+            jComboBoxCartes.addItem(carte);
 
-        // Set up loadButton
-        this.loadButton.setPreferredSize(new Dimension(100, 25));
-        this.loadButton.setBackground(new Color(235, 235, 235));
-        this.loadButton.addActionListener(new ActionListener() {
-            public void actionPerformed(ActionEvent evt) {
-                go(jComboBoxCartes.getSelectedItem().toString(), jCheckBoxSortieGraphique.isSelected());
-            }
-        });
+        jLabelImage = new JLabel();
+        image = new ImageIcon("arbre.jpg");
+        jLabelImage.setIcon(image);
 
-        // Set the Layout
-        this.cp = getContentPane();
-        this.cp.setLayout(new GridBagLayout());
-        GridBagConstraints gbc = new GridBagConstraints();
+        loadButton = new JButton("CHARGER");
+        loadButton.setPreferredSize(new Dimension(100, 25));
+        loadButton.setBackground(new Color(235, 235, 235));
+        loadButton.addActionListener(new BoutonListener());
 
-        // Add the components to the control panels
-        //On positionne la case de départ du composant
-        gbc.gridx = 0;
-        gbc.gridy = 0;
-        //La taille en hauteur et en largeur
-        gbc.gridheight = 1;
-        gbc.gridwidth = 2;
-        //Cette instruction informe le layout que c'est une fin de ligne
-        gbc.gridwidth = GridBagConstraints.REMAINDER;
-        this.controlPanel.add(jLabelBienvenue, gbc);
-        gbc.gridx = 1;
-        gbc.gridwidth = GridBagConstraints.REMAINDER;
-        this.controlPanel.add(jLabelImage, gbc);
-        gbc.gridx = 2;
-        gbc.gridwidth = 1;
-        this.controlPanel.add(jLabelChoixCarte, gbc);
-        gbc.gridy = 1;
-        gbc.gridwidth = GridBagConstraints.REMAINDER;
-        this.controlPanel.add(jComboBoxCartes, gbc);
-        gbc.gridx = 3;
-        gbc.gridy = 0;
-        this.controlPanel.add(jLabelSortieGraphique, gbc);
-        gbc.gridy = 1;
-        gbc.gridwidth = GridBagConstraints.REMAINDER;
-        this.controlPanel.add(jCheckBoxSortieGraphique, gbc);
-        gbc.gridx = 4;
-        gbc.gridy = 0;
-        gbc.gridwidth = 2;
-        gbc.gridwidth = GridBagConstraints.REMAINDER;
-        this.controlPanel.add(loadButton, gbc);
+        controlPanel = new JPanel();
+        controlPanel.setPreferredSize(new Dimension(350, 420));
+        controlPanel.setLayout(new FlowLayout());
 
-        // Add the panels to the Launch
-        this.cp.add(controlPanel);
+        controlPanel.add(jLabelBienvenue);
+        controlPanel.add(jLabelImage);
+        controlPanel.add(jLabelChoixCarte);
+        controlPanel.add(jComboBoxCartes);
+        controlPanel.add(jLabelSortieGraphique);
+        controlPanel.add(jCheckBoxSortieGraphique);
+        controlPanel.add(loadButton);
 
-        this.pack();
-        this.setResizable(false);
-        this.setVisible(true);
+        frame.setContentPane(controlPanel);
+        frame.pack();
+        frame.setResizable(false);
+        frame.setVisible(true);
+
     } // _________  end of constructor
+
+    public class BoutonListener implements ActionListener {
+        public void actionPerformed(ActionEvent arg0) {
+            nomcarte = jComboBoxCartes.getSelectedItem().toString();
+            display = jCheckBoxSortieGraphique.isSelected();
+            t = new Thread(new PlayAnimation());
+            t.start();
+            frame.setVisible(false);
+            frame.dispose();
+        }
+    }
+
+    class PlayAnimation implements Runnable {
+        public void run() {
+            go();
+        }
+    }
 
     public static void main(String[] args) {
         Launch launch = new Launch(args);
@@ -152,7 +134,7 @@ public class Launch extends JFrame{
         return choix;
     }
 
-    public void go(String carte, boolean sortieGraphique) {
+    public void go() {
 
         try {
             System.out.println("**");
@@ -161,12 +143,10 @@ public class Launch extends JFrame{
             System.out.println();
 
             // On obtient ici le nom de la carte a utiliser.
-            String nomcarte = carte;
-            if (nomcarte == null) {
-                System.exit(1);
-            }
-            DataInputStream mapdata = Openfile.open(nomcarte);
-            boolean display = sortieGraphique;
+            //String nomcarte = this.readarg.lireString ("Nom du fichier .map a utiliser ? ") ;
+            DataInputStream mapdata = Openfile.open (nomcarte) ;
+
+            //boolean display = (1 == this.readarg.lireInt ("Voulez-vous une sortie graphique (0 = non, 1 = oui) ? ")) ;
 
             Dessin dessin = (display) ? new DessinVisible(800, 600) : new DessinInvisible();
 
@@ -240,7 +220,6 @@ public class Launch extends JFrame{
                     case 6:
                         // Programme de test des 2 algos D + D A-Star
                         int origine, dest;
-                        origine = 12;
                         origine = Integer.parseInt(JOptionPane.showInputDialog(null, "Numero du sommet d'origine'"));
                         dest = Integer.parseInt(JOptionPane.showInputDialog(null, "Numero du sommet d'origine'"));
                         algo1 = new Pcc_Dijkstra(graphe, this.fichierSortie(), this.readarg, true, origine, dest);
@@ -277,7 +256,7 @@ public class Launch extends JFrame{
         PrintStream result = System.out;
 
         //String nom = this.readarg.lireString("Nom du fichier de sortie ? ");
-        String nom = (String) JOptionPane.showInputDialog(null, "Nom du fichier de sortie ?");
+        String nom = JOptionPane.showInputDialog(null, "Nom du fichier de sortie ?");
         if ("".equals(nom)) {
             //nom = "/dev/null";
             nom = "sortie";
