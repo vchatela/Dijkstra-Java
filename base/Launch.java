@@ -45,6 +45,8 @@ public class Launch extends JFrame {
     private JLabel		jLabel3;
     private JLabel		jLabel4;
     private JLabel      jLabelImage;
+    private JLabel      jLabelFichier;
+    private JTextField  jTextFieldFichier;
     private JTextField  jTextField1;
     private JTextField  jTextField2;
     private JCheckBox   jCheckBoxSortieGraphique;
@@ -58,6 +60,10 @@ public class Launch extends JFrame {
     private boolean     display;        //Affichage graphique ou non
     private boolean     buttonHasBeenClicked;   //Choix du menu effectué ou non
     private Thread      t;              //Utilisé pour afficher la carte
+
+    public static void main(String[] args) {
+        Launch launch = new Launch(args);
+    }
 
     /**
      * Default constructor
@@ -73,11 +79,14 @@ public class Launch extends JFrame {
         jLabel2 = new JLabel("Programme de test des algorithmes de graphe");
         jLabel3 = new JLabel("Nom du fichier .map a utiliser");
         jLabel4 = new JLabel("Voulez-vous une sortie graphique");
+        jLabelFichier = new JLabel("Fichier de sortie :");
 
         jTextField1 = new JTextField();
         jTextField2 = new JTextField();
+        jTextFieldFichier = new JTextField();
         jTextField1.setPreferredSize(new Dimension(100, 25));
         jTextField2.setPreferredSize(new Dimension(100, 25));
+        jTextFieldFichier.setPreferredSize(new Dimension(100, 25));
 
         jCheckBoxSortieGraphique = new JCheckBox();
         jCheckBoxSortieGraphique.setSelected(true);
@@ -131,10 +140,6 @@ public class Launch extends JFrame {
 
     } // _________  end of constructor
 
-    public static void main(String[] args) {
-        Launch launch = new Launch(args);
-    }
-
     public void afficherMenu() {
         makeControlPanel(1);
     }
@@ -152,6 +157,8 @@ public class Launch extends JFrame {
             controlPanel.add(Box.createHorizontalStrut(300));
             controlPanel.add(jLabel1);
             controlPanel.add(jComboBoxMenu);
+            controlPanel.add(jLabelFichier);
+            controlPanel.add(jTextFieldFichier);
             controlPanel.add(goButton);
         }
 
@@ -180,20 +187,12 @@ public class Launch extends JFrame {
 
             graphe = new Graphe(nomcarte, mapdata, dessin);
 
-            // Boucle principale : le menu est accessible
-            // jusqu'a ce que l'on quitte.
+            // Boucle principale : le menu est accessible jusqu'a ce que l'on quitte.
             boolean continuer = true;
             int choix;
 
             while (continuer) {
                 this.afficherMenu();
-
-//                choix = -1;
-//                String selection = (String) JOptionPane.showInputDialog(null, "Que voulez-vous faire ?", "Votre choix", JOptionPane.QUESTION_MESSAGE, null, menu, menu[0]);
-//                if (selection != null)
-//                    for (int i = 0; i < menu.length; i++)
-//                        if (selection.equals(menu[i]))
-//                            choix = i;
 
                 while (buttonHasBeenClicked == false) {
                     try {
@@ -290,7 +289,6 @@ public class Launch extends JFrame {
 
                         break;
 
-
                     default:
                         System.out.println("Choix de menu incorrect : " + choix);
                         JOptionPane.showMessageDialog(null, "Choix de menu incorrect", "Choix menu", JOptionPane.ERROR_MESSAGE);
@@ -336,7 +334,8 @@ public class Launch extends JFrame {
         PrintStream result = System.out;
 
         //String nom = this.readarg.lireString("Nom du fichier de sortie ? ");
-        String nom = JOptionPane.showInputDialog(null, "Nom du fichier de sortie ?");
+        //String nom = JOptionPane.showInputDialog(null, "Nom du fichier de sortie ?");
+        String nom = jTextFieldFichier.getText();
         if ("".equals(nom)) {
             //nom = "/dev/null";
             nom = "sortie";
@@ -359,6 +358,7 @@ public class Launch extends JFrame {
             if (evt.getSource() == loadButton) {
                 nomcarte = jComboBoxCartes.getSelectedItem().toString();
                 display = jCheckBoxSortieGraphique.isSelected();
+                loadButton.setEnabled(false);
                 t = new Thread(new PlayAnimation());
                 t.start();
             } else if (evt.getSource() == reloadButton) {
