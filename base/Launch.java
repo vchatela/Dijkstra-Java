@@ -4,7 +4,7 @@ package base;
  * Ce programme propose de lancer divers algorithmes sur les graphes
  * a partir d'un menu texte, ou a partir de la ligne de commande (ou des deux).
  *
- * A chaque question posee par le programme (par exemple, le nom de la carte), 
+ * A chaque question posee par le programme (par exemple, le nom de la carte),
  * la reponse est d'abord cherchee sur la ligne de commande.
  *
  * Pour executer en ligne de commande, ecrire les donnees dans l'ordre. Par exemple
@@ -20,36 +20,39 @@ import core.Pcc_Dijkstra;
 
 import javax.swing.*;
 import java.awt.*;
+import java.awt.dnd.DropTarget;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.DataInputStream;
 import java.io.PrintStream;
 
-public class Launch {
+public class Launch extends JFrame {
 
     /**
      * Variable declarations
      */
     private final Readarg readarg;
+    private Graphe      graphe;
 
-    private JFrame      frame;
     private JPanel		controlPanel;
-    private JLabel		jLabelBienvenue;
-    private JLabel		jLabelChoixCarte;
-    private JLabel		jLabelChoixMenu;
-    private JLabel		jLabelSortieGraphique;
+    private Container 	cp;
+    private JLabel		jLabel1;
+    private JLabel		jLabel2;
+    private JLabel		jLabel3;
+    private JLabel		jLabel4;
     private JLabel      jLabelImage;
-    private JTextField  jTextFieldOrigine;
-    private JTextField  jTextFieldDestination;
+    private JTextField  jTextField1;
+    private JTextField  jTextField2;
     private JCheckBox   jCheckBoxSortieGraphique;
     private JComboBox	jComboBoxMenu;
     private JComboBox	jComboBoxCartes;
     private ImageIcon   image;
     private JButton		goButton;       //Button go (selection menu)
     private JButton		loadButton;     //Button charger (lancement de l'appli)
+    private JButton		reloadButton;     //Button charger (lancement de l'appli)
     private String      nomcarte;       //Nom de la carte à charger
     private boolean     display;        //Affichage graphique ou non
-    private boolean     menuSelected;   //Choix du menu effectué ou non
+    private boolean     buttonHasBeenClicked;   //Choix du menu effectué ou non
     private Thread      t;              //Utilisé pour afficher la carte
 
 
@@ -68,19 +71,21 @@ public class Launch {
      * Default constructor
      */
     public Launch(String[] args) {
-        frame = new JFrame("Dijkstra");
-        frame.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
+        this.setTitle("Dijkstra");
+        this.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
 
         this.readarg = new Readarg(args);
-        menuSelected = false;
+        buttonHasBeenClicked = false;
 
-        jLabelBienvenue = new JLabel("Bienvenue\nVersion 3.0\nde Mangel - Chatelard");
-        jLabelChoixCarte = new JLabel("Nom du fichier .map a utiliser");
-        jLabelChoixMenu = new JLabel("Que voulez-vous faire");
-        jLabelSortieGraphique = new JLabel("Voulez-vous une sortie graphique");
+        jLabel1 = new JLabel("Bienvenue (Version 3.0 de Mangel - Chatelard)");
+        jLabel2 = new JLabel("Programme de test des algorithmes de graphe");
+        jLabel3 = new JLabel("Nom du fichier .map a utiliser");
+        jLabel4 = new JLabel("Voulez-vous une sortie graphique");
 
-        jTextFieldOrigine = new JTextField();
-        jTextFieldDestination = new JTextField();
+        jTextField1 = new JTextField();
+        jTextField2 = new JTextField();
+        jTextField1.setPreferredSize(new Dimension(100,25));
+        jTextField2.setPreferredSize(new Dimension(100,25));
 
         jCheckBoxSortieGraphique = new JCheckBox();
         jCheckBoxSortieGraphique.setSelected(true);
@@ -101,27 +106,36 @@ public class Launch {
         loadButton.setBackground(new Color(235, 235, 235));
         loadButton.addActionListener(new BoutonListener());
 
+        reloadButton = new JButton("RECHARGER");
+        reloadButton.setPreferredSize(new Dimension(100, 25));
+        reloadButton.setBackground(new Color(235, 235, 235));
+        reloadButton.addActionListener(new BoutonListener());
+
         goButton = new JButton("GO");
         goButton.setPreferredSize(new Dimension(100, 25));
         goButton.setBackground(new Color(235, 235, 235));
         goButton.addActionListener(new BoutonListener());
 
         controlPanel = new JPanel();
-        controlPanel.setPreferredSize(new Dimension(350, 420));
+        controlPanel.setPreferredSize(new Dimension(350, 645));
         controlPanel.setLayout(new FlowLayout());
 
-        controlPanel.add(jLabelBienvenue);
+        controlPanel.add(jLabel1);
+        controlPanel.add(jLabel2);
         controlPanel.add(jLabelImage);
-        controlPanel.add(jLabelChoixCarte);
+        controlPanel.add(jLabel3);
         controlPanel.add(jComboBoxCartes);
-        controlPanel.add(jLabelSortieGraphique);
+        controlPanel.add(jLabel4);
         controlPanel.add(jCheckBoxSortieGraphique);
         controlPanel.add(loadButton);
 
-        frame.setContentPane(controlPanel);
-        frame.pack();
-        frame.setResizable(false);
-        frame.setVisible(true);
+        cp = getContentPane();
+        cp.setLayout(new FlowLayout());
+        cp.add(controlPanel);
+
+        this.pack();
+        this.setResizable(false);
+        this.setVisible(true);
 
     } // _________  end of constructor
 
@@ -133,21 +147,13 @@ public class Launch {
                 display = jCheckBoxSortieGraphique.isSelected();
                 t = new Thread(new PlayAnimation());
                 t.start();
-                frame.setVisible(false);
-                frame.dispose();
-
-                //préparation du menu
-                //On supprime tout le reste du précédent Panel
-                controlPanel.removeAll();
-
-                controlPanel.add(jLabelChoixMenu);
-                controlPanel.add(jComboBoxMenu);
-                controlPanel.add(goButton);
-
-                frame.pack();
+            }
+            else if(evt.getSource() == reloadButton) {
+                buttonHasBeenClicked = true;
+                nomcarte = jComboBoxCartes.getSelectedItem().toString();
             }
             else if(evt.getSource() == goButton) {
-                menuSelected = true;
+                buttonHasBeenClicked = true;
                 goButton.setEnabled(false);
             }
         }
@@ -160,38 +166,49 @@ public class Launch {
     }
 
     public void afficherMenu() {
-        frame.setVisible(true);
+        makeControlPanel(1);
+    }
 
-        //On parametre le menu
-        goButton.setEnabled(true);
+    public void makeControlPanel(int choice) {
+        cp.remove(controlPanel);
+        controlPanel.removeAll();
+        controlPanel.revalidate();
 
-//        int choix = -1;
-//        String selection = (String) JOptionPane.showInputDialog(null, "Que voulez-vous faire ?", "Votre choix", JOptionPane.QUESTION_MESSAGE, null, menu, menu[0]);
-//        if (selection != null)
-//            for (int i = 0; i < menu.length; i++)
-//                if (selection.equals(menu[i])) choix = i;
-//
-//        return choix;
+        // Afficher le menu
+        if(choice == 1) {
+            jLabel1.setText("Que voulez-vous faire");
+            goButton.setEnabled(true);
 
+            controlPanel.add(Box.createHorizontalStrut(300));
+            controlPanel.add(jLabel1);
+            controlPanel.add(jComboBoxMenu);
+            controlPanel.add(goButton);
+        }
+
+        //Reinitialisation de la carte
+        else if (choice == 5) {
+            jLabel1 = new JLabel("Nom du fichier .map a utiliser");
+
+            controlPanel.add(jLabel1);
+            controlPanel.add(jComboBoxCartes);
+            controlPanel.add(reloadButton);
+        }
+        cp.add(controlPanel, 0);
+        this.repaint();
+        this.pack();
     }
 
     public void go() {
 
         try {
-            System.out.println("**");
-            System.out.println("** Programme de test des algorithmes de graphe.");
-            System.out.println("**");
-            System.out.println();
 
-            // On obtient ici le nom de la carte a utiliser.
-            //String nomcarte = this.readarg.lireString ("Nom du fichier .map a utiliser ? ") ;
             DataInputStream mapdata = Openfile.open (nomcarte) ;
 
-            //boolean display = (1 == this.readarg.lireInt ("Voulez-vous une sortie graphique (0 = non, 1 = oui) ? ")) ;
-
             Dessin dessin = (display) ? new DessinVisible(800, 600) : new DessinInvisible();
+            cp.add(dessin);
+            this.pack();
 
-            Graphe graphe = new Graphe(nomcarte, mapdata, dessin);
+            graphe = new Graphe(nomcarte, mapdata, dessin);
 
             // Boucle principale : le menu est accessible
             // jusqu'a ce que l'on quitte.
@@ -201,7 +218,14 @@ public class Launch {
             while (continuer) {
                 this.afficherMenu();
 
-                while (menuSelected == false) {
+//                choix = -1;
+//                String selection = (String) JOptionPane.showInputDialog(null, "Que voulez-vous faire ?", "Votre choix", JOptionPane.QUESTION_MESSAGE, null, menu, menu[0]);
+//                if (selection != null)
+//                    for (int i = 0; i < menu.length; i++)
+//                        if (selection.equals(menu[i]))
+//                            choix = i;
+
+                while (buttonHasBeenClicked == false) {
                     try {
                         t.sleep(200);
                     }
@@ -209,8 +233,9 @@ public class Launch {
                         System.out.println("Error thread sleep");
                     }
                 }
-                menuSelected = false;
+                buttonHasBeenClicked = false;
                 choix = jComboBoxMenu.getSelectedIndex();
+
 
                 // Algorithme a executer
                 Algo algo = null;
@@ -235,7 +260,16 @@ public class Launch {
                         break;
 
                     case 3:
+                        jLabel2.setText("Clic aux coordonnées : ");
+                        jLabel3.setText("Noeud le plus proche : ");
+                        controlPanel.add(jLabel2);
+                        controlPanel.add(jTextField1);
+                        controlPanel.add(jLabel3);
+                        controlPanel.add(jTextField2);
+                        this.pack();
+
                         graphe.situerClick();
+
                         break;
 
                     case 4:
@@ -254,19 +288,28 @@ public class Launch {
                         graphe.getChemin().cout_chemin_temps();
                         break;
                     case 5:
-/*
-            for (Node noeud : graphe.getArrayList()){
-				Descripteur[] descripteurs = new Descripteur[graphe.nb_descripteurs] ;
-				for (int num_descr = 0 ; num_descr < graphe.nb_descripteurs ; num_descr++) {
-					// Lecture du descripteur numero num_descr
-					descripteurs[num_descr]= new Descripteur(mapdata);
-					Couleur.set(dessin, descripteurs[num_descr].getType());
-					// On affiche quelques descripteurs parmi tous. - DEBUG
-					//if (0 == num_descr % (1 + nb_descripteurs / 400))
-					//	System.out.println("Descripteur " + num_descr + " = " + this.listNode.get(num_descr)) ;
-				}
-			}*/
-                        JOptionPane.showMessageDialog(null, "Fonctionnalite a venir");
+                        makeControlPanel(5);
+
+                        //On attend d'avoir cliquer sur RECHARGER
+                        while (buttonHasBeenClicked == false) {
+                            try {
+                                t.sleep(200);
+                            }
+                            catch(InterruptedException e) {
+                                System.out.println("Error thread sleep");
+                            }
+                        }
+                        buttonHasBeenClicked = false;
+
+                        cp.remove(dessin);
+                        dessin = (display) ? new DessinVisible(800, 600) : new DessinInvisible();
+                        cp.add(dessin);
+                        dessin.revalidate();
+                        mapdata = Openfile.open (nomcarte);
+                        graphe = null; //Pour detruire l'objet (methode finalize())
+                        graphe = new Graphe(nomcarte, mapdata, dessin);
+                        this.pack();
+
                         break;
                     case 6:
                         // Programme de test des 2 algos D + D A-Star
@@ -278,6 +321,8 @@ public class Launch {
                         algo = new PccStar(graphe, this.fichierSortie(), this.readarg, true, origine, dest);
 
                         break;
+
+
                     default:
                         System.out.println("Choix de menu incorrect : " + choix);
                         JOptionPane.showMessageDialog(null, "Choix de menu incorrect", "Choix menu", JOptionPane.ERROR_MESSAGE);
@@ -291,6 +336,10 @@ public class Launch {
                     algo.run();
                 }
             }
+
+            //On detruit le jFrame
+            this.setVisible(false);
+            this.dispose();
 
             System.out.println("Programme termine.");
             System.exit(0);
@@ -325,5 +374,3 @@ public class Launch {
     }
 
 }
-
-//TODO affichage menu sur sortie graphique (avec menu deroulant des cartes, chemins) et affichage temps, longueurs... 
