@@ -20,20 +20,24 @@ import core.Pcc_Dijkstra;
 
 import javax.swing.*;
 import java.awt.*;
-import java.awt.dnd.DropTarget;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.DataInputStream;
 import java.io.PrintStream;
+import java.util.ArrayList;
 
 public class Launch extends JFrame {
 
+    static private final String menu[] = {"Quitter", "PCC Standard", "PCC A-star",
+            "Obtenir un numero de sommet ", "Charger un fichier de chemin"
+            , "Reinitialiser la carte", "Tester les performances"};
+    static private final String cartes[] = {"midip", "insa", "france",
+            "fractal", "reunion", "carre-dense", "carre", "fractal-spiral"};
     /**
      * Variable declarations
      */
     private final Readarg readarg;
     private Graphe      graphe;
-
     private JPanel		controlPanel;
     private Container 	cp;
     private JLabel		jLabel1;
@@ -55,18 +59,6 @@ public class Launch extends JFrame {
     private boolean     buttonHasBeenClicked;   //Choix du menu effectué ou non
     private Thread      t;              //Utilisé pour afficher la carte
 
-
-    static private final String menu[] = {"Quitter", "PCC Standard", "PCC A-star",
-            "Obtenir un numero de sommet ", "Charger un fichier de chemin"
-            , "Reinitialiser la carte", "Tester les performances"};
-
-    static private final String cartes[] = {"midip", "insa", "france",
-            "fractal", "reunion", "carre-dense", "carre",  "fractal-spiral"};
-
-    public static void main(String[] args) {
-        Launch launch = new Launch(args);
-    }
-
     /**
      * Default constructor
      */
@@ -84,8 +76,8 @@ public class Launch extends JFrame {
 
         jTextField1 = new JTextField();
         jTextField2 = new JTextField();
-        jTextField1.setPreferredSize(new Dimension(100,25));
-        jTextField2.setPreferredSize(new Dimension(100,25));
+        jTextField1.setPreferredSize(new Dimension(100, 25));
+        jTextField2.setPreferredSize(new Dimension(100, 25));
 
         jCheckBoxSortieGraphique = new JCheckBox();
         jCheckBoxSortieGraphique.setSelected(true);
@@ -139,30 +131,8 @@ public class Launch extends JFrame {
 
     } // _________  end of constructor
 
-    public class BoutonListener implements ActionListener {
-        public void actionPerformed(ActionEvent evt) {
-            //Click sur le boutton Load
-            if(evt.getSource() == loadButton) {
-                nomcarte = jComboBoxCartes.getSelectedItem().toString();
-                display = jCheckBoxSortieGraphique.isSelected();
-                t = new Thread(new PlayAnimation());
-                t.start();
-            }
-            else if(evt.getSource() == reloadButton) {
-                buttonHasBeenClicked = true;
-                nomcarte = jComboBoxCartes.getSelectedItem().toString();
-            }
-            else if(evt.getSource() == goButton) {
-                buttonHasBeenClicked = true;
-                goButton.setEnabled(false);
-            }
-        }
-    }
-
-    class PlayAnimation implements Runnable {
-        public void run() {
-            go();
-        }
+    public static void main(String[] args) {
+        Launch launch = new Launch(args);
     }
 
     public void afficherMenu() {
@@ -175,7 +145,7 @@ public class Launch extends JFrame {
         controlPanel.revalidate();
 
         // Afficher le menu
-        if(choice == 1) {
+        if (choice == 1) {
             jLabel1.setText("Que voulez-vous faire");
             goButton.setEnabled(true);
 
@@ -202,7 +172,7 @@ public class Launch extends JFrame {
 
         try {
 
-            DataInputStream mapdata = Openfile.open (nomcarte) ;
+            DataInputStream mapdata = Openfile.open(nomcarte);
 
             Dessin dessin = (display) ? new DessinVisible(800, 600) : new DessinInvisible();
             cp.add(dessin);
@@ -228,8 +198,7 @@ public class Launch extends JFrame {
                 while (buttonHasBeenClicked == false) {
                     try {
                         t.sleep(200);
-                    }
-                    catch(InterruptedException e) {
+                    } catch (InterruptedException e) {
                         System.out.println("Error thread sleep");
                     }
                 }
@@ -294,8 +263,7 @@ public class Launch extends JFrame {
                         while (buttonHasBeenClicked == false) {
                             try {
                                 t.sleep(200);
-                            }
-                            catch(InterruptedException e) {
+                            } catch (InterruptedException e) {
                                 System.out.println("Error thread sleep");
                             }
                         }
@@ -305,7 +273,7 @@ public class Launch extends JFrame {
                         dessin = (display) ? new DessinVisible(800, 600) : new DessinInvisible();
                         cp.add(dessin);
                         dessin.revalidate();
-                        mapdata = Openfile.open (nomcarte);
+                        mapdata = Openfile.open(nomcarte);
                         graphe = null; //Pour detruire l'objet (methode finalize())
                         graphe = new Graphe(nomcarte, mapdata, dessin);
                         this.pack();
@@ -331,9 +299,21 @@ public class Launch extends JFrame {
 
                 if (algo != null) {
                     //TODO
-                    if (algo1 != null)
-                        algo1.run();
-                    algo.run();
+                    if (algo1 != null) {
+                        ArrayList perf1 = new ArrayList();
+                        perf1 = algo1.run();
+                        ArrayList perf2 = new ArrayList();
+                        perf2 = algo.run();
+                        // on affiche les performances
+                        String resultat = new String("Performance des algos Dijkstra VS Dijkstra A-Star \n");
+                        resultat += "Le cout est de : " + perf1.get(0) + " km - " + perf2.get(0) + " km \n";
+                        resultat += "Durée exécution : " + perf1.get(1) + " ms - " + perf2.get(1) + " ms \n";
+                        resultat += "Nbr max éléments dans le tas : " + perf1.get(2) + " - " + perf2.get(2) + "\n";
+                        resultat += "Nombre d'éléments parcourut : " + perf1.get(3) + " - " + perf2.get(3) + "\n";
+                        JOptionPane.showMessageDialog(null, resultat);
+                    } else {
+                        algo.run();
+                    }
                 }
             }
 
@@ -371,6 +351,30 @@ public class Launch extends JFrame {
         }
 
         return result;
+    }
+
+    public class BoutonListener implements ActionListener {
+        public void actionPerformed(ActionEvent evt) {
+            //Click sur le boutton Load
+            if (evt.getSource() == loadButton) {
+                nomcarte = jComboBoxCartes.getSelectedItem().toString();
+                display = jCheckBoxSortieGraphique.isSelected();
+                t = new Thread(new PlayAnimation());
+                t.start();
+            } else if (evt.getSource() == reloadButton) {
+                buttonHasBeenClicked = true;
+                nomcarte = jComboBoxCartes.getSelectedItem().toString();
+            } else if (evt.getSource() == goButton) {
+                buttonHasBeenClicked = true;
+                goButton.setEnabled(false);
+            }
+        }
+    }
+
+    class PlayAnimation implements Runnable {
+        public void run() {
+            go();
+        }
     }
 
 }
