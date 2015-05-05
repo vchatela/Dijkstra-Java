@@ -13,6 +13,7 @@ public class Connexite extends Algo {
 
     public ArrayList run() {
         // A vous d'implementer la recherche de connexite.
+        return new ArrayList();
     }
 
 }

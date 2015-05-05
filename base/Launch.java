@@ -254,6 +254,7 @@ public class Launch {
                         ArrayList perf2 = new ArrayList();
                         perf2 = algo.run();
                         // on va afficher des graphiques de performances
+
                     } else algo.run();
                 }
             }
