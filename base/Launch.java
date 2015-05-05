@@ -27,11 +27,15 @@ import java.io.PrintStream;
 
 public class Launch {
 
+    static private final String menu[] = {"Quitter", "PCC Standard", "PCC A-star",
+            "Obtenir un numero de sommet ", "Charger un fichier de chemin"
+            , "Reinitialiser la carte", "Tester les performances"};
+    static private final String cartes[] = {"midip", "insa", "france",
+            "fractal", "reunion", "carre-dense", "carre", "fractal-spiral"};
     /**
      * Variable declarations
      */
     private final Readarg readarg;
-
     private JFrame      frame;
     private JPanel		controlPanel;
     private JLabel		jLabelBienvenue;
@@ -52,18 +56,6 @@ public class Launch {
     private boolean     menuSelected;   //Choix du menu effectué ou non
     private Thread      t;              //Utilisé pour afficher la carte
 
-
-    static private final String menu[] = {"Quitter", "PCC Standard", "PCC A-star",
-            "Obtenir un numero de sommet ", "Charger un fichier de chemin"
-            , "Reinitialiser la carte", "Tester les performances"};
-
-    static private final String cartes[] = {"midip", "insa", "france",
-            "fractal", "reunion", "carre-dense", "carre",  "fractal-spiral"};
-
-    public static void main(String[] args) {
-        Launch launch = new Launch(args);
-    }
-
     /**
      * Default constructor
      */
@@ -74,7 +66,7 @@ public class Launch {
         this.readarg = new Readarg(args);
         menuSelected = false;
 
-        jLabelBienvenue = new JLabel("Bienvenue\nVersion 3.0\nde Mangel - Chatelard");
+        jLabelBienvenue = new JLabel("Bienvenue \n Version 3.0 \n de Mangel - Chatelard");
         jLabelChoixCarte = new JLabel("Nom du fichier .map a utiliser");
         jLabelChoixMenu = new JLabel("Que voulez-vous faire");
         jLabelSortieGraphique = new JLabel("Voulez-vous une sortie graphique");
@@ -125,38 +117,8 @@ public class Launch {
 
     } // _________  end of constructor
 
-    public class BoutonListener implements ActionListener {
-        public void actionPerformed(ActionEvent evt) {
-            //Click sur le boutton Load
-            if(evt.getSource() == loadButton) {
-                nomcarte = jComboBoxCartes.getSelectedItem().toString();
-                display = jCheckBoxSortieGraphique.isSelected();
-                t = new Thread(new PlayAnimation());
-                t.start();
-                frame.setVisible(false);
-                frame.dispose();
-
-                //préparation du menu
-                //On supprime tout le reste du précédent Panel
-                controlPanel.removeAll();
-
-                controlPanel.add(jLabelChoixMenu);
-                controlPanel.add(jComboBoxMenu);
-                controlPanel.add(goButton);
-
-                frame.pack();
-            }
-            else if(evt.getSource() == goButton) {
-                menuSelected = true;
-                goButton.setEnabled(false);
-            }
-        }
-    }
-
-    class PlayAnimation implements Runnable {
-        public void run() {
-            go();
-        }
+    public static void main(String[] args) {
+        Launch launch = new Launch(args);
     }
 
     public void afficherMenu() {
@@ -185,7 +147,7 @@ public class Launch {
 
             // On obtient ici le nom de la carte a utiliser.
             //String nomcarte = this.readarg.lireString ("Nom du fichier .map a utiliser ? ") ;
-            DataInputStream mapdata = Openfile.open (nomcarte) ;
+            DataInputStream mapdata = Openfile.open(nomcarte);
 
             //boolean display = (1 == this.readarg.lireInt ("Voulez-vous une sortie graphique (0 = non, 1 = oui) ? ")) ;
 
@@ -204,8 +166,7 @@ public class Launch {
                 while (menuSelected == false) {
                     try {
                         t.sleep(200);
-                    }
-                    catch(InterruptedException e) {
+                    } catch (InterruptedException e) {
                         System.out.println("Error thread sleep");
                     }
                 }
@@ -274,7 +235,6 @@ public class Launch {
                         origine = Integer.parseInt(JOptionPane.showInputDialog(null, "Numero du sommet d'origine'"));
                         dest = Integer.parseInt(JOptionPane.showInputDialog(null, "Numero du sommet d'origine'"));
                         algo1 = new Pcc_Dijkstra(graphe, this.fichierSortie(), this.readarg, true, origine, dest);
-                        // TODO : PCCStar non assign?
                         algo = new PccStar(graphe, this.fichierSortie(), this.readarg, true, origine, dest);
 
                         break;
@@ -322,6 +282,39 @@ public class Launch {
         }
 
         return result;
+    }
+
+    public class BoutonListener implements ActionListener {
+        public void actionPerformed(ActionEvent evt) {
+            //Click sur le boutton Load
+            if (evt.getSource() == loadButton) {
+                nomcarte = jComboBoxCartes.getSelectedItem().toString();
+                display = jCheckBoxSortieGraphique.isSelected();
+                t = new Thread(new PlayAnimation());
+                t.start();
+                frame.setVisible(false);
+                frame.dispose();
+
+                //préparation du menu
+                //On supprime tout le reste du précédent Panel
+                controlPanel.removeAll();
+
+                controlPanel.add(jLabelChoixMenu);
+                controlPanel.add(jComboBoxMenu);
+                controlPanel.add(goButton);
+
+                frame.pack();
+            } else if (evt.getSource() == goButton) {
+                menuSelected = true;
+                goButton.setEnabled(false);
+            }
+        }
+    }
+
+    class PlayAnimation implements Runnable {
+        public void run() {
+            go();
+        }
     }
 
 }
