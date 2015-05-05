@@ -3,6 +3,7 @@ package core;
 import base.Readarg;
 
 import java.io.PrintStream;
+import java.util.ArrayList;
 
 /**
  * Classe abstraite representant un algorithme (connexite, plus court chemin, etc.)
@@ -17,6 +18,6 @@ public abstract class Algo {
         this.sortie = fichierSortie;
     }
 
-    public abstract int run();
+    public abstract ArrayList run();
 
 }

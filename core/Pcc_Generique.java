@@ -115,11 +115,10 @@ public class Pcc_Generique<E extends Comparable<E>> extends Algo {
         // impl?ment?es dans les sous classes
     }
 
-    public int run() {
+    public ArrayList run() {
         if ((origine <= 0) || (origine > graphe.getArrayList().size()) || (destination <= 0) || (destination > graphe.getArrayList().size())
                 || this.origine == -1 || this.destination == -1) {
             JOptionPane.showMessageDialog(null, "Un des sommets n'appartient pas au graphe.");
-            return;
         }
         System.out.println();
         System.out.println("Lancement de l'algorithme de (zone,noeud) : (" + zoneOrigine + "," + origine + ") vers (" + zoneDestination + "," + destination + ")");
@@ -197,16 +196,28 @@ public class Pcc_Generique<E extends Comparable<E>> extends Algo {
         System.out.println("Duree= " + duree + " ms");
         //Afficher le resultat du calcul - ou rediriger sur fichier
         chemin();
+        ArrayList resultat = new ArrayList();
+
         if (choix == 0) {
             JOptionPane.showMessageDialog(null, "Le cout est de " + ((Label) dest).getCout() / 1000 + "km\n" +
                     "Temps de Calcul: " + duree + " ms\n" +
                     "Nb max d'element: " + maxTas + "\nNb elements explores: " + nb_elements_tas);
+            resultat.add(((Label) dest).getCout() / 1000);
+            resultat.add(duree);
+            resultat.add(maxTas);
+            resultat.add(nb_elements_tas);
         } else {
+            //TODO : passer en minutes et heures etcs
             JOptionPane.showMessageDialog(null, "Le cout est de " + ((Label) dest).getCout() + "min\n" +
                     "Temps de Calcul: " + duree + " ms\n" +
                     "Nb max d'element: " + maxTas + "\nNb elements explores: " + nb_elements_tas);
+            resultat.add(((Label) dest).getCout());
+            resultat.add(duree);
+            resultat.add(maxTas);
+            resultat.add(nb_elements_tas);
         }
-        return
+
+        return resultat;
     }
 
     public void chemin() {

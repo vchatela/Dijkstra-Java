@@ -24,6 +24,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.DataInputStream;
 import java.io.PrintStream;
+import java.util.ArrayList;
 
 public class Launch {
 
@@ -247,8 +248,12 @@ public class Launch {
                 if (algo != null) {
                     //TODO
                     if (algo1 != null) {
-                        int perf = algo1.run();
-                        int perf2 = algo.run();
+                        // résultat sous la forme : cout - duree - maxTas - nb_element_tas
+                        ArrayList perf = new ArrayList();
+                        perf = algo1.run();
+                        ArrayList perf2 = new ArrayList();
+                        perf2 = algo.run();
+                        // on va afficher des graphiques de performances
                     } else algo.run();
                 }
             }

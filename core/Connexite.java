@@ -3,6 +3,7 @@ package core;
 import base.Readarg;
 
 import java.io.PrintStream;
+import java.util.ArrayList;
 
 public class Connexite extends Algo {
 
@@ -10,7 +11,7 @@ public class Connexite extends Algo {
         super(gr, sortie, readarg);
     }
 
-    public int run() {
+    public ArrayList run() {
         // A vous d'implementer la recherche de connexite.
     }
 
