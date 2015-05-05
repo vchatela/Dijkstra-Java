@@ -246,9 +246,10 @@ public class Launch {
 
                 if (algo != null) {
                     //TODO
-                    if (algo1 != null)
-                        algo1.run();
-                    algo.run();
+                    if (algo1 != null) {
+                        int perf = algo1.run();
+                        int perf2 = algo.run();
+                    } else algo.run();
                 }
             }
 

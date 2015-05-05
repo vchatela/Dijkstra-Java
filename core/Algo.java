@@ -17,6 +17,6 @@ public abstract class Algo {
         this.sortie = fichierSortie;
     }
 
-    public abstract void run();
+    public abstract int run();
 
 }

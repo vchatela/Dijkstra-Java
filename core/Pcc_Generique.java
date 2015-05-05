@@ -115,7 +115,7 @@ public class Pcc_Generique<E extends Comparable<E>> extends Algo {
         // impl?ment?es dans les sous classes
     }
 
-    public void run() {
+    public int run() {
         if ((origine <= 0) || (origine > graphe.getArrayList().size()) || (destination <= 0) || (destination > graphe.getArrayList().size())
                 || this.origine == -1 || this.destination == -1) {
             JOptionPane.showMessageDialog(null, "Un des sommets n'appartient pas au graphe.");
@@ -206,6 +206,7 @@ public class Pcc_Generique<E extends Comparable<E>> extends Algo {
                     "Temps de Calcul: " + duree + " ms\n" +
                     "Nb max d'element: " + maxTas + "\nNb elements explores: " + nb_elements_tas);
         }
+        return
     }
 
     public void chemin() {

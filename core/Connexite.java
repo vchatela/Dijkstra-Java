@@ -10,7 +10,7 @@ public class Connexite extends Algo {
         super(gr, sortie, readarg);
     }
 
-    public void run() {
+    public int run() {
         // A vous d'implementer la recherche de connexite.
     }
 
