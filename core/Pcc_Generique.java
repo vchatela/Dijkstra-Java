@@ -206,10 +206,6 @@ public class Pcc_Generique<E extends Comparable<E>> extends Algo {
                     "Temps de Calcul: " + duree + " ms\n" +
                     "Nb max d'element: " + maxTas + "\nNb elements explores: " + nb_elements_tas);
         }
-
-        // on pourra aussi tracer le chemin ! cf en dessous
-
-
     }
 
     public void chemin() {

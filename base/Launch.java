@@ -165,7 +165,7 @@ public class Launch {
 
                 while (menuSelected == false) {
                     try {
-                        t.sleep(200);
+                        Thread.sleep(200);
                     } catch (InterruptedException e) {
                         System.out.println("Error thread sleep");
                     }

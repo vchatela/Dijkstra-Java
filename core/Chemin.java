@@ -88,7 +88,6 @@ public class Chemin {
                 if (nb_passage == 1) {
                     long_arete = A.getLg_arete();
                 }
-                ;
                 if (long_arete >= A.getLg_arete()) {
                     long_arete = A.getLg_arete();
                     arc = A;
@@ -124,7 +123,6 @@ public class Chemin {
                 if (nb_passage == 1) {
                     temps_arete = ((float) A.getLg_arete()) / ((float) A.getDescripteur().getVitMax());
                 }
-                ;
                 if (temps_arete >= ((float) A.getLg_arete()) / ((float) A.getDescripteur().getVitMax())) {
                     temps_arete = ((float) A.getLg_arete()) / ((float) A.getDescripteur().getVitMax());
                     arc = A;

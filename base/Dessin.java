@@ -13,8 +13,6 @@ public abstract class Dessin {
     protected Dessin() {
     }
 
-    ;
-
     /**
      * Fixe la largeur du crayon en pixel.
      */
@@ -86,11 +84,8 @@ public abstract class Dessin {
         return 0.0f;
     }
 
-    ;
-
     public float getClickLat() {
         return 0.0f;
     }
 
-    ;
 }

@@ -54,22 +54,14 @@ public class ImagePanel extends JPanel implements MouseListener {
     public void mouseEntered(MouseEvent e) {
     }
 
-    ;
-
     public void mouseExited(MouseEvent e) {
     }
-
-    ;
 
     public void mousePressed(MouseEvent e) {
     }
 
-    ;
-
     public void mouseReleased(MouseEvent e) {
     }
-
-    ;
 
     public void mouseClicked(MouseEvent e) {
         this.ClickIsHere = true;
