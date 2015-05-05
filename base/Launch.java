@@ -32,27 +32,37 @@ public class Launch {
      */
     private final Readarg readarg;
 
-    private JButton		loadButton;
     private JFrame      frame;
     private JPanel		controlPanel;
     private JLabel		jLabelBienvenue;
     private JLabel		jLabelChoixCarte;
-    private JCheckBox   jCheckBoxSortieGraphique;
+    private JLabel		jLabelChoixMenu;
     private JLabel		jLabelSortieGraphique;
     private JLabel      jLabelImage;
+    private JTextField  jTextFieldOrigine;
+    private JTextField  jTextFieldDestination;
+    private JCheckBox   jCheckBoxSortieGraphique;
+    private JComboBox	jComboBoxMenu;
     private JComboBox	jComboBoxCartes;
     private ImageIcon   image;
-    private String      nomcarte;
-    private Thread t;
-    private boolean     display;
+    private JButton		goButton;       //Button go (selection menu)
+    private JButton		loadButton;     //Button charger (lancement de l'appli)
+    private String      nomcarte;       //Nom de la carte à charger
+    private boolean     display;        //Affichage graphique ou non
+    private boolean     menuSelected;   //Choix du menu effectué ou non
+    private Thread      t;              //Utilisé pour afficher la carte
 
-    static private final String menu[] = {"Quitter", "Plus court chemin Standard", "Plus court chemin A-star",
-            "Cliquer sur la carte pour obtenir un numero de sommet ", "Charger un fichier de chemin"
+
+    static private final String menu[] = {"Quitter", "PCC Standard", "PCC A-star",
+            "Obtenir un numero de sommet ", "Charger un fichier de chemin"
             , "Reinitialiser la carte", "Tester les performances"};
 
     static private final String cartes[] = {"midip", "insa", "france",
             "fractal", "reunion", "carre-dense", "carre",  "fractal-spiral"};
 
+    public static void main(String[] args) {
+        Launch launch = new Launch(args);
+    }
 
     /**
      * Default constructor
@@ -62,10 +72,15 @@ public class Launch {
         frame.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
 
         this.readarg = new Readarg(args);
+        menuSelected = false;
 
         jLabelBienvenue = new JLabel("Bienvenue\nVersion 3.0\nde Mangel - Chatelard");
         jLabelChoixCarte = new JLabel("Nom du fichier .map a utiliser");
+        jLabelChoixMenu = new JLabel("Que voulez-vous faire");
         jLabelSortieGraphique = new JLabel("Voulez-vous une sortie graphique");
+
+        jTextFieldOrigine = new JTextField();
+        jTextFieldDestination = new JTextField();
 
         jCheckBoxSortieGraphique = new JCheckBox();
         jCheckBoxSortieGraphique.setSelected(true);
@@ -73,6 +88,9 @@ public class Launch {
         jComboBoxCartes = new JComboBox();
         for (String carte : cartes)
             jComboBoxCartes.addItem(carte);
+        jComboBoxMenu = new JComboBox();
+        for (String choix : menu)
+            jComboBoxMenu.addItem(choix);
 
         jLabelImage = new JLabel();
         image = new ImageIcon("arbre.jpg");
@@ -82,6 +100,11 @@ public class Launch {
         loadButton.setPreferredSize(new Dimension(100, 25));
         loadButton.setBackground(new Color(235, 235, 235));
         loadButton.addActionListener(new BoutonListener());
+
+        goButton = new JButton("GO");
+        goButton.setPreferredSize(new Dimension(100, 25));
+        goButton.setBackground(new Color(235, 235, 235));
+        goButton.addActionListener(new BoutonListener());
 
         controlPanel = new JPanel();
         controlPanel.setPreferredSize(new Dimension(350, 420));
@@ -103,13 +126,30 @@ public class Launch {
     } // _________  end of constructor
 
     public class BoutonListener implements ActionListener {
-        public void actionPerformed(ActionEvent arg0) {
-            nomcarte = jComboBoxCartes.getSelectedItem().toString();
-            display = jCheckBoxSortieGraphique.isSelected();
-            t = new Thread(new PlayAnimation());
-            t.start();
-            frame.setVisible(false);
-            frame.dispose();
+        public void actionPerformed(ActionEvent evt) {
+            //Click sur le boutton Load
+            if(evt.getSource() == loadButton) {
+                nomcarte = jComboBoxCartes.getSelectedItem().toString();
+                display = jCheckBoxSortieGraphique.isSelected();
+                t = new Thread(new PlayAnimation());
+                t.start();
+                frame.setVisible(false);
+                frame.dispose();
+
+                //préparation du menu
+                //On supprime tout le reste du précédent Panel
+                controlPanel.removeAll();
+
+                controlPanel.add(jLabelChoixMenu);
+                controlPanel.add(jComboBoxMenu);
+                controlPanel.add(goButton);
+
+                frame.pack();
+            }
+            else if(evt.getSource() == goButton) {
+                menuSelected = true;
+                goButton.setEnabled(false);
+            }
         }
     }
 
@@ -119,19 +159,20 @@ public class Launch {
         }
     }
 
-    public static void main(String[] args) {
-        Launch launch = new Launch(args);
-        //launch.go();
-    }
+    public void afficherMenu() {
+        frame.setVisible(true);
 
-    public int afficherMenu() {
-        int choix = -1;
-        String selection = (String) JOptionPane.showInputDialog(null, "Que voulez-vous faire ?", "Votre choix", JOptionPane.QUESTION_MESSAGE, null, menu, menu[0]);
-        if (selection != null)
-            for (int i = 0; i < menu.length; i++)
-                if (selection.equals(menu[i])) choix = i;
+        //On parametre le menu
+        goButton.setEnabled(true);
 
-        return choix;
+//        int choix = -1;
+//        String selection = (String) JOptionPane.showInputDialog(null, "Que voulez-vous faire ?", "Votre choix", JOptionPane.QUESTION_MESSAGE, null, menu, menu[0]);
+//        if (selection != null)
+//            for (int i = 0; i < menu.length; i++)
+//                if (selection.equals(menu[i])) choix = i;
+//
+//        return choix;
+
     }
 
     public void go() {
@@ -158,8 +199,18 @@ public class Launch {
             int choix;
 
             while (continuer) {
-                choix = this.afficherMenu();
-                //choix = this.readarg.lireInt("Votre choix ? ");
+                this.afficherMenu();
+
+                while (menuSelected == false) {
+                    try {
+                        t.sleep(200);
+                    }
+                    catch(InterruptedException e) {
+                        System.out.println("Error thread sleep");
+                    }
+                }
+                menuSelected = false;
+                choix = jComboBoxMenu.getSelectedIndex();
 
                 // Algorithme a executer
                 Algo algo = null;
