@@ -304,7 +304,8 @@ public class Launch extends JFrame {
                         ArrayList perf1 = null;
                         perf1 = algo1.run();
                         if (perf1 == null) {
-                            break;
+                            // on revient au debut du menu
+                            continue;
                         } else {
                             // On efface le graphe
                             cp.remove(dessin);
@@ -319,7 +320,7 @@ public class Launch extends JFrame {
                         ArrayList perf2 = null;
                         perf2 = algo.run();
                         if (perf2 == null) {
-                            break;
+                            continue;
                         }
                         // on affiche les performances
                         String resultat = new String("Performance des algos Dijkstra VS Dijkstra A-Star \n");
