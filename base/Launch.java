@@ -298,10 +298,28 @@ public class Launch extends JFrame {
                 if (algo != null) {
                     //TODO
                     if (algo1 != null) {
-                        ArrayList perf1 = new ArrayList();
+                        // on est dans la partie des performances
+                        ArrayList perf1 = null;
                         perf1 = algo1.run();
-                        ArrayList perf2 = new ArrayList();
+                        if (perf1 == null) {
+                            // on revient au debut du menu
+                            continue;
+                        } else {
+                            // On efface le graphe
+                            cp.remove(dessin);
+                            dessin = (display) ? new DessinVisible(800, 600) : new DessinInvisible();
+                            cp.add(dessin);
+                            dessin.revalidate();
+                            mapdata = Openfile.open(nomcarte);
+                            graphe = null; //Pour detruire l'objet (methode finalize())
+                            graphe = new Graphe(nomcarte, mapdata, dessin);
+                            this.pack();
+                        }
+                        ArrayList perf2 = null;
                         perf2 = algo.run();
+                        if (perf2 == null) {
+                            continue;
+                        }
                         // on affiche les performances
                         String resultat = new String("Performance des algos Dijkstra VS Dijkstra A-Star \n");
                         resultat += "Le cout est de : " + perf1.get(0) + " km - " + perf2.get(0) + " km \n";
