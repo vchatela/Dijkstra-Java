@@ -11,7 +11,7 @@ import java.awt.image.BufferedImage;
 
 public class DessinVisible extends Dessin {
 
-    private final ImagePanel panel;
+    //private final ImagePanel panel;
     private final Graphics2D gr;
     private final float width;
     private final float height;
@@ -25,14 +25,16 @@ public class DessinVisible extends Dessin {
      * Cree et affiche une nouvelle fenetre de dessin.
      */
     public DessinVisible(int largeur, int hauteur) {
-        JFrame frame = new JFrame("Visualisation de graphe");
+        //JFrame frame = new JFrame("Visualisation de graphe");
         BufferedImage img = new BufferedImage(largeur, hauteur, BufferedImage.TYPE_3BYTE_BGR);
         this.gr = img.createGraphics();
-        this.panel = new ImagePanel();
+        //this.panel = new ImagePanel();
 
-        this.panel.setImage(img);
-        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        frame.setSize(largeur + 45, hauteur + 45);
+        //this.panel.setImage(img);
+        this.setImage(img);
+        //frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        //frame.setSize(largeur + 45, hauteur + 45);
+        this.setSize(largeur + 45, hauteur + 45);
 
         this.bb_is_set = false;
 
@@ -44,17 +46,17 @@ public class DessinVisible extends Dessin {
         this.lat1 = (float) 0.0;
         this.lat2 = (float) hauteur;
 
-        frame.setContentPane(this.panel);
-        frame.setVisible(true);
+        //frame.setContentPane(this.panel);
+        //frame.setVisible(true);
 
         this.setColor(Color.white);
         gr.fillRect(0, 0, largeur, hauteur);
         this.repaint();
     }
 
-    private void repaint() {
-        panel.repaint();
-    }
+//    private void repaint() {
+//        panel.repaint();
+//    }
 
     public void setWidth(int width) {
         this.gr.setStroke(new BasicStroke(width));
@@ -113,17 +115,19 @@ public class DessinVisible extends Dessin {
         this.repaint();
     }
 
-    public boolean waitClick() {
-        return this.panel.waitClick();
-    }
+//    public boolean waitClick() {
+//        return this.panel.waitClick();
+//    }
 
     public float getClickLon() {
-        float x = this.panel.getXClick();
+        float x = this.getXClick();
+//        float x = this.panel.getXClick();
         return (this.long1 + (x / width) * (this.long2 - this.long1));
     }
 
     public float getClickLat() {
-        float y = this.panel.getYClick();
+        float y = this.getYClick();
+//        float y = this.panel.getYClick();
         return (this.lat1 + (1 - (y / height)) * (this.lat2 - this.lat1));
     }
 

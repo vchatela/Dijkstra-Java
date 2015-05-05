@@ -350,4 +350,17 @@ public class Graphe {
         this.chemin = chemin;
     }
 
+    //Sorte de destructeur : appelé par le ramasse-miette avant que l'instance ne soit detruite par la memoire (quand il n'y a plus de reference à cette objet)
+    protected void finalize() throws Throwable {
+        try {
+            System.out.println("Ouai j'ai detruit mon graphe !!");
+        } finally {
+            super.finalize();
+        }
+    }
+
+    public void destroy() {
+
+    }
+
 }
