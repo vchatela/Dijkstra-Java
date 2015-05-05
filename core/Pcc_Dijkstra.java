@@ -14,7 +14,7 @@ public class Pcc_Dijkstra extends Pcc_Generique<Label_Dijkstra> {
         super(gr, sortie, readarg, test, origine, dest);
 
         String chaine = (choix == 0) ? "distance" : "temps";
-        sortieAlgo = "Carte: " + graphe.getNomCarte() + "\n" + "Dijkstra de " + origine + " -> " + destination + " en " + chaine;
+        sortieAlgo = "Carte: " + graphe.getNomCarte() + "\n" + "Dijkstra Standard de " + origine + " -> " + destination + " en " + chaine + "\n";
         //L'affichage du deroulement de l'algo est faite en magenta
         this.graphe.getDessin().setColor(Color.magenta);
     }
@@ -22,7 +22,7 @@ public class Pcc_Dijkstra extends Pcc_Generique<Label_Dijkstra> {
         super(gr, sortie, readarg);
 
         String chaine = (choix == 0) ? "distance" : "temps";
-        sortieAlgo = "Carte: " + graphe.getNomCarte() + "\n" + "Dijkstra de " + origine + " -> " + destination + " en " + chaine;
+        sortieAlgo = "Carte: " + graphe.getNomCarte() + "\n" + "Dijkstra Standard de " + origine + " -> " + destination + " en " + chaine + "\n";
         //L'affichage du deroulement de l'algo est faite en magenta
         this.graphe.getDessin().setColor(Color.magenta);
     }

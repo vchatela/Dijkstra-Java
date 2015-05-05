@@ -25,6 +25,7 @@ import java.awt.event.ActionListener;
 import java.io.DataInputStream;
 import java.io.PrintStream;
 import java.util.ArrayList;
+import java.util.Date;
 
 public class Launch extends JFrame {
 
@@ -361,6 +362,7 @@ public class Launch extends JFrame {
 
         try {
             result = new PrintStream(nom);
+            result.println("Fichier créé le : " + new Date() + "\n");
         } catch (Exception e) {
             JOptionPane.showMessageDialog(null, "Erreur ? l'ouverture du fichier" + nom);
             //System.err.println("Erreur a l'ouverture du fichier " + nom);

@@ -11,14 +11,14 @@ public class PccStar extends Pcc_Generique<Label_Star> {
         super(gr, sortie, readarg, test, origine, dest);
 
         String chaine = (choix == 0) ? "distance" : "temps";
-        sortieAlgo = "Carte: " + graphe.getNomCarte() + "\n" + "Dijkstra A STAR de " + origine + " -> " + destination + " en " + chaine;
+        sortieAlgo = "Carte: " + graphe.getNomCarte() + "\n" + "Dijkstra A STAR de " + origine + " -> " + destination + " en " + chaine + "\n";
         this.graphe.getDessin().setColor(Color.CYAN);
     }
     public PccStar(Graphe gr, PrintStream sortie, Readarg readarg) {
         super(gr, sortie, readarg);
 
         String chaine = (choix == 0) ? "distance" : "temps";
-        sortieAlgo = "Carte: " + graphe.getNomCarte() + "\n" + "Dijkstra A STAR de " + origine + " -> " + destination + " en " + chaine;
+        sortieAlgo = "Carte: " + graphe.getNomCarte() + "\n" + "Dijkstra A STAR de " + origine + " -> " + destination + " en " + chaine + "\n";
         this.graphe.getDessin().setColor(Color.CYAN);
     }
 

@@ -202,21 +202,33 @@ public class Pcc_Generique<E extends Comparable<E>> extends Algo {
         if (choix == 0) {
             JOptionPane.showMessageDialog(null, "Le cout est de " + ((Label) dest).getCout() / 1000 + "km\n" +
                     "Temps de Calcul: " + duree + " ms\n" +
-                    "Nb max d'element: " + maxTas + "\nNb elements explores: " + nb_elements_tas);
+                    "Nb max d'element: " + maxTas + "\n" +
+                    "Nb elements explores: " + nb_elements_tas);
+            sortieAlgo += "Le cout est de " + ((Label) dest).getCout() / 1000 + "km\n";
             resultat.add(((Label) dest).getCout() / 1000);
             resultat.add(duree);
             resultat.add(maxTas);
             resultat.add(nb_elements_tas);
+
         } else {
             //TODO : passer en minutes et heures etcs
             JOptionPane.showMessageDialog(null, "Le cout est de " + ((Label) dest).getCout() + "min\n" +
                     "Temps de Calcul: " + duree + " ms\n" +
-                    "Nb max d'element: " + maxTas + "\nNb elements explores: " + nb_elements_tas);
+                    "Nb max d'element: " + maxTas + "\n" +
+                    "Nb elements explores: " + nb_elements_tas);
+            sortieAlgo += "Le cout est de " + ((Label) dest).getCout() + "min\n";
             resultat.add(((Label) dest).getCout());
             resultat.add(duree);
             resultat.add(maxTas);
             resultat.add(nb_elements_tas);
         }
+
+        //Maj du fichier : ecriture
+        sortieAlgo += "Temps de Calcul: " + duree + " ms\n" +
+                "Nb max d'element: " + maxTas + "\n" +
+                "Nb elements explores: " + nb_elements_tas;
+        sortie.append(sortieAlgo);
+        sortie.close();
 
         return resultat;
     }
