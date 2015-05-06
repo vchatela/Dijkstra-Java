@@ -259,7 +259,9 @@ public class Launch extends JFrame {
                             System.exit(1);
                         }
 
-                        graphe.verifierChemin(Openfile.open(nom_chemin), nom_chemin);
+                        int ok = graphe.verifierChemin(Openfile.open(nom_chemin), nom_chemin);
+                        if (ok == -1)
+                            continue;
                         graphe.getChemin().tracerChemin(graphe.getDessin());
                         graphe.getChemin().cout_chemin_distance();
                         graphe.getChemin().cout_chemin_temps();
@@ -324,7 +326,6 @@ public class Launch extends JFrame {
                         }
 
                         algo1 = new Pcc_Dijkstra(graphe, sortie, this.readarg, true, origine, dest);
-                        // TODO : PCCStar non assign?
                         algo = new PccStar(graphe, sortie, this.readarg, true, origine, dest);
 
                         break;
