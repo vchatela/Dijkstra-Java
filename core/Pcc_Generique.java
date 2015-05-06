@@ -24,11 +24,12 @@ public class Pcc_Generique<E extends Comparable<E>> extends Algo {
     protected BinaryHeap<E> tas;
     //Label_Dijkstra destinataire
     protected E dest;
-    //en temps (choix=1),  en distance (choix=0)
-    protected int choix;
 
     //Afficher ou non le deroulement de l'algo
     protected int choixAffichage;
+
+    //en temps (choix=1),  en distance (choix=0)
+    protected int choix;
 
     //fait correspondre un noeud a un Label_Dijkstra
     protected HashMap<Node, E> mapLabel;
@@ -42,8 +43,9 @@ public class Pcc_Generique<E extends Comparable<E>> extends Algo {
     protected String sortieAlgo;
     protected boolean test;
 
-    public Pcc_Generique(Graphe gr, PrintStream sortie, Readarg readarg, boolean test, int origine, int dest) {
+    public Pcc_Generique(Graphe gr, PrintStream sortie, Readarg readarg, int choixCout, boolean test, int origine, int dest) {
         super(gr, sortie, readarg);
+        this.choix = choixCout;
         mapLabel = new HashMap<Node, E>();
         this.zoneOrigine = gr.getZone();
         this.origine = origine;
@@ -58,13 +60,13 @@ public class Pcc_Generique<E extends Comparable<E>> extends Algo {
             System.out.println(" Le numero de sommet saisi n'appartient pas au graphe");
             return;
         }
-        this.choix = Integer.parseInt(JOptionPane.showInputDialog("Plus court en:\n0 : Distance\n1 : Temps"));
         // Ici on a d?j? donn? les num?ros des sommets, on demande simplement le graphisme et hop
         choixAffichage = JOptionPane.showConfirmDialog(null, "Voulez vous afficher le deroulement de l'algo", "Choix de l'affichage", JOptionPane.YES_NO_OPTION);
     }
 
-    public Pcc_Generique(Graphe gr, PrintStream sortie, Readarg readarg) {
+    public Pcc_Generique(Graphe gr, PrintStream sortie, Readarg readarg, int choixCout) {
         super(gr, sortie, readarg);
+        this.choix = choixCout;
         // On veut stocker le resultat dans le fichier de sortie de la forme
         /*Carte: france
 				Dijsktra de 12 -> 11111 en temps
@@ -95,9 +97,6 @@ public class Pcc_Generique<E extends Comparable<E>> extends Algo {
                 System.out.println(" Le numero de sommet saisi n'appartient pas au graphe");
                 return;
             }
-
-            // Enfin on demande le type choisi : temps ou distance  - TODO : A ameliorer
-            this.choix = Integer.parseInt(JOptionPane.showInputDialog("Plus court en:\n0 : Distance\n1 : Temps"));
 
             // a voir si on fait le choix de l'affichage avec choixAffichage
             choixAffichage = JOptionPane.showConfirmDialog(null, "Voulez vous afficher le deroulement de l'algo", "Choix de l'affichage", JOptionPane.YES_NO_OPTION);

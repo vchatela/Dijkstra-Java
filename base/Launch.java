@@ -57,6 +57,9 @@ public class Launch extends JFrame {
     private JTextField  jTextField1;
     private JTextField  jTextField2;
     private JCheckBox   jCheckBoxSortieGraphique;
+    private JRadioButton   jRadioButtonChoixTemps;
+    private JRadioButton   jRadioButtonChoixDistance;
+    private ButtonGroup    buttonGroup;
     private JComboBox	jComboBoxMenu;
     private JComboBox	jComboBoxCartes;
     private ImageIcon   image;
@@ -95,6 +98,13 @@ public class Launch extends JFrame {
 
         jCheckBoxSortieGraphique = new JCheckBox();
         jCheckBoxSortieGraphique.setSelected(true);
+
+        jRadioButtonChoixTemps = new JRadioButton("En temps");
+        jRadioButtonChoixDistance = new JRadioButton("En distance");
+        jRadioButtonChoixTemps.setSelected(true);
+        buttonGroup = new ButtonGroup();
+        buttonGroup.add(jRadioButtonChoixTemps);
+        buttonGroup.add(jRadioButtonChoixDistance);
 
         jComboBoxCartes = new JComboBox();
         for (String carte : cartes)
@@ -191,12 +201,22 @@ public class Launch extends JFrame {
         }
 
         //Perf
-        else if(choice == 6) {
-            jLabel2.setText("Noeud de départ : ");
-            jLabel3.setText("Noeud d'arrivée : ");
+        else if(choice == 61) {
+            jLabel2.setText("Plus court en :");
             controlPanel.add(jLabel2);
-            controlPanel.add(jTextField1);
+            controlPanel.add(jRadioButtonChoixTemps);
+            controlPanel.add(jRadioButtonChoixDistance);
+        }
+        else if(choice == 62) {
+            jLabel2.setText("Plus court en :");
+            jLabel3.setText("Noeud de départ : ");
+            jLabel4.setText("Noeud d'arrivée : ");
+            controlPanel.add(jLabel2);
+            controlPanel.add(jRadioButtonChoixTemps);
+            controlPanel.add(jRadioButtonChoixDistance);
             controlPanel.add(jLabel3);
+            controlPanel.add(jTextField1);
+            controlPanel.add(jLabel4);
             controlPanel.add(jTextField2);
         }
 
@@ -223,7 +243,10 @@ public class Launch extends JFrame {
 
             // Boucle principale : le menu est accessible jusqu'a ce que l'on quitte.
             boolean continuer = true;
-            int choix;
+            int choixMenu;
+
+            // Plus court en: 0 : Distance ou 1 : Temps
+            int choixCout;
 
             while (continuer) {
                 this.afficherMenu();
@@ -233,14 +256,14 @@ public class Launch extends JFrame {
                 waitButtonOk();
 
                 okButton.setEnabled(false);
-                choix = jComboBoxMenu.getSelectedIndex();
+                choixMenu = jComboBoxMenu.getSelectedIndex();
 
 
                 // Algorithme a executer
                 Algo algo = null;
                 Algo algo1 = null;
                 // Le choix correspond au numero du menu.
-                switch (choix) {
+                switch (choixMenu) {
                     case 0:
                         //quitter
                         continuer = false;
@@ -251,11 +274,13 @@ public class Launch extends JFrame {
                         break;*/
 
                     case 1:
-                        algo = new Pcc_Dijkstra(graphe, sortie, this.readarg);
+                        choixCout = Integer.parseInt(JOptionPane.showInputDialog("Plus court en:\n0 : Distance\n1 : Temps"));
+                        algo = new Pcc_Dijkstra(graphe, sortie, this.readarg, choixCout);
                         break;
 
                     case 2:
-                        algo = new PccStar(graphe, sortie, this.readarg);
+                        choixCout = Integer.parseInt(JOptionPane.showInputDialog("Plus court en:\n0 : Distance\n1 : Temps"));
+                        algo = new PccStar(graphe, sortie, this.readarg, choixCout);
                         break;
 
                     case 3:
@@ -316,12 +341,16 @@ public class Launch extends JFrame {
                         int origine, dest;
                         // On demande à l'utilisateur s'il connait les numéros ou veut cliquer
                         int click;
+
                         click = JOptionPane.showConfirmDialog(null, "Connaissez vous le numéro des sommets", "", JOptionPane.OK_OPTION);
+
                         switch (click) {
                             case JOptionPane.OK_OPTION:
+                                makeControlPanel(61);
+
                                 try {
                                     origine = Integer.parseInt(JOptionPane.showInputDialog(null, "Numero du sommet d'origine'"));
-                                    dest = Integer.parseInt(JOptionPane.showInputDialog(null, "Numero du sommet d'origine'"));
+                                    dest = Integer.parseInt(JOptionPane.showInputDialog(null, "Numero du sommet de destination'"));
                                 } catch (Exception e) {
                                     System.out.println(e);
                                     origine = -1;
@@ -329,32 +358,34 @@ public class Launch extends JFrame {
                                 }
                                 break;
                             default:
-                                makeControlPanel(6);
-                                this.pack();
+                                makeControlPanel(62);
 
                                 try {
-
                                     clickCoord = graphe.situerClick();
                                     jTextField1.setText(clickCoord.get(1).toString());
                                     clickCoord = graphe.situerClick();
                                     jTextField2.setText(clickCoord.get(1).toString());
                                     origine = Integer.parseInt(jTextField1.getText());
                                     dest = Integer.parseInt(jTextField2.getText());
-                                    break;
                                 } catch (NumberFormatException n) {
                                     System.out.println(n);
                                     origine = -1;
                                     dest = -1;
                                 }
+                                break;
                         }
 
-                        algo1 = new Pcc_Dijkstra(graphe, sortie, this.readarg, true, origine, dest);
-                        algo = new PccStar(graphe, sortie, this.readarg, true, origine, dest);
+                        if(jRadioButtonChoixDistance.isSelected())
+                            choixCout = 0;
+                        else choixCout = 1;
+
+                        algo1 = new Pcc_Dijkstra(graphe, sortie, this.readarg, choixCout, true, origine, dest);
+                        algo = new PccStar(graphe, sortie, this.readarg, choixCout, true, origine, dest);
 
                         break;
 
                     default:
-                        System.out.println("Choix de menu incorrect : " + choix);
+                        System.out.println("Choix de menu incorrect : " + choixMenu);
                         JOptionPane.showMessageDialog(null, "Choix de menu incorrect", "Choix menu", JOptionPane.ERROR_MESSAGE);
                         System.exit(1);
                 }
