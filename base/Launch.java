@@ -299,7 +299,7 @@ public class Launch extends JFrame {
                                 dest = Integer.parseInt(JOptionPane.showInputDialog(null, "Numero du sommet d'origine'"));
                                 break;
                             default:
-                                jLabel2.setText("Clic aux coordonnées : ");
+                                jLabel2.setText("\n Clic aux coordonnées : ");
                                 jLabel3.setText("Noeud le plus proche : ");
                                 controlPanel.add(jLabel2);
                                 controlPanel.add(jTextField1);
@@ -308,9 +308,13 @@ public class Launch extends JFrame {
                                 this.pack();
 
                                 graphe.situerClick();
-                                origine = Integer.parseInt(jTextField1.getText());
+                                if (jTextField1.getText() != "")
+                                    origine = Integer.parseInt(jTextField1.getText());
+                                else origine = -1;
                                 graphe.situerClick();
-                                dest = Integer.parseInt(jTextField2.getText());
+                                if (jTextField2.getText() != "")
+                                    dest = Integer.parseInt(jTextField2.getText());
+                                else dest = -1;
                                 break;
                         }
 
