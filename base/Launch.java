@@ -186,6 +186,7 @@ public class Launch extends JFrame {
 
             controlPanel.add(jLabel1);
             controlPanel.add(jComboBoxCartes);
+            okButton.setEnabled(true);
             controlPanel.add(okButton);
         }
 
@@ -420,6 +421,17 @@ public class Launch extends JFrame {
         return result;
     }
 
+    public void waitButtonOk() {
+        while (buttonHasBeenClicked == false) {
+            try {
+                t.sleep(200);
+            } catch (InterruptedException e) {
+                System.out.println("Error thread sleep");
+            }
+        }
+        buttonHasBeenClicked = false;
+    }
+
     public class BoutonListener implements ActionListener {
         public void actionPerformed(ActionEvent evt) {
             //Click sur le boutton Load
@@ -433,17 +445,6 @@ public class Launch extends JFrame {
                 buttonHasBeenClicked = true;
             }
         }
-    }
-
-    public void waitButtonOk() {
-        while (buttonHasBeenClicked == false) {
-            try {
-                t.sleep(200);
-            } catch (InterruptedException e) {
-                System.out.println("Error thread sleep");
-            }
-        }
-        buttonHasBeenClicked = false;
     }
 
     class PlayAnimation implements Runnable {
