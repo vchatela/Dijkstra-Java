@@ -60,7 +60,6 @@ public class Pcc_Generique<E extends Comparable<E>> extends Algo {
             System.out.println(" Le numero de sommet saisi n'appartient pas au graphe");
             return;
         }
-        this.choix = Integer.parseInt(JOptionPane.showInputDialog("Plus court en:\n0 : Distance\n1 : Temps"));
         // Ici on a d?j? donn? les num?ros des sommets, on demande simplement le graphisme et hop
         choixAffichage = JOptionPane.showConfirmDialog(null, "Voulez vous afficher le deroulement de l'algo", "Choix de l'affichage", JOptionPane.YES_NO_OPTION);
     }
