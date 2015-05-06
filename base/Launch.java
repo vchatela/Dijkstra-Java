@@ -61,7 +61,7 @@ public class Launch extends JFrame {
     private ImageIcon   image;
     private JButton		goButton;       //Button go (selection menu)
     private JButton		loadButton;     //Button charger (lancement de l'appli)
-    private JButton		reloadButton;     //Button charger (lancement de l'appli)
+    private JButton		okButton;     //Button charger (lancement de l'appli)
     private String      nomcarte;       //Nom de la carte à charger
     private boolean     display;        //Affichage graphique ou non
     private boolean     buttonHasBeenClicked;   //Choix du menu effectué ou non
@@ -114,10 +114,10 @@ public class Launch extends JFrame {
         loadButton.setBackground(new Color(235, 235, 235));
         loadButton.addActionListener(new BoutonListener());
 
-        reloadButton = new JButton("RECHARGER");
-        reloadButton.setPreferredSize(new Dimension(100, 25));
-        reloadButton.setBackground(new Color(235, 235, 235));
-        reloadButton.addActionListener(new BoutonListener());
+        okButton = new JButton("RECHARGER");
+        okButton.setPreferredSize(new Dimension(100, 25));
+        okButton.setBackground(new Color(235, 235, 235));
+        okButton.addActionListener(new BoutonListener());
 
         goButton = new JButton("GO");
         goButton.setPreferredSize(new Dimension(100, 25));
@@ -175,7 +175,7 @@ public class Launch extends JFrame {
 
             controlPanel.add(jLabel1);
             controlPanel.add(jComboBoxCartes);
-            controlPanel.add(reloadButton);
+            controlPanel.add(okButton);
         }
         cp.add(controlPanel, 0);
         this.repaint();
@@ -203,14 +203,10 @@ public class Launch extends JFrame {
             while (continuer) {
                 this.afficherMenu();
 
-                while (buttonHasBeenClicked == false) {
-                    try {
-                        t.sleep(200);
-                    } catch (InterruptedException e) {
-                        System.out.println("Error thread sleep");
-                    }
-                }
-                buttonHasBeenClicked = false;
+                //On attend d'avoir cliqué sur OK
+                waitButtonOk();
+
+                goButton.setEnabled(false);
                 choix = jComboBoxMenu.getSelectedIndex();
 
 
@@ -267,15 +263,10 @@ public class Launch extends JFrame {
                     case 5:
                         makeControlPanel(5);
 
-                        //On attend d'avoir cliquer sur RECHARGER
-                        while (buttonHasBeenClicked == false) {
-                            try {
-                                t.sleep(200);
-                            } catch (InterruptedException e) {
-                                System.out.println("Error thread sleep");
-                            }
-                        }
-                        buttonHasBeenClicked = false;
+                        //On attend d'avoir cliqué sur OK
+                        waitButtonOk();
+
+                        nomcarte = jComboBoxCartes.getSelectedItem().toString();
 
                         cp.remove(dessin);
                         dessin = (display) ? new DessinVisible(800, 600) : new DessinInvisible();
@@ -381,14 +372,23 @@ public class Launch extends JFrame {
                 loadButton.setEnabled(false);
                 t = new Thread(new PlayAnimation());
                 t.start();
-            } else if (evt.getSource() == reloadButton) {
+            } else if (evt.getSource() == okButton) {
                 buttonHasBeenClicked = true;
-                nomcarte = jComboBoxCartes.getSelectedItem().toString();
             } else if (evt.getSource() == goButton) {
                 buttonHasBeenClicked = true;
-                goButton.setEnabled(false);
             }
         }
+    }
+
+    public void waitButtonOk() {
+        while (buttonHasBeenClicked == false) {
+            try {
+                t.sleep(200);
+            } catch (InterruptedException e) {
+                System.out.println("Error thread sleep");
+            }
+        }
+        buttonHasBeenClicked = false;
     }
 
     class PlayAnimation implements Runnable {
