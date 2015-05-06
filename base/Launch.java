@@ -68,10 +68,6 @@ public class Launch extends JFrame {
     private Thread      t;              //Utilisé pour afficher la carte
     private PrintStream sortie;
 
-    public static void main(String[] args) {
-        Launch launch = new Launch(args);
-    }
-
     /**
      * Default constructor
      */
@@ -148,6 +144,10 @@ public class Launch extends JFrame {
         this.setVisible(true);
 
     } // _________  end of constructor
+
+    public static void main(String[] args) {
+        Launch launch = new Launch(args);
+    }
 
     public void afficherMenu() {
         makeControlPanel(1);
@@ -281,8 +281,30 @@ public class Launch extends JFrame {
                     case 6:
                         // Programme de test des 2 algos D + D A-Star
                         int origine, dest;
-                        origine = Integer.parseInt(JOptionPane.showInputDialog(null, "Numero du sommet d'origine'"));
-                        dest = Integer.parseInt(JOptionPane.showInputDialog(null, "Numero du sommet d'origine'"));
+                        // On demande à l'utilisateur s'il connait les numéros ou veut cliquer
+                        int click;
+                        click = JOptionPane.showConfirmDialog(null, "Connaissez vous le numéro des sommets", "", JOptionPane.OK_OPTION);
+                        switch (click) {
+                            case JOptionPane.OK_OPTION:
+                                origine = Integer.parseInt(JOptionPane.showInputDialog(null, "Numero du sommet d'origine'"));
+                                dest = Integer.parseInt(JOptionPane.showInputDialog(null, "Numero du sommet d'origine'"));
+                                break;
+                            default:
+                                jLabel2.setText("Clic aux coordonnées : ");
+                                jLabel3.setText("Noeud le plus proche : ");
+                                controlPanel.add(jLabel2);
+                                controlPanel.add(jTextField1);
+                                controlPanel.add(jLabel3);
+                                controlPanel.add(jTextField2);
+                                this.pack();
+
+                                graphe.situerClick();
+                                origine = Integer.parseInt(jTextField1.getText());
+                                graphe.situerClick();
+                                dest = Integer.parseInt(jTextField2.getText());
+                                break;
+                        }
+
                         algo1 = new Pcc_Dijkstra(graphe, sortie, this.readarg, true, origine, dest);
                         // TODO : PCCStar non assign?
                         algo = new PccStar(graphe, sortie, this.readarg, true, origine, dest);
