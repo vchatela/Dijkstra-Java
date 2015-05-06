@@ -313,9 +313,10 @@ public class Launch extends JFrame {
                         else choixCout = 1;
                         try {
                             origine = Integer.parseInt(jTextField1.getText());
-                            dest = Integer.parseInt(jTextField1.getText());
+                            dest = Integer.parseInt(jTextField2.getText());
                         } catch (NumberFormatException n) {
-
+                            System.out.println(n);
+                            origine = dest = -1;
                         }
 
                         algo = new Pcc_Dijkstra(graphe, sortie, this.readarg, choixCout, true, origine, dest);
@@ -327,6 +328,13 @@ public class Launch extends JFrame {
                         if (jRadioButtonChoixDistance.isSelected())
                             choixCout = 0;
                         else choixCout = 1;
+                        try {
+                            origine = Integer.parseInt(jTextField1.getText());
+                            dest = Integer.parseInt(jTextField2.getText());
+                        } catch (NumberFormatException n) {
+                            System.out.println(n);
+                            origine = dest = -1;
+                        }
 
                         algo = new PccStar(graphe, sortie, this.readarg, choixCout, true, origine, dest);
                         break;
@@ -386,7 +394,6 @@ public class Launch extends JFrame {
                         break;
                     case 6:
                         // Programme de test des 2 algos D + D A-Star
-                        int origine, dest;
                         // On demande à l'utilisateur s'il connait les numéros ou veut cliquer
                         int click;
 
