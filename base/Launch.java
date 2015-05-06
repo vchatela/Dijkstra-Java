@@ -56,7 +56,7 @@ public class Launch extends JFrame {
     private JTextField  jTextFieldFichier;
     private JTextField  jTextField1;
     private JTextField  jTextField2;
-    private JCheckBox   jCheckBoxSortieGraphique;
+    private JCheckBox   jCheckBox;
     private JRadioButton   jRadioButtonChoixTemps;
     private JRadioButton   jRadioButtonChoixDistance;
     private ButtonGroup    buttonGroup;
@@ -96,8 +96,8 @@ public class Launch extends JFrame {
         jTextField2.setPreferredSize(new Dimension(300, 25));
         jTextFieldFichier.setPreferredSize(new Dimension(100, 25));
 
-        jCheckBoxSortieGraphique = new JCheckBox();
-        jCheckBoxSortieGraphique.setSelected(true);
+        jCheckBox = new JCheckBox();
+        jCheckBox.setSelected(true);
 
         jRadioButtonChoixTemps = new JRadioButton("En temps");
         jRadioButtonChoixDistance = new JRadioButton("En distance");
@@ -137,7 +137,7 @@ public class Launch extends JFrame {
         controlPanel.add(jLabel3);
         controlPanel.add(jComboBoxCartes);
         controlPanel.add(jLabel4);
-        controlPanel.add(jCheckBoxSortieGraphique);
+        controlPanel.add(jCheckBox);
         controlPanel.add(jLabelFichier);
         controlPanel.add(jTextFieldFichier);
         controlPanel.add(loadButton);
@@ -193,7 +193,6 @@ public class Launch extends JFrame {
         //Reinitialisation de la carte
         else if (choice == 5) {
             jLabel1 = new JLabel("Nom du fichier .map a utiliser");
-
             controlPanel.add(jLabel1);
             controlPanel.add(jComboBoxCartes);
             okButton.setEnabled(true);
@@ -202,15 +201,21 @@ public class Launch extends JFrame {
 
         //Perf
         else if(choice == 61) {
+            jLabel1.setText("Afficher le deroulement ?");
             jLabel2.setText("Plus court en :");
+            controlPanel.add(jLabel1);
+            controlPanel.add(jCheckBox);
             controlPanel.add(jLabel2);
             controlPanel.add(jRadioButtonChoixTemps);
             controlPanel.add(jRadioButtonChoixDistance);
         }
         else if(choice == 62) {
+            jLabel1.setText("Afficher le deroulement des algorithmes ?");
             jLabel2.setText("Plus court en :");
             jLabel3.setText("Noeud de départ : ");
             jLabel4.setText("Noeud d'arrivée : ");
+            controlPanel.add(jLabel1);
+            controlPanel.add(jCheckBox);
             controlPanel.add(jLabel2);
             controlPanel.add(jRadioButtonChoixTemps);
             controlPanel.add(jRadioButtonChoixDistance);
@@ -227,9 +232,7 @@ public class Launch extends JFrame {
 
     public void go() {
 
-        try {
-
-            DataInputStream mapdata = Openfile.open(nomcarte);
+        try {DataInputStream mapdata = Openfile.open(nomcarte);
 
             ArrayList clickCoord = null; //Pour avoir coordonnées d'un clic
 
@@ -247,6 +250,9 @@ public class Launch extends JFrame {
 
             // Plus court en: 0 : Distance ou 1 : Temps
             int choixCout;
+
+            //Affichage des algorithmes ou non
+            int affichageDeroulementAlgo;
 
             while (continuer) {
                 this.afficherMenu();
@@ -275,12 +281,16 @@ public class Launch extends JFrame {
 
                     case 1:
                         choixCout = Integer.parseInt(JOptionPane.showInputDialog("Plus court en:\n0 : Distance\n1 : Temps"));
-                        algo = new Pcc_Dijkstra(graphe, sortie, this.readarg, choixCout);
+                        affichageDeroulementAlgo = JOptionPane.showConfirmDialog(null, "Voulez vous afficher le deroulement de l'algo", "Choix de l'affichage", JOptionPane.YES_NO_OPTION);
+
+                        algo = new Pcc_Dijkstra(graphe, sortie, this.readarg, choixCout, affichageDeroulementAlgo);
                         break;
 
                     case 2:
                         choixCout = Integer.parseInt(JOptionPane.showInputDialog("Plus court en:\n0 : Distance\n1 : Temps"));
-                        algo = new PccStar(graphe, sortie, this.readarg, choixCout);
+                        affichageDeroulementAlgo = JOptionPane.showConfirmDialog(null, "Voulez vous afficher le deroulement de l'algo", "Choix de l'affichage", JOptionPane.YES_NO_OPTION);
+
+                        algo = new PccStar(graphe, sortie, this.readarg, choixCout, affichageDeroulementAlgo);
                         break;
 
                     case 3:
@@ -375,12 +385,18 @@ public class Launch extends JFrame {
                                 break;
                         }
 
+                        //Choix du coup en temps ou distance
                         if(jRadioButtonChoixDistance.isSelected())
                             choixCout = 0;
                         else choixCout = 1;
 
-                        algo1 = new Pcc_Dijkstra(graphe, sortie, this.readarg, choixCout, true, origine, dest);
-                        algo = new PccStar(graphe, sortie, this.readarg, choixCout, true, origine, dest);
+                        //Choix de l'affichage des algo
+                        if(jCheckBox.isSelected())
+                            affichageDeroulementAlgo = 1;
+                        else affichageDeroulementAlgo = 0;
+
+                        algo1 = new Pcc_Dijkstra(graphe, sortie, this.readarg, choixCout, affichageDeroulementAlgo, true, origine, dest);
+                        algo = new PccStar(graphe, sortie, this.readarg, choixCout, affichageDeroulementAlgo, true, origine, dest);
 
                         break;
 
@@ -475,7 +491,7 @@ public class Launch extends JFrame {
             //Click sur le boutton Load
             if (evt.getSource() == loadButton) {
                 nomcarte = jComboBoxCartes.getSelectedItem().toString();
-                display = jCheckBoxSortieGraphique.isSelected();
+                display = jCheckBox.isSelected();
                 loadButton.setEnabled(false);
                 t = new Thread(new PlayAnimation());
                 t.start();

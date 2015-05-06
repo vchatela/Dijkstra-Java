@@ -43,9 +43,11 @@ public class Pcc_Generique<E extends Comparable<E>> extends Algo {
     protected String sortieAlgo;
     protected boolean test;
 
-    public Pcc_Generique(Graphe gr, PrintStream sortie, Readarg readarg, int choixCout, boolean test, int origine, int dest) {
+    public Pcc_Generique(Graphe gr, PrintStream sortie, Readarg readarg, int choixCout, int affichageDeroulementAlgo, boolean test, int origine, int dest) {
         super(gr, sortie, readarg);
         this.choix = choixCout;
+        this.choixAffichage = affichageDeroulementAlgo;
+
         mapLabel = new HashMap<Node, E>();
         this.zoneOrigine = gr.getZone();
         this.origine = origine;
@@ -60,13 +62,12 @@ public class Pcc_Generique<E extends Comparable<E>> extends Algo {
             System.out.println(" Le numero de sommet saisi n'appartient pas au graphe");
             return;
         }
-        // Ici on a d?j? donn? les num?ros des sommets, on demande simplement le graphisme et hop
-        choixAffichage = JOptionPane.showConfirmDialog(null, "Voulez vous afficher le deroulement de l'algo", "Choix de l'affichage", JOptionPane.YES_NO_OPTION);
-    }
+}
 
-    public Pcc_Generique(Graphe gr, PrintStream sortie, Readarg readarg, int choixCout) {
+    public Pcc_Generique(Graphe gr, PrintStream sortie, Readarg readarg, int choixCout, int affichageDeroulementAlgo) {
         super(gr, sortie, readarg);
         this.choix = choixCout;
+        this.choixAffichage = affichageDeroulementAlgo;
         // On veut stocker le resultat dans le fichier de sortie de la forme
         /*Carte: france
 				Dijsktra de 12 -> 11111 en temps
@@ -98,8 +99,6 @@ public class Pcc_Generique<E extends Comparable<E>> extends Algo {
                 return;
             }
 
-            // a voir si on fait le choix de l'affichage avec choixAffichage
-            choixAffichage = JOptionPane.showConfirmDialog(null, "Voulez vous afficher le deroulement de l'algo", "Choix de l'affichage", JOptionPane.YES_NO_OPTION);
         } catch (NumberFormatException n) {
             System.out.println("Erreur du type " + n);
         }
@@ -198,7 +197,7 @@ public class Pcc_Generique<E extends Comparable<E>> extends Algo {
         ArrayList resultat = new ArrayList();
 
         if (choix == 0) {
-            JOptionPane.showMessageDialog(null, "Le cout est de " + ((Label) dest).getCout() / 1000 + "km\n" +
+            JOptionPane.showMessageDialog(null, this.getClass().getName() + "\n\nLe cout est de " + ((Label) dest).getCout() / 1000 + "km\n" +
                     "Temps de Calcul: " + duree + " ms\n" +
                     "Nb max d'element: " + maxTas + "\n" +
                     "Nb elements explores: " + nb_elements_tas);
@@ -210,7 +209,7 @@ public class Pcc_Generique<E extends Comparable<E>> extends Algo {
 
         } else {
             //TODO : passer en minutes et heures etcs
-            JOptionPane.showMessageDialog(null, "Le cout est de " + ((Label) dest).getCout() + "min\n" +
+            JOptionPane.showMessageDialog(null, this.getClass().getName() + "\n\nLe cout est de " + ((Label) dest).getCout() + "min\n" +
                     "Temps de Calcul: " + duree + " ms\n" +
                     "Nb max d'element: " + maxTas + "\n" +
                     "Nb elements explores: " + nb_elements_tas);
