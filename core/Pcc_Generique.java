@@ -3,7 +3,6 @@ package core;
 import base.Readarg;
 
 import javax.swing.*;
-import java.awt.*;
 import java.io.PrintStream;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -176,7 +175,7 @@ public class Pcc_Generique<E extends Comparable<E>> extends Algo {
                         nb_elements_tas++;
                         // On peut afficher le sommet sur la carte
                         if (choixAffichage == JOptionPane.OK_OPTION) {
-                            graphe.getDessin().setColor(Color.magenta);
+                            //graphe.getDessin().setColor(Color.magenta);
                             this.graphe.getDessin().drawPoint(node_suc.getLongitude(), node_suc.getLatitude(), 3);
                         }
                     }

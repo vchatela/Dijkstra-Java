@@ -319,8 +319,14 @@ public class Launch extends JFrame {
                         click = JOptionPane.showConfirmDialog(null, "Connaissez vous le numéro des sommets", "", JOptionPane.OK_OPTION);
                         switch (click) {
                             case JOptionPane.OK_OPTION:
-                                origine = Integer.parseInt(JOptionPane.showInputDialog(null, "Numero du sommet d'origine'"));
-                                dest = Integer.parseInt(JOptionPane.showInputDialog(null, "Numero du sommet d'origine'"));
+                                try {
+                                    origine = Integer.parseInt(JOptionPane.showInputDialog(null, "Numero du sommet d'origine'"));
+                                    dest = Integer.parseInt(JOptionPane.showInputDialog(null, "Numero du sommet d'origine'"));
+                                } catch (Exception e) {
+                                    System.out.println(e);
+                                    origine = -1;
+                                    dest = -1;
+                                }
                                 break;
                             default:
                                 makeControlPanel(6);
@@ -357,12 +363,14 @@ public class Launch extends JFrame {
                     //TODO
                     if (algo1 != null) {
                         // on est dans la partie des performances
+                        graphe.getDessin().setColor(Color.magenta);
                         ArrayList perf1 = null;
                         perf1 = algo1.run();
                         if (perf1 == null) {
                             // on revient au debut du menu
                             continue;
                         }
+                        graphe.getDessin().setColor(Color.red);
                         ArrayList perf2 = null;
                         perf2 = algo.run();
                         if (perf2 == null) {
