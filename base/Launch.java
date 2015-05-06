@@ -46,6 +46,7 @@ public class Launch extends JFrame {
     private Graphe      graphe;
     private JPanel		controlPanel;
     private Container 	cp;
+    private JLabel		jSpace;
     private JLabel		jLabel1;
     private JLabel		jLabel2;
     private JLabel		jLabel3;
@@ -59,8 +60,7 @@ public class Launch extends JFrame {
     private JComboBox	jComboBoxMenu;
     private JComboBox	jComboBoxCartes;
     private ImageIcon   image;
-    private JButton		goButton;       //Button go (selection menu)
-    private JButton		loadButton;     //Button charger (lancement de l'appli)
+    private JButton		loadButton;     //Button ok (lancement de l'appli, chagement de menu, attente de lecture des coord du clic)
     private JButton		okButton;     //Button charger (lancement de l'appli)
     private String      nomcarte;       //Nom de la carte à charger
     private boolean     display;        //Affichage graphique ou non
@@ -78,6 +78,8 @@ public class Launch extends JFrame {
         this.readarg = new Readarg(args);
         buttonHasBeenClicked = false;
 
+        jSpace = new JLabel();
+        jSpace.setPreferredSize(new Dimension(350, 25));
         jLabel1 = new JLabel("Bienvenue (Version 3.0 de Mangel - Chatelard)");
         jLabel2 = new JLabel("Programme de test des algorithmes de graphe");
         jLabel3 = new JLabel("Nom du fichier .map a utiliser");
@@ -87,8 +89,8 @@ public class Launch extends JFrame {
         jTextField1 = new JTextField();
         jTextField2 = new JTextField();
         jTextFieldFichier = new JTextField();
-        jTextField1.setPreferredSize(new Dimension(100, 25));
-        jTextField2.setPreferredSize(new Dimension(100, 25));
+        jTextField1.setPreferredSize(new Dimension(300, 25));
+        jTextField2.setPreferredSize(new Dimension(300, 25));
         jTextFieldFichier.setPreferredSize(new Dimension(100, 25));
 
         jCheckBoxSortieGraphique = new JCheckBox();
@@ -110,15 +112,10 @@ public class Launch extends JFrame {
         loadButton.setBackground(new Color(235, 235, 235));
         loadButton.addActionListener(new BoutonListener());
 
-        okButton = new JButton("RECHARGER");
+        okButton = new JButton("OK");
         okButton.setPreferredSize(new Dimension(100, 25));
         okButton.setBackground(new Color(235, 235, 235));
         okButton.addActionListener(new BoutonListener());
-
-        goButton = new JButton("GO");
-        goButton.setPreferredSize(new Dimension(100, 25));
-        goButton.setBackground(new Color(235, 235, 235));
-        goButton.addActionListener(new BoutonListener());
 
         controlPanel = new JPanel();
         controlPanel.setPreferredSize(new Dimension(350, 645));
@@ -161,12 +158,26 @@ public class Launch extends JFrame {
         // Afficher le menu
         if (choice == 1) {
             jLabel1.setText("Que voulez-vous faire");
-            goButton.setEnabled(true);
+            okButton.setEnabled(true);
 
             controlPanel.add(Box.createHorizontalStrut(300));
             controlPanel.add(jLabel1);
             controlPanel.add(jComboBoxMenu);
-            controlPanel.add(goButton);
+            controlPanel.add(okButton);
+        }
+
+        // Situer clic
+        else if (choice == 3) {
+            jLabel2.setText("Clic aux coordonnées : ");
+            jLabel3.setText("Noeud le plus proche : ");
+            jLabel4.setText("Cliquez sur OK une fois terminé");
+            controlPanel.add(jSpace);
+            controlPanel.add(jLabel2);
+            controlPanel.add(jTextField1);
+            controlPanel.add(jLabel3);
+            controlPanel.add(jTextField2);
+            controlPanel.add(jLabel4);
+            controlPanel.add(okButton);
         }
 
         //Reinitialisation de la carte
@@ -177,6 +188,17 @@ public class Launch extends JFrame {
             controlPanel.add(jComboBoxCartes);
             controlPanel.add(okButton);
         }
+
+        //Perf
+        else if(choice == 6) {
+            //Label2.setText("Clic aux coordonnées : ");
+            jLabel3.setText("Noeud le plus proche : ");
+            //controlPanel.add(jLabel2);
+            //controlPanel.add(jTextField1);
+            controlPanel.add(jLabel3);
+            controlPanel.add(jTextField2);
+        }
+
         cp.add(controlPanel, 0);
         this.repaint();
         this.pack();
@@ -187,6 +209,8 @@ public class Launch extends JFrame {
         try {
 
             DataInputStream mapdata = Openfile.open(nomcarte);
+
+            ArrayList clickCoord = null; //Pour avoir coordonnées d'un clic
 
             Dessin dessin = (display) ? new DessinVisible(800, 600) : new DessinInvisible();
             cp.add(dessin);
@@ -202,11 +226,12 @@ public class Launch extends JFrame {
 
             while (continuer) {
                 this.afficherMenu();
+                okButton.setEnabled(true);
 
                 //On attend d'avoir cliqué sur OK
                 waitButtonOk();
 
-                goButton.setEnabled(false);
+                okButton.setEnabled(false);
                 choix = jComboBoxMenu.getSelectedIndex();
 
 
@@ -233,15 +258,19 @@ public class Launch extends JFrame {
                         break;
 
                     case 3:
-                        jLabel2.setText("Clic aux coordonnées : ");
-                        jLabel3.setText("Noeud le plus proche : ");
-                        controlPanel.add(jLabel2);
-                        controlPanel.add(jTextField1);
-                        controlPanel.add(jLabel3);
-                        controlPanel.add(jTextField2);
-                        this.pack();
+                        makeControlPanel(3);
 
-                        graphe.situerClick();
+                        clickCoord=graphe.situerClick();
+                        if(clickCoord == null) {
+                            System.out.println();
+                        }
+                        else {
+                            jTextField1.setText(clickCoord.get(0).toString());
+                            jTextField2.setText(clickCoord.get(1).toString());
+                        }
+
+                        okButton.setEnabled(true);
+                        waitButtonOk();
 
                         break;
 
@@ -290,21 +319,16 @@ public class Launch extends JFrame {
                                 dest = Integer.parseInt(JOptionPane.showInputDialog(null, "Numero du sommet d'origine'"));
                                 break;
                             default:
-                                controlPanel.remove(goButton);
-                                controlPanel.revalidate();
-                                // this.pack();
-                                //Label2.setText("Clic aux coordonnées : ");
-                                jLabel3.setText("Noeud le plus proche : ");
-                                //controlPanel.add(jLabel2);
-                                //controlPanel.add(jTextField1);
-                                controlPanel.add(jLabel3);
-                                controlPanel.add(jTextField2);
+                                makeControlPanel(6);
                                 this.pack();
 
                                 try {
-                                    graphe.situerClick();
+
+                                    clickCoord = graphe.situerClick();
+                                    jTextField2.setText(clickCoord.get(1).toString());
                                     origine = Integer.parseInt(jTextField2.getText());
-                                    graphe.situerClick();
+                                    clickCoord = graphe.situerClick();
+                                    jTextField2.setText(clickCoord.get(1).toString());
                                     dest = Integer.parseInt(jTextField2.getText());
                                     break;
                                 } catch (NumberFormatException n) {
@@ -404,8 +428,6 @@ public class Launch extends JFrame {
                 t = new Thread(new PlayAnimation());
                 t.start();
             } else if (evt.getSource() == okButton) {
-                buttonHasBeenClicked = true;
-            } else if (evt.getSource() == goButton) {
                 buttonHasBeenClicked = true;
             }
         }

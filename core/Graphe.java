@@ -232,15 +232,17 @@ public class Graphe {
      * A n'utiliser que pour faire du debug ou des tests ponctuels.
      * Ne pas utiliser automatiquement a chaque invocation des algorithmes.
      */
-    public void situerClick() {
+    public ArrayList situerClick() {
 
         System.out.println("Allez-y, cliquez donc.");
 
         if (dessin.waitClick()) {
             float lon = dessin.getClickLon();
             float lat = dessin.getClickLat();
+            ArrayList resultat = new ArrayList();
 
-            JOptionPane.showMessageDialog(null, "Clic aux coordonnees lon = " + lon + "  lat = " + lat);
+            resultat.add("lon = " + lon + "  lat = " + lat);
+            //JOptionPane.showMessageDialog(null, "Clic aux coordonnees lon = " + lon + "  lat = " + lat);
             //System.out.println("Clic aux coordonnees lon = " + lon + "  lat = " + lat);
 
             // On cherche le noeud le plus proche. O(n)
@@ -263,8 +265,13 @@ public class Graphe {
 
             dessin.setColor(java.awt.Color.red);
             dessin.drawPoint(this.listNode.get(noeud).getLongitude(), this.listNode.get(noeud).getLatitude(), 5);
-            JOptionPane.showMessageDialog(null, "Noeud le plus proche: " + noeud);
+            //JOptionPane.showMessageDialog(null, "Noeud le plus proche: " + noeud);
+            resultat.add(noeud);
+
+            return resultat;
         }
+
+        return null;
     }
 
     /**
