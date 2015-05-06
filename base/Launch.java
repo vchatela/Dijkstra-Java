@@ -391,7 +391,6 @@ public class Launch extends JFrame {
                 }
 
                 if (algo != null) {
-                    //TODO
                     if (algo1 != null) {
                         // on est dans la partie des performances
                         graphe.getDessin().setColor(Color.magenta);
