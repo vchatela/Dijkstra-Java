@@ -66,6 +66,7 @@ public class Launch extends JFrame {
     private boolean     display;        //Affichage graphique ou non
     private boolean     buttonHasBeenClicked;   //Choix du menu effectué ou non
     private Thread      t;              //Utilisé pour afficher la carte
+    private PrintStream sortie;
 
     public static void main(String[] args) {
         Launch launch = new Launch(args);
@@ -134,6 +135,8 @@ public class Launch extends JFrame {
         controlPanel.add(jComboBoxCartes);
         controlPanel.add(jLabel4);
         controlPanel.add(jCheckBoxSortieGraphique);
+        controlPanel.add(jLabelFichier);
+        controlPanel.add(jTextFieldFichier);
         controlPanel.add(loadButton);
 
         cp = getContentPane();
@@ -163,8 +166,6 @@ public class Launch extends JFrame {
             controlPanel.add(Box.createHorizontalStrut(300));
             controlPanel.add(jLabel1);
             controlPanel.add(jComboBoxMenu);
-            controlPanel.add(jLabelFichier);
-            controlPanel.add(jTextFieldFichier);
             controlPanel.add(goButton);
         }
 
@@ -192,6 +193,8 @@ public class Launch extends JFrame {
             this.pack();
 
             graphe = new Graphe(nomcarte, mapdata, dessin);
+
+            sortie = this.fichierSortie();
 
             // Boucle principale : le menu est accessible jusqu'a ce que l'on quitte.
             boolean continuer = true;
@@ -226,11 +229,11 @@ public class Launch extends JFrame {
                         break;*/
 
                     case 1:
-                        algo = new Pcc_Dijkstra(graphe, this.fichierSortie(), this.readarg);
+                        algo = new Pcc_Dijkstra(graphe, sortie, this.readarg);
                         break;
 
                     case 2:
-                        algo = new PccStar(graphe, this.fichierSortie(), this.readarg);
+                        algo = new PccStar(graphe, sortie, this.readarg);
                         break;
 
                     case 3:
@@ -289,9 +292,9 @@ public class Launch extends JFrame {
                         int origine, dest;
                         origine = Integer.parseInt(JOptionPane.showInputDialog(null, "Numero du sommet d'origine'"));
                         dest = Integer.parseInt(JOptionPane.showInputDialog(null, "Numero du sommet d'origine'"));
-                        algo1 = new Pcc_Dijkstra(graphe, this.fichierSortie(), this.readarg, true, origine, dest);
+                        algo1 = new Pcc_Dijkstra(graphe, sortie, this.readarg, true, origine, dest);
                         // TODO : PCCStar non assign?
-                        algo = new PccStar(graphe, this.fichierSortie(), this.readarg, true, origine, dest);
+                        algo = new PccStar(graphe, sortie, this.readarg, true, origine, dest);
 
                         break;
 
@@ -332,6 +335,8 @@ public class Launch extends JFrame {
             //On detruit le jFrame
             this.setVisible(false);
             this.dispose();
+
+            sortie.close();
 
             System.out.println("Programme termine.");
             System.exit(0);

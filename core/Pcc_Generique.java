@@ -226,9 +226,8 @@ public class Pcc_Generique<E extends Comparable<E>> extends Algo {
         //Maj du fichier : ecriture
         sortieAlgo += "Temps de Calcul: " + duree + " ms\n" +
                 "Nb max d'element: " + maxTas + "\n" +
-                "Nb elements explores: " + nb_elements_tas;
+                "Nb elements explores: " + nb_elements_tas + "\n\n";
         sortie.append(sortieAlgo);
-        sortie.close();
 
         return resultat;
     }
