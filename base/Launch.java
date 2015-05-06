@@ -284,6 +284,7 @@ public class Launch extends JFrame {
                             System.exit(1);
                         }
 
+
                         int ok = graphe.verifierChemin(Openfile.open(nom_chemin), nom_chemin);
                         if (ok == -1)
                             continue;
