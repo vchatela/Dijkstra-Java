@@ -192,10 +192,10 @@ public class Launch extends JFrame {
 
         //Perf
         else if(choice == 6) {
-            //Label2.setText("Clic aux coordonnées : ");
-            jLabel3.setText("Noeud le plus proche : ");
-            //controlPanel.add(jLabel2);
-            //controlPanel.add(jTextField1);
+            jLabel2.setText("Noeud de départ : ");
+            jLabel3.setText("Noeud d'arrivée : ");
+            controlPanel.add(jLabel2);
+            controlPanel.add(jTextField1);
             controlPanel.add(jLabel3);
             controlPanel.add(jTextField2);
         }
@@ -329,10 +329,10 @@ public class Launch extends JFrame {
                                 try {
 
                                     clickCoord = graphe.situerClick();
-                                    jTextField2.setText(clickCoord.get(1).toString());
-                                    origine = Integer.parseInt(jTextField2.getText());
+                                    jTextField1.setText(clickCoord.get(1).toString());
                                     clickCoord = graphe.situerClick();
                                     jTextField2.setText(clickCoord.get(1).toString());
+                                    origine = Integer.parseInt(jTextField1.getText());
                                     dest = Integer.parseInt(jTextField2.getText());
                                     break;
                                 } catch (NumberFormatException n) {
