@@ -307,15 +307,17 @@ public class Launch extends JFrame {
                                 controlPanel.add(jTextField2);
                                 this.pack();
 
-                                graphe.situerClick();
-                                if (jTextField1.getText() != "")
+                                try {
+                                    graphe.situerClick();
                                     origine = Integer.parseInt(jTextField1.getText());
-                                else origine = -1;
-                                graphe.situerClick();
-                                if (jTextField2.getText() != "")
+                                    graphe.situerClick();
                                     dest = Integer.parseInt(jTextField2.getText());
-                                else dest = -1;
-                                break;
+                                    break;
+                                } catch (NumberFormatException n) {
+                                    System.out.println(n);
+                                    origine = -1;
+                                    dest = -1;
+                                }
                         }
 
                         algo1 = new Pcc_Dijkstra(graphe, sortie, this.readarg, true, origine, dest);
