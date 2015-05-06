@@ -278,7 +278,7 @@ public class Graphe {
      * Charge un chemin depuis un fichier .path (voir le fichier FORMAT_PATH qui decrit le format)
      * Verifie que le chemin est empruntable et calcule le temps de trajet.
      */
-    public void verifierChemin(DataInputStream dis, String nom_chemin) {
+    public int verifierChemin(DataInputStream dis, String nom_chemin) {
 
         try {
 
@@ -303,7 +303,7 @@ public class Graphe {
 
             if (path_carte != this.idcarte) {
                 JOptionPane.showMessageDialog(null, "Le chemin du fichier " + nom_chemin + " n'appartient pas a la carte actuellement chargee.");
-                return;
+                return -1;
             }
 
             int nb_noeuds = dis.readInt();
@@ -343,6 +343,7 @@ public class Graphe {
             System.exit(1);
         }
 
+        return 0;
     }
 
     public String getNomCarte() {
