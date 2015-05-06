@@ -290,19 +290,28 @@ public class Launch extends JFrame {
                                 dest = Integer.parseInt(JOptionPane.showInputDialog(null, "Numero du sommet d'origine'"));
                                 break;
                             default:
-                                jLabel2.setText("Clic aux coordonnées : ");
+                                controlPanel.remove(goButton);
+                                controlPanel.revalidate();
+                                // this.pack();
+                                //Label2.setText("Clic aux coordonnées : ");
                                 jLabel3.setText("Noeud le plus proche : ");
-                                controlPanel.add(jLabel2);
-                                controlPanel.add(jTextField1);
+                                //controlPanel.add(jLabel2);
+                                //controlPanel.add(jTextField1);
                                 controlPanel.add(jLabel3);
                                 controlPanel.add(jTextField2);
                                 this.pack();
 
-                                graphe.situerClick();
-                                origine = Integer.parseInt(jTextField1.getText());
-                                graphe.situerClick();
-                                dest = Integer.parseInt(jTextField2.getText());
-                                break;
+                                try {
+                                    graphe.situerClick();
+                                    origine = Integer.parseInt(jTextField2.getText());
+                                    graphe.situerClick();
+                                    dest = Integer.parseInt(jTextField2.getText());
+                                    break;
+                                } catch (NumberFormatException n) {
+                                    System.out.println(n);
+                                    origine = -1;
+                                    dest = -1;
+                                }
                         }
 
                         algo1 = new Pcc_Dijkstra(graphe, sortie, this.readarg, true, origine, dest);
