@@ -51,7 +51,6 @@ public class Graphe {
         this.dessin = dessin;
         Utils.calibrer(nomCarte, dessin);
 
-
         //Petit outil pour verifier le chargement des cartes qui sont parfois longues
         JProgressBar pb = new JProgressBar();
         pb.setStringPainted(true);

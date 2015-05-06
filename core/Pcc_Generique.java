@@ -55,11 +55,11 @@ public class Pcc_Generique<E extends Comparable<E>> extends Algo {
         this.destination = dest;
 
         if ((origine <= 0) || (origine > graphe.getArrayList().size())) {
-            System.out.println(" Le numero de sommet saisi n'appartient pas au graphe");
+            System.out.println(" Le numero de sommet saisi : " + origine + " n'appartient pas au graphe");
             return;
         }
         if ((destination <= 0) || (destination > graphe.getArrayList().size())) {
-            System.out.println(" Le numero de sommet saisi n'appartient pas au graphe");
+            System.out.println(" Le numero de sommet saisi : " + origine + " n'appartient pas au graphe");
             return;
         }
 }
@@ -68,15 +68,6 @@ public class Pcc_Generique<E extends Comparable<E>> extends Algo {
         super(gr, sortie, readarg);
         this.choix = choixCout;
         this.choixAffichage = affichageDeroulementAlgo;
-        // On veut stocker le resultat dans le fichier de sortie de la forme
-        /*Carte: france
-				Dijsktra de 12 -> 11111 en temps
-				cout: 59659.546845 mn
-				Temps de Calcul: 261 ms
-				Nombre maximum d'elements dans le tas: 25235
-				Nombre d'elements explores: 54653
-		*/
-        // TODO !!!!!!
         this.test = false;
         mapLabel = new HashMap<Node, E>();
         // a voir si on demande la zone ou le sommet directement
@@ -91,11 +82,11 @@ public class Pcc_Generique<E extends Comparable<E>> extends Algo {
             this.destination = Integer.parseInt(JOptionPane.showInputDialog(null, "Numero du sommet de destination ?"));
             // Si le numero des noeuds n'est pas dans le graphe on doit arreter l'algo
             if ((origine <= 0) || (origine > graphe.getArrayList().size())) {
-                System.out.println(" Le numero de sommet saisi n'appartient pas au graphe");
+                System.out.println(" Le numero de sommet saisi : " + origine + " n'appartient pas au graphe");
                 return;
             }
             if ((destination <= 0) || (destination > graphe.getArrayList().size())) {
-                System.out.println(" Le numero de sommet saisi n'appartient pas au graphe");
+                System.out.println(" Le numero de sommet saisi : " + origine + " n'appartient pas au graphe");
                 return;
             }
 
@@ -172,7 +163,7 @@ public class Pcc_Generique<E extends Comparable<E>> extends Algo {
                         this.tas.insert(E_succ);
                         nb_elements_tas++;
                         // On peut afficher le sommet sur la carte
-                        if (choixAffichage == JOptionPane.OK_OPTION) {
+                        if (choixAffichage == 1) {
                             //graphe.getDessin().setColor(Color.magenta);
                             this.graphe.getDessin().drawPoint(node_suc.getLongitude(), node_suc.getLatitude(), 3);
                         }
