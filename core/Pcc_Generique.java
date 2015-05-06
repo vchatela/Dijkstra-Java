@@ -96,8 +96,11 @@ public class Pcc_Generique<E extends Comparable<E>> extends Algo {
             }
 
             // Enfin on demande le type choisi : temps ou distance  - TODO : A ameliorer sans passer par un pop up
-            this.choix = Integer.parseInt(JOptionPane.showInputDialog("Plus court en:\n0 : Distance\n1 : Temps"));
-
+            try {
+                this.choix = Integer.parseInt(JOptionPane.showInputDialog("Plus court en:\n0 : Distance\n1 : Temps"));
+            } catch (NumberFormatException n) {
+                choix = 0;
+            }
             // a voir si on fait le choix de l'affichage avec choixAffichage
             choixAffichage = JOptionPane.showConfirmDialog(null, "Voulez vous afficher le deroulement de l'algo", "Choix de l'affichage", JOptionPane.YES_NO_OPTION);
         } catch (NumberFormatException n) {
