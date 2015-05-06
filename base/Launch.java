@@ -176,30 +176,28 @@ public class Launch extends JFrame {
                 controlPanel.add(jComboBoxMenu);
                 controlPanel.add(okButton);
                 break;
-            case 1:
-                // dijkstra normal
-                okButton.setEnabled(true);
+            //Perf, Pcc Standard et A-Star
+            case 11:
+                jLabel1.setText("Afficher le deroulement ?");
                 jLabel2.setText("Plus court en :");
-                jLabel3.setText("Noeud de départ : ");
-                jLabel4.setText("Noeud d'arrivée : ");
+                controlPanel.add(jLabel1);
+                controlPanel.add(jCheckBox);
                 controlPanel.add(jLabel2);
                 controlPanel.add(jRadioButtonChoixTemps);
                 controlPanel.add(jRadioButtonChoixDistance);
-                controlPanel.add(jLabel3);
-                controlPanel.add(jTextField1);
-                controlPanel.add(jLabel4);
-                controlPanel.add(jTextField2);
                 controlPanel.add(okButton);
                 break;
-            case 2:
-                //Dijkstra Astar
-                okButton.setEnabled(true);
+            case 12:
+                jLabel1.setText("Afficher le deroulement des algorithmes ?");
                 jLabel2.setText("Plus court en :");
                 jLabel3.setText("Noeud de départ : ");
                 jLabel4.setText("Noeud d'arrivée : ");
+                controlPanel.add(jLabel1);
+                controlPanel.add(jCheckBox);
                 controlPanel.add(jLabel2);
                 controlPanel.add(jRadioButtonChoixTemps);
                 controlPanel.add(jRadioButtonChoixDistance);
+                controlPanel.add(jSpace);
                 controlPanel.add(jLabel3);
                 controlPanel.add(jTextField1);
                 controlPanel.add(jLabel4);
@@ -228,31 +226,6 @@ public class Launch extends JFrame {
                 okButton.setEnabled(true);
                 controlPanel.add(okButton);
                 break;
-            //Perf
-            case 61:
-                jLabel1.setText("Afficher le deroulement ?");
-                jLabel2.setText("Plus court en :");
-                controlPanel.add(jLabel1);
-                controlPanel.add(jCheckBox);
-                controlPanel.add(jLabel2);
-                controlPanel.add(jRadioButtonChoixTemps);
-                controlPanel.add(jRadioButtonChoixDistance);
-                break;
-            case 62:
-                jLabel1.setText("Afficher le deroulement des algorithmes ?");
-                jLabel2.setText("Plus court en :");
-                jLabel3.setText("Noeud de départ : ");
-                jLabel4.setText("Noeud d'arrivée : ");
-                controlPanel.add(jLabel1);
-                controlPanel.add(jCheckBox);
-                controlPanel.add(jLabel2);
-                controlPanel.add(jRadioButtonChoixTemps);
-                controlPanel.add(jRadioButtonChoixDistance);
-                controlPanel.add(jLabel3);
-                controlPanel.add(jTextField1);
-                controlPanel.add(jLabel4);
-                controlPanel.add(jTextField2);
-                break;
 
 
         }
@@ -264,6 +237,7 @@ public class Launch extends JFrame {
     public void go() {
 
         try {
+            DataInputStream mapdata = Openfile.open(nomcarte);
 
             ArrayList clickCoord = null; //Pour avoir coordonnées d'un clic
 
@@ -294,6 +268,7 @@ public class Launch extends JFrame {
 
                 okButton.setEnabled(false);
                 choixMenu = jComboBoxMenu.getSelectedIndex();
+                int click;
 
                 int origine;
                 int dest;
@@ -312,37 +287,111 @@ public class Launch extends JFrame {
                         break;*/
 
                     case 1:
-                        makeControlPanel(1);
-                        waitButtonOk();
-                        if (jRadioButtonChoixDistance.isSelected())
-                            choixCout = 0;
-                        else choixCout = 1;
-                        try {
-                            origine = Integer.parseInt(jTextField1.getText());
-                            dest = Integer.parseInt(jTextField2.getText());
-                        } catch (NumberFormatException n) {
-                            System.out.println(n);
-                            origine = dest = -1;
+
+                        // On demande à l'utilisateur s'il connait les numéros ou veut cliquer
+                        click = JOptionPane.showConfirmDialog(null, "Connaissez vous le numéro des sommets", "", JOptionPane.OK_OPTION);
+
+
+                        switch (click) {
+                            case JOptionPane.OK_OPTION:
+                                makeControlPanel(11);
+
+                                try {
+                                    origine = Integer.parseInt(JOptionPane.showInputDialog(null, "Numero du sommet d'origine'"));
+                                    dest = Integer.parseInt(JOptionPane.showInputDialog(null, "Numero du sommet de destination'"));
+                                } catch (Exception e) {
+                                    System.out.println(e);
+                                    origine = -1;
+                                    dest = -1;
+                                }
+                                break;
+                            default:
+                                makeControlPanel(12);
+
+                                try {
+                                    clickCoord = graphe.situerClick();
+                                    jTextField1.setText(clickCoord.get(1).toString());
+                                    clickCoord = graphe.situerClick();
+                                    jTextField2.setText(clickCoord.get(1).toString());
+                                    origine = Integer.parseInt(jTextField1.getText());
+                                    dest = Integer.parseInt(jTextField2.getText());
+                                } catch (NumberFormatException n) {
+                                    System.out.println(n);
+                                    origine = -1;
+                                    dest = -1;
+                                }
+                                break;
                         }
 
-                        algo = new Pcc_Dijkstra(graphe, sortie, this.readarg, choixCout, true, origine, dest);
+                        //Choix du coup en temps ou distance
+                        if(jRadioButtonChoixDistance.isSelected())
+                            choixCout = 0;
+                        else choixCout = 1;
+
+                        //Choix de l'affichage des algo
+                        if(jCheckBox.isSelected())
+                            affichageDeroulementAlgo = 1;
+                        else affichageDeroulementAlgo = 0;
+
+                        okButton.setEnabled(true);
+                        waitButtonOk();
+
+                        algo = new Pcc_Dijkstra(graphe, sortie, this.readarg, choixCout, affichageDeroulementAlgo, true, origine, dest);
+
                         break;
 
                     case 2:
-                        makeControlPanel(2);
-                        waitButtonOk();
-                        if (jRadioButtonChoixDistance.isSelected())
-                            choixCout = 0;
-                        else choixCout = 1;
-                        try {
-                            origine = Integer.parseInt(jTextField1.getText());
-                            dest = Integer.parseInt(jTextField2.getText());
-                        } catch (NumberFormatException n) {
-                            System.out.println(n);
-                            origine = dest = -1;
+
+                        // On demande à l'utilisateur s'il connait les numéros ou veut cliquer
+                        click = JOptionPane.showConfirmDialog(null, "Connaissez vous le numéro des sommets", "", JOptionPane.OK_OPTION);
+
+
+                        switch (click) {
+                            case JOptionPane.OK_OPTION:
+                                makeControlPanel(11);
+
+                                try {
+                                    origine = Integer.parseInt(JOptionPane.showInputDialog(null, "Numero du sommet d'origine'"));
+                                    dest = Integer.parseInt(JOptionPane.showInputDialog(null, "Numero du sommet de destination'"));
+                                } catch (Exception e) {
+                                    System.out.println(e);
+                                    origine = -1;
+                                    dest = -1;
+                                }
+                                break;
+                            default:
+                                makeControlPanel(12);
+
+                                try {
+                                    clickCoord = graphe.situerClick();
+                                    jTextField1.setText(clickCoord.get(1).toString());
+                                    clickCoord = graphe.situerClick();
+                                    jTextField2.setText(clickCoord.get(1).toString());
+                                    origine = Integer.parseInt(jTextField1.getText());
+                                    dest = Integer.parseInt(jTextField2.getText());
+                                } catch (NumberFormatException n) {
+                                    System.out.println(n);
+                                    origine = -1;
+                                    dest = -1;
+                                }
+                                break;
                         }
 
-                        algo = new PccStar(graphe, sortie, this.readarg, choixCout, true, origine, dest);
+                        //Choix du coup en temps ou distance
+                        if(jRadioButtonChoixDistance.isSelected())
+                            choixCout = 0;
+                        else choixCout = 1;
+
+                        //Choix de l'affichage des algo
+                        if(jCheckBox.isSelected())
+                            affichageDeroulementAlgo = 1;
+                        else affichageDeroulementAlgo = 0;
+
+                        okButton.setEnabled(true);
+                        waitButtonOk();
+
+                        algo = new PccStar(graphe, sortie, this.readarg, choixCout, affichageDeroulementAlgo, true, origine, dest);
+
                         break;
 
                     case 3:
@@ -400,15 +449,14 @@ public class Launch extends JFrame {
                         break;
                     case 6:
                         // Programme de test des 2 algos D + D A-Star
-                        int origine, dest;
-                        // On demande à l'utilisateur s'il connait les numéros ou veut cliquer
-                        int click;
 
+                        // On demande à l'utilisateur s'il connait les numéros ou veut cliquer
                         click = JOptionPane.showConfirmDialog(null, "Connaissez vous le numéro des sommets", "", JOptionPane.OK_OPTION);
+
 
                         switch (click) {
                             case JOptionPane.OK_OPTION:
-                                makeControlPanel(61);
+                                makeControlPanel(11);
 
                                 try {
                                     origine = Integer.parseInt(JOptionPane.showInputDialog(null, "Numero du sommet d'origine'"));
@@ -420,7 +468,7 @@ public class Launch extends JFrame {
                                 }
                                 break;
                             default:
-                                makeControlPanel(62);
+                                makeControlPanel(12);
 
                                 try {
                                     clickCoord = graphe.situerClick();
@@ -446,6 +494,9 @@ public class Launch extends JFrame {
                         if(jCheckBox.isSelected())
                             affichageDeroulementAlgo = 1;
                         else affichageDeroulementAlgo = 0;
+
+                        okButton.setEnabled(true);
+                        waitButtonOk();
 
                         algo1 = new Pcc_Dijkstra(graphe, sortie, this.readarg, choixCout, affichageDeroulementAlgo, true, origine, dest);
                         algo = new PccStar(graphe, sortie, this.readarg, choixCout, affichageDeroulementAlgo, true, origine, dest);
