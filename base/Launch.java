@@ -157,7 +157,7 @@ public class Launch extends JFrame {
     }
 
     public void afficherMenu() {
-        makeControlPanel(1);
+        makeControlPanel(0);
     }
 
     public void makeControlPanel(int choice) {
@@ -166,60 +166,91 @@ public class Launch extends JFrame {
         controlPanel.revalidate();
 
         // Afficher le menu
-        if (choice == 1) {
-            jLabel1.setText("Que voulez-vous faire");
-            okButton.setEnabled(true);
+        switch (choice) {
+            case 0:
+                jLabel1.setText("Que voulez-vous faire");
+                okButton.setEnabled(true);
 
-            controlPanel.add(Box.createHorizontalStrut(300));
-            controlPanel.add(jLabel1);
-            controlPanel.add(jComboBoxMenu);
-            controlPanel.add(okButton);
+                controlPanel.add(Box.createHorizontalStrut(300));
+                controlPanel.add(jLabel1);
+                controlPanel.add(jComboBoxMenu);
+                controlPanel.add(okButton);
+                break;
+            case 1:
+                // dijkstra normal
+                okButton.setEnabled(true);
+                jLabel2.setText("Plus court en :");
+                jLabel3.setText("Noeud de départ : ");
+                jLabel4.setText("Noeud d'arrivée : ");
+                controlPanel.add(jLabel2);
+                controlPanel.add(jRadioButtonChoixTemps);
+                controlPanel.add(jRadioButtonChoixDistance);
+                controlPanel.add(jLabel3);
+                controlPanel.add(jTextField1);
+                controlPanel.add(jLabel4);
+                controlPanel.add(jTextField2);
+                controlPanel.add(okButton);
+                break;
+            case 2:
+                //Dijkstra Astar
+                okButton.setEnabled(true);
+                jLabel2.setText("Plus court en :");
+                jLabel3.setText("Noeud de départ : ");
+                jLabel4.setText("Noeud d'arrivée : ");
+                controlPanel.add(jLabel2);
+                controlPanel.add(jRadioButtonChoixTemps);
+                controlPanel.add(jRadioButtonChoixDistance);
+                controlPanel.add(jLabel3);
+                controlPanel.add(jTextField1);
+                controlPanel.add(jLabel4);
+                controlPanel.add(jTextField2);
+                controlPanel.add(okButton);
+                break;
+            case 3:
+                okButton.setEnabled(true);
+                jLabel2.setText("Clic aux coordonnées : ");
+                jLabel3.setText("Noeud le plus proche : ");
+                jLabel4.setText("Cliquez sur OK une fois terminé");
+                controlPanel.add(jSpace);
+                controlPanel.add(jLabel2);
+                controlPanel.add(jTextField1);
+                controlPanel.add(jLabel3);
+                controlPanel.add(jTextField2);
+                controlPanel.add(jLabel4);
+                controlPanel.add(okButton);
+                break;
+            case 4:
+                break;
+            case 5:
+                jLabel1 = new JLabel("Nom du fichier .map a utiliser");
+
+                controlPanel.add(jLabel1);
+                controlPanel.add(jComboBoxCartes);
+                okButton.setEnabled(true);
+                controlPanel.add(okButton);
+                break;
+            //Perf
+            case 61:
+                jLabel2.setText("Plus court en :");
+                controlPanel.add(jLabel2);
+                controlPanel.add(jRadioButtonChoixTemps);
+                controlPanel.add(jRadioButtonChoixDistance);
+                break;
+            case 62:
+                jLabel2.setText("Plus court en :");
+                jLabel3.setText("Noeud de départ : ");
+                jLabel4.setText("Noeud d'arrivée : ");
+                controlPanel.add(jLabel2);
+                controlPanel.add(jRadioButtonChoixTemps);
+                controlPanel.add(jRadioButtonChoixDistance);
+                controlPanel.add(jLabel3);
+                controlPanel.add(jTextField1);
+                controlPanel.add(jLabel4);
+                controlPanel.add(jTextField2);
+                break;
+
+
         }
-
-        // Situer clic
-        else if (choice == 3) {
-            jLabel2.setText("Clic aux coordonnées : ");
-            jLabel3.setText("Noeud le plus proche : ");
-            jLabel4.setText("Cliquez sur OK une fois terminé");
-            controlPanel.add(jSpace);
-            controlPanel.add(jLabel2);
-            controlPanel.add(jTextField1);
-            controlPanel.add(jLabel3);
-            controlPanel.add(jTextField2);
-            controlPanel.add(jLabel4);
-            controlPanel.add(okButton);
-        }
-
-        //Reinitialisation de la carte
-        else if (choice == 5) {
-            jLabel1 = new JLabel("Nom du fichier .map a utiliser");
-
-            controlPanel.add(jLabel1);
-            controlPanel.add(jComboBoxCartes);
-            okButton.setEnabled(true);
-            controlPanel.add(okButton);
-        }
-
-        //Perf
-        else if(choice == 61) {
-            jLabel2.setText("Plus court en :");
-            controlPanel.add(jLabel2);
-            controlPanel.add(jRadioButtonChoixTemps);
-            controlPanel.add(jRadioButtonChoixDistance);
-        }
-        else if(choice == 62) {
-            jLabel2.setText("Plus court en :");
-            jLabel3.setText("Noeud de départ : ");
-            jLabel4.setText("Noeud d'arrivée : ");
-            controlPanel.add(jLabel2);
-            controlPanel.add(jRadioButtonChoixTemps);
-            controlPanel.add(jRadioButtonChoixDistance);
-            controlPanel.add(jLabel3);
-            controlPanel.add(jTextField1);
-            controlPanel.add(jLabel4);
-            controlPanel.add(jTextField2);
-        }
-
         cp.add(controlPanel, 0);
         this.repaint();
         this.pack();
@@ -258,7 +289,8 @@ public class Launch extends JFrame {
                 okButton.setEnabled(false);
                 choixMenu = jComboBoxMenu.getSelectedIndex();
 
-
+                int origine;
+                int dest;
                 // Algorithme a executer
                 Algo algo = null;
                 Algo algo1 = null;
@@ -274,13 +306,29 @@ public class Launch extends JFrame {
                         break;*/
 
                     case 1:
-                        choixCout = Integer.parseInt(JOptionPane.showInputDialog("Plus court en:\n0 : Distance\n1 : Temps"));
-                        algo = new Pcc_Dijkstra(graphe, sortie, this.readarg, choixCout);
+                        makeControlPanel(1);
+                        waitButtonOk();
+                        if (jRadioButtonChoixDistance.isSelected())
+                            choixCout = 0;
+                        else choixCout = 1;
+                        try {
+                            origine = Integer.parseInt(jTextField1.getText());
+                            dest = Integer.parseInt(jTextField1.getText());
+                        } catch (NumberFormatException n) {
+
+                        }
+
+                        algo = new Pcc_Dijkstra(graphe, sortie, this.readarg, choixCout, true, origine, dest);
                         break;
 
                     case 2:
-                        choixCout = Integer.parseInt(JOptionPane.showInputDialog("Plus court en:\n0 : Distance\n1 : Temps"));
-                        algo = new PccStar(graphe, sortie, this.readarg, choixCout);
+                        makeControlPanel(2);
+                        waitButtonOk();
+                        if (jRadioButtonChoixDistance.isSelected())
+                            choixCout = 0;
+                        else choixCout = 1;
+
+                        algo = new PccStar(graphe, sortie, this.readarg, choixCout, true, origine, dest);
                         break;
 
                     case 3:
