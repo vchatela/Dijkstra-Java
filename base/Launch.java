@@ -13,6 +13,11 @@ package base;
  * ecrit le resultat dans le fichier '/tmp/sortie', puis quitte le programme.
  */
 
+
+//FRANCE
+//Origine :1494811
+//Arrivée : 311006
+
 import core.Algo;
 import core.Graphe;
 import core.PccStar;
@@ -305,16 +310,6 @@ public class Launch extends JFrame {
                         if (perf1 == null) {
                             // on revient au debut du menu
                             continue;
-                        } else {
-                            // On efface le graphe
-                            cp.remove(dessin);
-                            dessin = (display) ? new DessinVisible(800, 600) : new DessinInvisible();
-                            cp.add(dessin);
-                            dessin.revalidate();
-                            mapdata = Openfile.open(nomcarte);
-                            graphe = null; //Pour detruire l'objet (methode finalize())
-                            graphe = new Graphe(nomcarte, mapdata, dessin);
-                            this.pack();
                         }
                         ArrayList perf2 = null;
                         perf2 = algo.run();
