@@ -73,7 +73,6 @@ public class Pcc_Generique<E extends Comparable<E>> extends Algo {
 				Nombre maximum d'elements dans le tas: 25235
 				Nombre d'elements explores: 54653
 		*/
-        // TODO !!!!!!
         this.test = false;
         mapLabel = new HashMap<Node, E>();
         // a voir si on demande la zone ou le sommet directement
@@ -96,7 +95,7 @@ public class Pcc_Generique<E extends Comparable<E>> extends Algo {
                 return;
             }
 
-            // Enfin on demande le type choisi : temps ou distance  - TODO : A ameliorer
+            // Enfin on demande le type choisi : temps ou distance  - TODO : A ameliorer sans passer par un pop up
             this.choix = Integer.parseInt(JOptionPane.showInputDialog("Plus court en:\n0 : Distance\n1 : Temps"));
 
             // a voir si on fait le choix de l'affichage avec choixAffichage
@@ -161,7 +160,6 @@ public class Pcc_Generique<E extends Comparable<E>> extends Algo {
                 // si le noeud n'est pas marque
                 if (!(((Label) E_succ).isMarque())) {
                     // on met alors le cout a jour
-                    // TODO : verifier temps !
                     new_cout = (choix == 0) ? arc.getLg_arete() + ((Label) min).getCout() : 60.0f * ((float) arc.getLg_arete()) / (1000.0f * (float) arc.getDescripteur().getVitMax()) + ((Label) min).getCout();
                     // on verifie alors que ce cout est bien inferieur au precedent
                     if (new_cout < ((Label) E_succ).getCout()) {
@@ -246,7 +244,6 @@ public class Pcc_Generique<E extends Comparable<E>> extends Algo {
         }
         // cout et affichage du chemin
         Collections.reverse(chemin.getListNode());
-        //TODO : traiter la difference suivant le choix ?
         System.out.println();
         System.out.println("Calcul sur le Chemin");
         chemin.cout_chemin_distance();

@@ -154,7 +154,6 @@ public class Chemin {
             dessin.setWidth(4);
             dessin.setColor(Color.green);
             //On joint les sommets deux a deux
-            // TODO : joindre segment et pas noeud ?
             dessin.drawLine(current_long, current_lat, this.getListNode().get(node + 1).getLongitude(), this.getListNode().get(node + 1).getLatitude());
         }
     }
