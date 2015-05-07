@@ -37,14 +37,6 @@ import java.util.Date;
 public class Launch extends JFrame {
 
     /**
-     * Main function
-     */
-
-    public static void main(String[] args) {
-        Launch launch = new Launch(args);
-    }
-
-    /**
      * Variable declarations
      */
 
@@ -54,10 +46,9 @@ public class Launch extends JFrame {
             , "Reinitialiser la carte", "Tester les performances"};
     static private final String cartes[] = {"midip", "insa", "france",
             "fractal", "reunion", "carre-dense", "carre", "fractal-spiral"};
-
     static private final String chemins[] = {"chemin_insa", "chemin_insa1", "chemin_midip", "chemin_fractal", "chemin_reunion", "chemin_carre-dense", "chemin_spiral",
             "chemin_spiral2"};
-
+    private final Readarg readarg;                    // Contient les arguments au lancement de l'appli
     // Declaration de Variables lié à l'affichage graphique
     private JPanel		    controlPanel;               // Contient le menu de selection des choix
     private Dessin          dessin;                     // Contient la map
@@ -93,7 +84,6 @@ public class Launch extends JFrame {
     private boolean         buttonClicked = false;      // Un bouton a été cliqué ou non
     private boolean         textFieldsSet = false;      // Tous les textFields (1&2) sont remplis)
     private boolean         continuer = true;           // Boucle principale : le menu est accessible jusqu'a ce que l'on quitte.
-    private final Readarg   readarg;                    // Contient les arguments au lancement de l'appli
     private ArrayList       clickCoord;                 // Pour avoir coordonnées d'un clic
     private ArrayList       parametresAlgo ;            // Pour avoir les parametres de l'algo à lancer
     private int             choixMenu;                  // Choix de la tache à effectuer
@@ -118,7 +108,7 @@ public class Launch extends JFrame {
         jSpace.setPreferredSize(new Dimension(350, 25));
 
         // Paramétrage des textes à afficher
-        jLabel1 = new JLabel("Bienvenue (Version 3.0 de Mangel - Chatelard)");
+        jLabel1 = new JLabel("Bienvenue (Version 4.0 de Mangel - Chatelard)");
         jLabel2 = new JLabel("Programme de test des algorithmes de graphe");
         jLabel3 = new JLabel("Nom du fichier .map a utiliser");
         jLabel4 = new JLabel("Voulez-vous une sortie graphique");
@@ -225,6 +215,14 @@ public class Launch extends JFrame {
         this.setVisible(true);
 
     } // _________  end of constructor
+
+    /**
+     * Main function
+     */
+
+    public static void main(String[] args) {
+        Launch launch = new Launch(args);
+    }
 
     /**
      * Methods
