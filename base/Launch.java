@@ -74,6 +74,7 @@ public class Launch extends JFrame {
     private JComboBox	    jComboBoxCartes;            // Contient les cartes
     private JButton		    okButton;                   // Button ok (lancement de l'appli, chagement de menu, attente de lecture des coord du clic)
     private JButton		    loadButton;                 // Button charger (lancement de l'appli)
+    private JButton		    clickButton;                // Button cliquer (choix manuel de origine et destination)
     private Thread          t;                          // Utilisé pour afficher la map en parallèle du menu de selection des choix
 
     // Declaration de Variables lié à l'execution du programme
@@ -85,11 +86,9 @@ public class Launch extends JFrame {
     private boolean         textFieldsSet = false;      // Tous les textFields (1&2) sont remplis)
     private boolean         continuer = true;           // Boucle principale : le menu est accessible jusqu'a ce que l'on quitte.
     private ArrayList       clickCoord;                 // Pour avoir coordonnées d'un clic
-    private ArrayList       parametresAlgo ;            // Pour avoir les parametres de l'algo à lancer
     private int             choixMenu;                  // Choix de la tache à effectuer
-    private int             choixCout;                  // Plus court en: 0 : Distance ou 1 : Temps
+    private int             choixCout;                  // Plus court en Distance:0 ou Temps:1
     private int             affichageDeroulementAlgo;   // Affichage des algorithmes ou non
-    private int             sommetsConnus;              // L'utilisateur connait les sommets origine et dest ou non
     private int             origine, dest;              // Numéro des sommets origine et dest
     private Algo            algo;                       // Algorithme a executer
     private Algo            algo1;                      // Algorithme n°2 a executer si on lance le test de performance
@@ -186,6 +185,10 @@ public class Launch extends JFrame {
         okButton.setPreferredSize(new Dimension(100, 25));
         okButton.setBackground(new Color(235, 235, 235));
         okButton.addActionListener(new BoutonListener());
+        clickButton = new JButton("CLIQUER");
+        clickButton.setPreferredSize(new Dimension(100, 25));
+        clickButton.setBackground(new Color(235, 235, 235));
+        clickButton.addActionListener(new BoutonListener());
 
         // Paramétrage du menu de selection des choix avec ajout des composants
         controlPanel = new JPanel();
@@ -283,7 +286,7 @@ public class Launch extends JFrame {
                     case 1:
                         //Initialisation et lancement de l'algorithme
                         initialiserAlgo();
-                        algo = new Pcc_Dijkstra(graphe, sortie, this.readarg, choixCout, affichageDeroulementAlgo, true, origine, dest);
+                        algo = new Pcc_Dijkstra(graphe, sortie, this.readarg, this.choixCout, this.affichageDeroulementAlgo, true, origine, dest);
                         algo.run();
 
                         break;
@@ -293,7 +296,7 @@ public class Launch extends JFrame {
 
                         //Initialisation et lancement de l'algorithme
                         initialiserAlgo();
-                        algo = new PccStar(graphe, sortie, this.readarg, choixCout, affichageDeroulementAlgo, true, origine, dest);
+                        algo = new PccStar(graphe, sortie, this.readarg, this.choixCout, this.affichageDeroulementAlgo, true, origine, dest);
                         algo.run();
 
                         break;
@@ -358,7 +361,8 @@ public class Launch extends JFrame {
 
                         // On met à jour la carte et on la réaffiche si on a souhaité avoir l'affichage graphique au lancement
                         cp.remove(dessin);
-                        this.pack();
+                        if(!display)
+                            this.pack();
                         dessin = (display) ? new DessinVisible(800, 600) : new DessinInvisible();
                         cp.add(dessin);
                         dessin.revalidate();
@@ -373,7 +377,7 @@ public class Launch extends JFrame {
                     case 6:
                         // Initialisation des algorithmes
                         initialiserAlgo();
-                        algo1 = new Pcc_Dijkstra(graphe, sortie, this.readarg, choixCout, affichageDeroulementAlgo, true, origine, dest);
+                        algo1 = new Pcc_Dijkstra(graphe, sortie, this.readarg, this.choixCout, this.affichageDeroulementAlgo, true, origine, dest);
 
                         // On paramètre la couleur d'execution du 1i algorithme
                         graphe.getDessin().setColor(Color.magenta);
@@ -386,7 +390,7 @@ public class Launch extends JFrame {
                         if (perf1 == null)
                             continue;
 
-                        algo = new PccStar(graphe, sortie, this.readarg, choixCout, affichageDeroulementAlgo, true, origine, dest);
+                        algo = new PccStar(graphe, sortie, this.readarg, this.choixCout, this.affichageDeroulementAlgo, true, origine, dest);
 
                         // On paramètre la couleur d'execution du 2i algorithme
                         graphe.getDessin().setColor(Color.red);
@@ -401,7 +405,10 @@ public class Launch extends JFrame {
 
                         // On affiche les performances
                         String resultat = new String("Performance des algos Dijkstra VS Dijkstra A-Star \n");
-                        resultat += "Le cout est de : " + perf1.get(0) + " km - " + perf2.get(0) + " km \n";
+                        if(choixCout == 0)
+                            resultat += "Le cout est de : " + perf1.get(0) + " km - " + perf2.get(0) + " km \n";
+                        else
+                            resultat += "Le cout est de : " + perf1.get(0) + " min - " + perf2.get(0) + " min \n";
                         resultat += "Durée exécution : " + perf1.get(1) + " ms - " + perf2.get(1) + " ms \n";
                         resultat += "Nbr max éléments dans le tas : " + perf1.get(2) + " - " + perf2.get(2) + "\n";
                         resultat += "Nombre d'éléments parcourut : " + perf1.get(3) + " - " + perf2.get(3) + "\n";
@@ -468,12 +475,22 @@ public class Launch extends JFrame {
                 jLabel2.setText("Plus court en :");
                 jLabel3.setText("Noeud de départ : ");
                 jLabel4.setText("Noeud d'arrivée : ");
-                jLabel5.setText("Saisir les coordonnées ou cliquez pour les obtenir");
+                jLabel5.setText("Saisir les coordonnées");
+                if(display) {
+                    clickButton.setEnabled(true);
+                }
+                else {
+                    clickButton.setEnabled(false);
+                }
+                jTextFieldOrigine.setText("");
+                jTextFieldDest.setText("");
                 controlPanel.add(jLabel1);
                 controlPanel.add(jCheckBox);
                 controlPanel.add(jLabel2);
                 controlPanel.add(jRadioButtonChoixTemps);
                 controlPanel.add(jRadioButtonChoixDistance);
+                controlPanel.add(jLabel5);
+                controlPanel.add(clickButton);
                 controlPanel.add(jSpace);
                 controlPanel.add(jLabel3);
                 controlPanel.add(jTextFieldOrigine);
@@ -517,44 +534,32 @@ public class Launch extends JFrame {
         //Paramétrer le menu de selection
         makeControlPanel(1);
 
-        // On demande à l'utilisateur s'il connait les numéros ou veut cliquer
-        sommetsConnus = JOptionPane.showConfirmDialog(null, "Connaissez vous le numéro des sommets", "", JOptionPane.OK_OPTION);
-
-        switch (sommetsConnus) {
-            case JOptionPane.OK_OPTION:
-                okButton.setEnabled(false);
-                jTextFieldOrigine.setText("");
-                jTextFieldDest.setText("");
-                // Les coordonnées vont automatiquements se mettrent à jours
-                break;
-            default:
-
-                try {
-                    clickCoord = graphe.situerClick();
-                    jTextFieldOrigine.setText(clickCoord.get(1).toString());
-                    clickCoord = graphe.situerClick();
-                    jTextFieldDest.setText(clickCoord.get(1).toString());
-                    origine = Integer.parseInt(jTextFieldOrigine.getText());
-                    dest = Integer.parseInt(jTextFieldDest.getText());
-                } catch (NumberFormatException n) {
-                    System.out.println(n);
-                    origine = -1;
-                    dest = -1;
-                }
-                break;
-        }
+        waitButtonOk();
 
         //Choix du coup en temps ou distance
         if(jRadioButtonChoixDistance.isSelected())
-            choixCout = 0;
-        else choixCout = 1;
+            this.choixCout = 0;
+        else this.choixCout = 1;
 
         //Choix de l'affichage des algo
         if(jCheckBox.isSelected())
-            affichageDeroulementAlgo = 1;
-        else affichageDeroulementAlgo = 0;
+            this.affichageDeroulementAlgo = 1;
+        else this.affichageDeroulementAlgo = 0;
+    }
 
-        waitButtonOk();
+    public void choixDesPointsParClic() {
+        try {
+            clickCoord = graphe.situerClick();
+            jTextFieldOrigine.setText(clickCoord.get(1).toString());
+            clickCoord = graphe.situerClick();
+            jTextFieldDest.setText(clickCoord.get(1).toString());
+            origine = Integer.parseInt(jTextFieldOrigine.getText());
+            dest = Integer.parseInt(jTextFieldDest.getText());
+        } catch (NumberFormatException n) {
+            System.out.println(n);
+            origine = -1;
+            dest = -1;
+        }
     }
 
     // Ouvre un fichier de sortie pour ecrire les reponses
@@ -616,8 +621,13 @@ public class Launch extends JFrame {
                 loadButton.setEnabled(false);
                 t = new Thread(new PlayAnimation());
                 t.start();
-            } else if (evt.getSource() == okButton) {
+            }
+            else if (evt.getSource() == okButton) {
                 buttonClicked = true;
+            }
+            else if (evt.getSource() == clickButton) {
+                //Lors du choix des points origine et dest, lorsque l'on choisit de cliquer sur la carte
+                choixDesPointsParClic();
             }
         }
     }
