@@ -144,6 +144,8 @@ public class Pcc_Generique<E extends Comparable<E>> extends Algo {
             ((Label) min).setMarque(true);
             // pour chaque successeurs / arc
             for (Arc arc : this.graphe.getArrayList().get(((Label) min).getNum_node()).getArrayListArc()) {
+
+                //TODO pour pfrance.x : si on sort de la map, ca plante
                 node_suc = this.graphe.getArrayList().get(arc.getNum_dest());
                 // Label_Dijkstra correspondant au noeud destinataire
                 E_succ = mapLabel.get(node_suc);

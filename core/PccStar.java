@@ -12,14 +12,14 @@ public class PccStar extends Pcc_Generique<Label_Star> {
 
         String chaine = (choix == 0) ? "distance" : "temps";
         sortieAlgo = "Carte: " + graphe.getNomCarte() + "\n" + "Dijkstra A STAR de " + origine + " -> " + destination + " en " + chaine + "\n";
-        this.graphe.getDessin().setColor(Color.orange);
+        this.graphe.getDessin().setColor(Color.magenta);
     }
     public PccStar(Graphe gr, PrintStream sortie, Readarg readarg, int choixCout, int affichageDeroulementAlgo) {
         super(gr, sortie, readarg, choixCout, affichageDeroulementAlgo);
 
         String chaine = (choix == 0) ? "distance" : "temps";
         sortieAlgo = "Carte: " + graphe.getNomCarte() + "\n" + "Dijkstra A STAR de " + origine + " -> " + destination + " en " + chaine + "\n";
-        //this.graphe.getDessin().setColor(Color.orange);
+        this.graphe.getDessin().setColor(Color.magenta);
     }
 
     public void initialisation() {

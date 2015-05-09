@@ -45,7 +45,7 @@ public class Launch extends JFrame {
             "Obtenir un numero de sommet ", "Charger un fichier de chemin"
             , "Reinitialiser la carte", "Tester les performances"};
     static private final String cartes[] = {"midip", "insa", "france",
-            "fractal", "reunion", "carre-dense", "carre", "fractal-spiral"};
+            "fractal", "reunion", "newzealand", "morbihan", "mayotte", "paris", "carre-dense", "carre", "fractal-spiral", "midip.0","midip.1","pfrance.0","pfrance.1","pfrance.2","pfrance.3","pfrance.4"};
     static private final String chemins[] = {"chemin_insa", "chemin_insa1", "chemin_midip", "chemin_fractal", "chemin_reunion", "chemin_carre-dense", "chemin_spiral",
             "chemin_spiral2"};
     private final Readarg readarg;                    // Contient les arguments au lancement de l'appli
@@ -193,6 +193,7 @@ public class Launch extends JFrame {
         controlPanel.setLayout(new FlowLayout());
         controlPanel.add(jLabel1);
         controlPanel.add(jLabel2);
+        controlPanel.add(jSpace);
         controlPanel.add(jLabelImage);
         controlPanel.add(jLabel3);
         controlPanel.add(jComboBoxCartes);
@@ -352,8 +353,12 @@ public class Launch extends JFrame {
                         // On récupère le nom de la carte
                         nomcarte = jComboBoxCartes.getSelectedItem().toString();
 
+                        // Choix de l'affichage de la carte ou non
+                        display = jCheckBox.isSelected();
+
                         // On met à jour la carte et on la réaffiche si on a souhaité avoir l'affichage graphique au lancement
                         cp.remove(dessin);
+                        this.pack();
                         dessin = (display) ? new DessinVisible(800, 600) : new DessinInvisible();
                         cp.add(dessin);
                         dessin.revalidate();
@@ -493,9 +498,12 @@ public class Launch extends JFrame {
                 break;
             case 5:
                 okButton.setEnabled(true);
-                jLabel1 = new JLabel("Nom du fichier .map a utiliser");
+                jLabel1.setText("Nom du fichier .map a utiliser");
+                jLabel2.setText("Voulez-vous une sortie graphique");
                 controlPanel.add(jLabel1);
                 controlPanel.add(jComboBoxCartes);
+                controlPanel.add(jLabel2);
+                controlPanel.add(jCheckBox);
                 controlPanel.add(okButton);
                 break;
         }
