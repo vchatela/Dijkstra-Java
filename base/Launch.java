@@ -74,7 +74,6 @@ public class Launch extends JFrame {
     private JComboBox	    jComboBoxCartes;            // Contient les cartes
     private JButton		    okButton;                   // Button ok (lancement de l'appli, chagement de menu, attente de lecture des coord du clic)
     private JButton		    loadButton;                 // Button charger (lancement de l'appli)
-    private JButton		    clickButton;                // Button cliquer (choix manuel de origine et destination)
     private Thread          t;                          // Utilisé pour afficher la map en parallèle du menu de selection des choix
 
     // Declaration de Variables lié à l'execution du programme
@@ -86,6 +85,7 @@ public class Launch extends JFrame {
     private boolean         textFieldsSet = false;      // Tous les textFields (1&2) sont remplis)
     private boolean         continuer = true;           // Boucle principale : le menu est accessible jusqu'a ce que l'on quitte.
     private ArrayList       clickCoord;                 // Pour avoir coordonnées d'un clic
+    private int             sommetsConnus;              // L'utilisateur connait les sommets origine et dest ou non
     private int             choixMenu;                  // Choix de la tache à effectuer
     private int             choixCout;                  // Plus court en Distance:0 ou Temps:1
     private int             affichageDeroulementAlgo;   // Affichage des algorithmes ou non
@@ -121,8 +121,8 @@ public class Launch extends JFrame {
         jTextFieldFichier = new JTextField();
         jTextField1.setPreferredSize(new Dimension(300, 25));
         jTextField2.setPreferredSize(new Dimension(300, 25));
-        jTextFieldOrigine.setPreferredSize(new Dimension(200, 25));
-        jTextFieldDest.setPreferredSize(new Dimension(200, 25));
+        jTextFieldOrigine.setPreferredSize(new Dimension(100, 25));
+        jTextFieldDest.setPreferredSize(new Dimension(100, 25));
         jTextFieldFichier.setPreferredSize(new Dimension(100, 25));
         jTextFieldOrigine.getDocument().addDocumentListener(new DocumentListener() {
             public void changedUpdate(DocumentEvent e) {
@@ -185,10 +185,6 @@ public class Launch extends JFrame {
         okButton.setPreferredSize(new Dimension(100, 25));
         okButton.setBackground(new Color(235, 235, 235));
         okButton.addActionListener(new BoutonListener());
-        clickButton = new JButton("CLIQUER");
-        clickButton.setPreferredSize(new Dimension(100, 25));
-        clickButton.setBackground(new Color(235, 235, 235));
-        clickButton.addActionListener(new BoutonListener());
 
         // Paramétrage du menu de selection des choix avec ajout des composants
         controlPanel = new JPanel();
@@ -361,8 +357,6 @@ public class Launch extends JFrame {
 
                         // On met à jour la carte et on la réaffiche si on a souhaité avoir l'affichage graphique au lancement
                         cp.remove(dessin);
-                        if(!display)
-                            this.pack();
                         dessin = (display) ? new DessinVisible(800, 600) : new DessinInvisible();
                         cp.add(dessin);
                         dessin.revalidate();
@@ -470,18 +464,14 @@ public class Launch extends JFrame {
                 break;
             // Utilisé par Pcc Standard, Pcc A-Star et le Programme de test des 2 algos D + D A-Star
             case 1:
+                jTextField1.setEditable(true);
+                jTextField2.setEditable(true);
                 okButton.setEnabled(false);
                 jLabel1.setText("Afficher le deroulement des algorithmes ?");
                 jLabel2.setText("Plus court en :");
-                jLabel3.setText("Noeud de départ : ");
-                jLabel4.setText("Noeud d'arrivée : ");
+                jLabel3.setText("Saisir le noeud de départ : ");
+                jLabel4.setText("Saisir le noeud d'arrivée : ");
                 jLabel5.setText("Saisir les coordonnées");
-                if(display) {
-                    clickButton.setEnabled(true);
-                }
-                else {
-                    clickButton.setEnabled(false);
-                }
                 jTextFieldOrigine.setText("");
                 jTextFieldDest.setText("");
                 controlPanel.add(jLabel1);
@@ -489,14 +479,36 @@ public class Launch extends JFrame {
                 controlPanel.add(jLabel2);
                 controlPanel.add(jRadioButtonChoixTemps);
                 controlPanel.add(jRadioButtonChoixDistance);
-                controlPanel.add(jLabel5);
-                controlPanel.add(clickButton);
                 controlPanel.add(jSpace);
+                controlPanel.add(jLabel5);
                 controlPanel.add(jLabel3);
                 controlPanel.add(jTextFieldOrigine);
                 controlPanel.add(jLabel4);
                 controlPanel.add(jTextFieldDest);
                 controlPanel.add(okButton);
+                break;
+            case 2:
+                jTextField1.setEditable(false);
+                jTextField2.setEditable(false);
+                jLabel1.setText("Afficher le deroulement des algorithmes ?");
+                jLabel2.setText("Plus court en :");
+                jLabel3.setText("Cliquez une 1i fois pour le noeud de départ : ");
+                jLabel4.setText("Cliquez une 2i fois pour le noeud d'arrivée : ");
+                jLabel5.setText("Obtenir les coordonnées");
+                jTextFieldOrigine.setText("");
+                jTextFieldDest.setText("");
+                controlPanel.add(jLabel1);
+                controlPanel.add(jCheckBox);
+                controlPanel.add(jLabel2);
+                controlPanel.add(jRadioButtonChoixTemps);
+                controlPanel.add(jRadioButtonChoixDistance);
+                controlPanel.add(jSpace);
+                controlPanel.add(jLabel5);
+                controlPanel.add(jLabel3);
+                controlPanel.add(jTextFieldOrigine);
+                controlPanel.add(jLabel4);
+                controlPanel.add(jTextFieldDest);
+
                 break;
             case 3:
                 okButton.setEnabled(true);
@@ -531,10 +543,35 @@ public class Launch extends JFrame {
 
     public void initialiserAlgo() {
 
-        //Paramétrer le menu de selection
-        makeControlPanel(1);
+        // On demande à l'utilisateur s'il connait les numéros ou veut cliquer
+        sommetsConnus = JOptionPane.showConfirmDialog(null, "Connaissez vous le numéro des sommets", "", JOptionPane.OK_OPTION);
 
-        waitButtonOk();
+        switch (sommetsConnus) {
+            case JOptionPane.OK_OPTION:
+                //Paramétrer le menu de selection
+                makeControlPanel(1);
+                // Les coordonnées vont automatiquements se mettrent à jours
+
+                // On doit cliquer sur OK pour continuer
+                waitButtonOk();
+                break;
+            default:
+                //Paramétrer le menu de selection
+                makeControlPanel(2);
+                try {
+                    clickCoord = graphe.situerClick();
+                    jTextFieldOrigine.setText(clickCoord.get(1).toString());
+                    clickCoord = graphe.situerClick();
+                    jTextFieldDest.setText(clickCoord.get(1).toString());
+                    origine = Integer.parseInt(jTextFieldOrigine.getText());
+                    dest = Integer.parseInt(jTextFieldDest.getText());
+                } catch (NumberFormatException n) {
+                    System.out.println(n);
+                    origine = -1;
+                    dest = -1;
+                }
+                break;
+        }
 
         //Choix du coup en temps ou distance
         if(jRadioButtonChoixDistance.isSelected())
@@ -545,21 +582,6 @@ public class Launch extends JFrame {
         if(jCheckBox.isSelected())
             this.affichageDeroulementAlgo = 1;
         else this.affichageDeroulementAlgo = 0;
-    }
-
-    public void choixDesPointsParClic() {
-        try {
-            clickCoord = graphe.situerClick();
-            jTextFieldOrigine.setText(clickCoord.get(1).toString());
-            clickCoord = graphe.situerClick();
-            jTextFieldDest.setText(clickCoord.get(1).toString());
-            origine = Integer.parseInt(jTextFieldOrigine.getText());
-            dest = Integer.parseInt(jTextFieldDest.getText());
-        } catch (NumberFormatException n) {
-            System.out.println(n);
-            origine = -1;
-            dest = -1;
-        }
     }
 
     // Ouvre un fichier de sortie pour ecrire les reponses
@@ -625,10 +647,7 @@ public class Launch extends JFrame {
             else if (evt.getSource() == okButton) {
                 buttonClicked = true;
             }
-            else if (evt.getSource() == clickButton) {
-                //Lors du choix des points origine et dest, lorsque l'on choisit de cliquer sur la carte
-                choixDesPointsParClic();
-            }
+
         }
     }
 

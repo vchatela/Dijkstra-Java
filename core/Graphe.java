@@ -233,9 +233,10 @@ public class Graphe {
      */
     public ArrayList situerClick() {
 
-        System.out.println("Allez-y, cliquez donc.");
-
         if (dessin.waitClick()) {
+
+            System.out.println("Allez-y, cliquez donc.");
+
             float lon = dessin.getClickLon();
             float lat = dessin.getClickLat();
             ArrayList resultat = new ArrayList();
