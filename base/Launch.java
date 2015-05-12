@@ -45,7 +45,7 @@ public class Launch extends JFrame {
             "Obtenir un numero de sommet ", "Charger un fichier de chemin"
             , "Reinitialiser la carte", "Tester les performances"};
     static private final String cartes[] = {"midip", "insa", "france",
-            "fractal", "reunion", "newzealand", "morbihan", "mayotte", "paris", "carre-dense", "carre", "fractal-spiral", "midip.0","midip.1","pfrance.0","pfrance.1","pfrance.2","pfrance.3","pfrance.4"};
+            "fractal", "reunion", "newzealand", "morbihan", "mayotte", "paris", "carre-dense", "carre", "fractal-spiral"};
     static private final String chemins[] = {"chemin_insa", "chemin_insa1", "chemin_midip", "chemin_fractal", "chemin_reunion", "chemin_carre-dense", "chemin_spiral",
             "chemin_spiral2"};
     private final Readarg readarg;                    // Contient les arguments au lancement de l'appli
@@ -471,7 +471,7 @@ public class Launch extends JFrame {
                 jLabel2.setText("Plus court en :");
                 jLabel3.setText("Saisir le noeud de départ : ");
                 jLabel4.setText("Saisir le noeud d'arrivée : ");
-                jLabel5.setText("Saisir les coordonnées");
+                jLabel5.setText("Saisir les coordonnées manuellement");
                 jTextFieldOrigine.setText("");
                 jTextFieldDest.setText("");
                 controlPanel.add(jLabel1);
@@ -494,7 +494,7 @@ public class Launch extends JFrame {
                 jLabel2.setText("Plus court en :");
                 jLabel3.setText("Cliquez une 1i fois pour le noeud de départ : ");
                 jLabel4.setText("Cliquez une 2i fois pour le noeud d'arrivée : ");
-                jLabel5.setText("Obtenir les coordonnées");
+                jLabel5.setText("Obtenir les coordonnées en cliquant");
                 jTextFieldOrigine.setText("");
                 jTextFieldDest.setText("");
                 controlPanel.add(jLabel1);
@@ -544,7 +544,10 @@ public class Launch extends JFrame {
     public void initialiserAlgo() {
 
         // On demande à l'utilisateur s'il connait les numéros ou veut cliquer
-        sommetsConnus = JOptionPane.showConfirmDialog(null, "Connaissez vous le numéro des sommets", "", JOptionPane.OK_OPTION);
+        if(display)
+            sommetsConnus = JOptionPane.showConfirmDialog(null, "Connaissez vous le numéro des sommets", "", JOptionPane.OK_OPTION);
+        else
+            sommetsConnus = 0;
 
         switch (sommetsConnus) {
             case JOptionPane.OK_OPTION:
