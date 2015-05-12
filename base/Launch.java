@@ -41,9 +41,10 @@ public class Launch extends JFrame {
      */
 
     // Declaration et initialisation des tableaux d'informations
-    static private final String menu[] = {"Quitter", "PCC Standard", "PCC A-star",
-            "Obtenir un numero de sommet ", "Charger un fichier de chemin"
-            , "Reinitialiser la carte", "Tester les performances"};
+    static private final String menuDisplay[] = {"Quitter", "PCC Standard", "PCC A-star","Charger un fichier de chemin"
+            , "Reinitialiser la carte", "Tester les performances", "Covoiturage", "Obtenir un numero de sommet "};
+    static private final String menuNotDisplay[] = {"Quitter", "PCC Standard", "PCC A-star","Charger un fichier de chemin"
+            , "Reinitialiser la carte", "Tester les performances", "Covoiturage"};
     static private final String cartes[] = {"midip", "insa", "france",
             "fractal", "reunion", "newzealand", "morbihan", "mayotte", "paris", "carre-dense", "carre", "fractal-spiral"};
     static private final String chemins[] = {"chemin_insa", "chemin_insa1", "chemin_midip", "chemin_fractal", "chemin_reunion", "chemin_carre-dense", "chemin_spiral",
@@ -168,8 +169,6 @@ public class Launch extends JFrame {
         for (String carte : cartes)
             jComboBoxCartes.addItem(carte);
         jComboBoxMenu = new JComboBox();
-        for (String choix : menu)
-            jComboBoxMenu.addItem(choix);
 
         // Paramétrage de l'image
         jLabelImage = new JLabel();
@@ -297,30 +296,8 @@ public class Launch extends JFrame {
 
                         break;
 
-                    // Obtenir un numéro de sommet
-                    case 3:
-                        // Paramétrer le menu de selection
-                        makeControlPanel(3);
-
-                        // On récupère les informations du click
-                        clickCoord = graphe.situerClick();
-
-                        // On vérifie que l'on a bien récupéré les informations du click
-                        if(clickCoord == null)
-                            System.out.println("Le clic n'a rien retourné");
-                        else {
-                            // On affiche les information
-                            jTextField1.setText(clickCoord.get(0).toString());
-                            jTextField2.setText(clickCoord.get(1).toString());
-                        }
-
-                        // On doit cliquer sur OK pour continuer
-                        waitButtonOk();
-
-                        break;
-
                     // Charger un fichier de chemin
-                    case 4:
+                    case 3:
                         // TODO affichage graphique
 
                         // Paramétrer le menu de selection
@@ -342,7 +319,7 @@ public class Launch extends JFrame {
                         break;
 
                     // Réinitialiser la map
-                    case 5:
+                    case 4:
                         // Paramétrer le menu de selection
                         makeControlPanel(5);
 
@@ -368,7 +345,7 @@ public class Launch extends JFrame {
                         break;
 
                     // Programme de test des 2 algos D + D A-Star
-                    case 6:
+                    case 5:
                         // Initialisation des algorithmes
                         initialiserAlgo();
                         algo1 = new Pcc_Dijkstra(graphe, sortie, this.readarg, this.choixCout, this.affichageDeroulementAlgo, true, origine, dest);
@@ -407,6 +384,32 @@ public class Launch extends JFrame {
                         resultat += "Nbr max éléments dans le tas : " + perf1.get(2) + " - " + perf2.get(2) + "\n";
                         resultat += "Nombre d'éléments parcourut : " + perf1.get(3) + " - " + perf2.get(3) + "\n";
                         JOptionPane.showMessageDialog(null, resultat);
+
+                        break;
+
+                    // Covoiturage
+                    case 6:
+                        break;
+
+                    // Obtenir un numéro de sommet
+                    case 7:
+                        // Paramétrer le menu de selection
+                        makeControlPanel(3);
+
+                        // On récupère les informations du click
+                        clickCoord = graphe.situerClick();
+
+                        // On vérifie que l'on a bien récupéré les informations du click
+                        if(clickCoord == null)
+                            System.out.println("Le clic n'a rien retourné");
+                        else {
+                            // On affiche les information
+                            jTextField1.setText(clickCoord.get(0).toString());
+                            jTextField2.setText(clickCoord.get(1).toString());
+                        }
+
+                        // On doit cliquer sur OK pour continuer
+                        waitButtonOk();
 
                         break;
 
@@ -457,6 +460,12 @@ public class Launch extends JFrame {
             // Menu de lancement
             case 0:
                 jLabel1.setText("Que voulez-vous faire");
+                if(display)
+                    for (String choix : menuDisplay)
+                        jComboBoxMenu.addItem(choix);
+                else
+                    for (String choix : menuNotDisplay)
+                        jComboBoxMenu.addItem(choix);
                 controlPanel.add(Box.createHorizontalStrut(300));
                 controlPanel.add(jLabel1);
                 controlPanel.add(jComboBoxMenu);
@@ -474,8 +483,10 @@ public class Launch extends JFrame {
                 jLabel5.setText("Saisir les coordonnées manuellement");
                 jTextFieldOrigine.setText("");
                 jTextFieldDest.setText("");
-                controlPanel.add(jLabel1);
-                controlPanel.add(jCheckBox);
+                if(display) {
+                    controlPanel.add(jLabel1);
+                    controlPanel.add(jCheckBox);
+                }
                 controlPanel.add(jLabel2);
                 controlPanel.add(jRadioButtonChoixTemps);
                 controlPanel.add(jRadioButtonChoixDistance);
@@ -497,8 +508,10 @@ public class Launch extends JFrame {
                 jLabel5.setText("Obtenir les coordonnées en cliquant");
                 jTextFieldOrigine.setText("");
                 jTextFieldDest.setText("");
-                controlPanel.add(jLabel1);
-                controlPanel.add(jCheckBox);
+                if(display) {
+                    controlPanel.add(jLabel1);
+                    controlPanel.add(jCheckBox);
+                }
                 controlPanel.add(jLabel2);
                 controlPanel.add(jRadioButtonChoixTemps);
                 controlPanel.add(jRadioButtonChoixDistance);
