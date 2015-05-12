@@ -10,8 +10,8 @@ import java.io.PrintStream;
  */
 public class Pcc_Dijkstra extends Pcc_Generique<Label_Dijkstra> {
 
-    public Pcc_Dijkstra(Graphe gr, PrintStream sortie, Readarg readarg, int choixCout, int affichageDeroulementAlgo, boolean test, int origine, int dest) {
-        super(gr, sortie, readarg, choixCout, affichageDeroulementAlgo, test, origine, dest);
+    public Pcc_Dijkstra(Graphe gr, PrintStream sortie, Readarg readarg, int choixCout, int affichageDeroulementAlgo, int origine, int dest, boolean TOUS) {
+        super(gr, sortie, readarg, choixCout, affichageDeroulementAlgo, origine, dest, TOUS);
 
         String chaine = (choix == 0) ? "distance" : "temps";
         sortieAlgo = "Carte: " + graphe.getNomCarte() + "\n" + "Dijkstra Standard de " + origine + " -> " + destination + " en " + chaine + "\n";

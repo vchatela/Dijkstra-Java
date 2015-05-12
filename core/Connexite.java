@@ -16,4 +16,9 @@ public class Connexite extends Algo {
         return new ArrayList();
     }
 
+    @Override
+    public ArrayList getLab() {
+        return null;
+    }
+
 }

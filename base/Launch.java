@@ -18,10 +18,7 @@ package base;
 //Origine :1494811
 //Arrivée : 311006
 
-import core.Algo;
-import core.Graphe;
-import core.PccStar;
-import core.Pcc_Dijkstra;
+import core.*;
 
 import javax.swing.*;
 import javax.swing.event.DocumentEvent;
@@ -281,7 +278,7 @@ public class Launch extends JFrame {
                     case 1:
                         //Initialisation et lancement de l'algorithme
                         initialiserAlgo();
-                        algo = new Pcc_Dijkstra(graphe, sortie, this.readarg, this.choixCout, this.affichageDeroulementAlgo, true, origine, dest);
+                        algo = new Pcc_Dijkstra(graphe, sortie, this.readarg, this.choixCout, this.affichageDeroulementAlgo, origine, dest, false);
                         algo.run();
 
                         break;
@@ -291,7 +288,7 @@ public class Launch extends JFrame {
 
                         //Initialisation et lancement de l'algorithme
                         initialiserAlgo();
-                        algo = new PccStar(graphe, sortie, this.readarg, this.choixCout, this.affichageDeroulementAlgo, true, origine, dest);
+                        algo = new PccStar(graphe, sortie, this.readarg, this.choixCout, this.affichageDeroulementAlgo, origine, dest, false);
                         algo.run();
 
                         break;
@@ -348,7 +345,7 @@ public class Launch extends JFrame {
                     case 5:
                         // Initialisation des algorithmes
                         initialiserAlgo();
-                        algo1 = new Pcc_Dijkstra(graphe, sortie, this.readarg, this.choixCout, this.affichageDeroulementAlgo, true, origine, dest);
+                        algo1 = new Pcc_Dijkstra(graphe, sortie, this.readarg, this.choixCout, this.affichageDeroulementAlgo, origine, dest, false);
 
                         // On paramètre la couleur d'execution du 1i algorithme
                         graphe.getDessin().setColor(Color.magenta);
@@ -361,7 +358,7 @@ public class Launch extends JFrame {
                         if (perf1 == null)
                             continue;
 
-                        algo = new PccStar(graphe, sortie, this.readarg, this.choixCout, this.affichageDeroulementAlgo, true, origine, dest);
+                        algo = new PccStar(graphe, sortie, this.readarg, this.choixCout, this.affichageDeroulementAlgo, origine, dest, false);
 
                         // On paramètre la couleur d'execution du 2i algorithme
                         graphe.getDessin().setColor(Color.red);
@@ -389,6 +386,96 @@ public class Launch extends JFrame {
 
                     // Covoiturage
                     case 6:
+                        /*
+                        Numéro des sommets de départ et celui d'arriver (3 points)
+                         */
+
+                        // pcc de départVoit vers tous
+                        // TODO : demander le graphisme comme pour les autres mais des 3 points ! Donc 3 cases a gauche avec/sans 3 clics
+
+                        // TODO : retirer les affichages des algos indépendants, ainsi que les pops up pour afficher seulement un temps complet d'éxécution
+
+                        // TODO : du coup mettre la durée comme pour Pcc
+
+                        origine = 95132;
+                        int origineP = 142519;
+                        dest = 114756;
+                        double valPiet, valVoit;
+                        ArrayList<Label_Dijkstra> covoitSomme = new ArrayList<Label_Dijkstra>();
+
+                        algo = new Pcc_Dijkstra(graphe, sortie, this.readarg, this.choixCout, this.affichageDeroulementAlgo, origine, dest, true);
+
+
+                        algo.run();
+
+                        ArrayList<Label_Dijkstra> covoit = algo.getLab();
+
+                        /*valPiet = covoit.get();
+                        valVoit = covoit.get();*/
+
+                        // pcc de départPiet vers tous et on le met dans le arraylist que si il est plus grand
+
+                        algo = new Pcc_Dijkstra(graphe, sortie, this.readarg, this.choixCout, this.affichageDeroulementAlgo, origineP, dest, true);
+                        algo.run();
+                        ArrayList<Label_Dijkstra> covoitPiet = algo.getLab();
+                        // on fait que si covoit et covoitPiet != null
+                        if (covoit != null && covoitPiet != null) {
+                            int i = 0;
+                            for (Label_Dijkstra lab : covoit) {
+                                if (lab.getCout() < covoitPiet.get(i).getCout()) {
+                                    covoitSomme.add(i, covoitPiet.get(i));
+                                } else {
+                                    covoitSomme.add(i, lab);
+                                }
+                                i++;
+                            }
+                        }
+
+                        // on a un arrayList covoitSomme qui contient des infini pour les noeuds qui ne sont pas en commun et sinon la valeur du max entre le temps
+                        // de la voiture et du pieton
+
+                        // on fait pcc de dest vers tous  et on met a jour dans l'arraylist à la seule condition que
+                        // max (x,y) < Pcc(dest, noeud) + Pcc( (x ou y) vers noeuds )
+                        algo = new Pcc_Dijkstra(graphe, sortie, this.readarg, this.choixCout, this.affichageDeroulementAlgo, dest, dest, true);
+                        algo.run();
+                        ArrayList<Label_Dijkstra> covoitTotal;
+                        covoitTotal = algo.getLab();
+
+                        // On met a jour
+                        if (covoitTotal != null) {
+                            int i = 0;
+                            for (Label_Dijkstra lab : covoitSomme) {
+                                valVoit = covoit.get(i).getCout();
+                                valPiet = covoitPiet.get(i).getCout();
+                                lab.setCout(lab.getCout() + covoitTotal.get(i).getCout());
+                                if (lab.getCout() < Math.max(valPiet, valVoit))
+                                    covoitTotal.set(i, lab);
+                                i++;
+                            }
+                        }
+                        // Ici on a covoitSomme qui nous donne les coups de chaque noeud (Pieton inter Voiture) vers dest
+                        int noeud_rejoint = -1;
+                        int i = 0;
+                        double min = Double.POSITIVE_INFINITY;
+
+                        for (Label_Dijkstra lab : covoitSomme) {
+                            if (lab.getCout() < min) {
+                                min = lab.getCout();
+                                noeud_rejoint = i;
+                            }
+                            i++;
+                        }
+                        Node node;
+                        if (noeud_rejoint != -1) {
+                            // on trace le point de rencontre
+                            node = this.graphe.getArrayList().get(noeud_rejoint);
+                            this.graphe.getDessin().drawPoint(node.getLongitude(), node.getLatitude(), 12);
+                            System.out.println("On est bien arrivé ! Rencontre au noeud " + node);
+                            System.out.println("Avec pour temps : min ");
+                        } else {
+                            // on a aucun point pour y aller
+                            // TODO : gérer ce cas
+                        }
                         break;
 
                     // Obtenir un numéro de sommet

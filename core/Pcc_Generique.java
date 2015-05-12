@@ -24,13 +24,10 @@ public class Pcc_Generique<E extends Comparable<E>> extends Algo {
     protected BinaryHeap<E> tas;
     //Label_Dijkstra destinataire
     protected E dest;
-
     //Afficher ou non le deroulement de l'algo
     protected int choixAffichage;
-
     //en temps (choix=1),  en distance (choix=0)
     protected int choix;
-
     //fait correspondre un noeud a un Label_Dijkstra
     protected HashMap<Node, E> mapLabel;
     //duree d'execution
@@ -41,12 +38,13 @@ public class Pcc_Generique<E extends Comparable<E>> extends Algo {
     protected int nb_elements_tas;
     //contient le resultat a enregister dans un fichier
     protected String sortieAlgo;
-    protected boolean test;
+    protected boolean TOUS;
 
-    public Pcc_Generique(Graphe gr, PrintStream sortie, Readarg readarg, int choixCout, int affichageDeroulementAlgo, boolean test, int origine, int dest) {
+    public Pcc_Generique(Graphe gr, PrintStream sortie, Readarg readarg, int choixCout, int affichageDeroulementAlgo, int origine, int dest, boolean TOUS) {
         super(gr, sortie, readarg);
         this.choix = choixCout;
         this.choixAffichage = affichageDeroulementAlgo;
+        this.TOUS = TOUS;
 
         mapLabel = new HashMap<Node, E>();
         this.zoneOrigine = gr.getZone();
@@ -62,13 +60,15 @@ public class Pcc_Generique<E extends Comparable<E>> extends Algo {
             System.out.println(" Le numero de sommet saisi : " + origine + " n'appartient pas au graphe");
             return;
         }
-}
+    }
 
     public Pcc_Generique(Graphe gr, PrintStream sortie, Readarg readarg, int choixCout, int affichageDeroulementAlgo) {
         super(gr, sortie, readarg);
         this.choix = choixCout;
         this.choixAffichage = affichageDeroulementAlgo;
-        this.test = false;
+        //this.test = false;
+        this.TOUS = false;
+
         mapLabel = new HashMap<Node, E>();
         // a voir si on demande la zone ou le sommet directement
         try {
@@ -96,6 +96,14 @@ public class Pcc_Generique<E extends Comparable<E>> extends Algo {
 
         }
 
+    public ArrayList<E> getLab() {
+        return lab;
+    }
+
+    public void setLab(ArrayList<E> lab) {
+        this.lab = lab;
+    }
+
     /**
      * Initialisation de l'algo de Dijikstra
      */
@@ -104,11 +112,12 @@ public class Pcc_Generique<E extends Comparable<E>> extends Algo {
     }
 
     public ArrayList run() {
-        if ((origine <= 0) || (origine > graphe.getArrayList().size()) || (destination <= 0) || (destination > graphe.getArrayList().size())
-                || this.origine == -1 || this.destination == -1) {
+        if (((origine <= 0) || (origine > graphe.getArrayList().size()) || (destination <= 0) || (destination > graphe.getArrayList().size()))) {
             JOptionPane.showMessageDialog(null, "Un des sommets n'appartient pas au graphe.");
             return null;
         }
+        // a noter que : si booleen TOUS alors message de confirmation de vers tout le monde
+
         System.out.println();
         System.out.println("Lancement de l'algorithme de (zone,noeud) : (" + zoneOrigine + "," + origine + ") vers (" + zoneDestination + "," + destination + ")");
 // Initialisation de nos champs
@@ -121,7 +130,7 @@ public class Pcc_Generique<E extends Comparable<E>> extends Algo {
         // afin de mesurer le temps d'execution on mettra une duree
         this.duree = System.currentTimeMillis();
 
-        // Il faut Initialiser l'algo ou pas
+        // Il faut Initialiser l'algo
         initialisation();
 		
 		/*Algorithme (a ameliorer)
@@ -139,7 +148,7 @@ public class Pcc_Generique<E extends Comparable<E>> extends Algo {
 		/* Boucle principale*/
         E min, E_succ;
         Node node_suc;
-        while (!(this.tas.isEmpty() || ((Label) dest).isMarque())) {
+        while (!((this.tas.isEmpty() || ((Label) dest).isMarque()) && !TOUS) && !(TOUS && this.tas.isEmpty())) {
             min = this.tas.deleteMin();
             ((Label) min).setMarque(true);
             // pour chaque successeurs / arc

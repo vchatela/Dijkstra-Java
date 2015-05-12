@@ -20,4 +20,5 @@ public abstract class Algo {
 
     public abstract ArrayList run();
 
+    public abstract ArrayList getLab();
 }
