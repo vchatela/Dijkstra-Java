@@ -19,7 +19,7 @@ public class Pcc_Generique<E extends Comparable<E>> extends Algo {
 
 
     //liste de tous les Label_Dijkstras
-    protected ArrayList<E> lab;
+    protected ArrayList<E> labels;
     //Le tas
     protected BinaryHeap<E> tas;
     //Label_Dijkstra destinataire
@@ -39,12 +39,14 @@ public class Pcc_Generique<E extends Comparable<E>> extends Algo {
     //contient le resultat a enregister dans un fichier
     protected String sortieAlgo;
     protected boolean TOUS;
+    protected boolean POPUP;
 
-    public Pcc_Generique(Graphe gr, PrintStream sortie, Readarg readarg, int choixCout, int affichageDeroulementAlgo, int origine, int dest, boolean TOUS) {
-        super(gr, sortie, readarg);
+    public Pcc_Generique(Graphe gr, PrintStream sortie, int choixCout, int affichageDeroulementAlgo, int origine, int dest, boolean TOUS, boolean POPUP) {
+        super(gr, sortie);
         this.choix = choixCout;
         this.choixAffichage = affichageDeroulementAlgo;
         this.TOUS = TOUS;
+        this.POPUP = POPUP;
 
         mapLabel = new HashMap<Node, E>();
         this.zoneOrigine = gr.getZone();
@@ -62,46 +64,12 @@ public class Pcc_Generique<E extends Comparable<E>> extends Algo {
         }
     }
 
-    public Pcc_Generique(Graphe gr, PrintStream sortie, Readarg readarg, int choixCout, int affichageDeroulementAlgo) {
-        super(gr, sortie, readarg);
-        this.choix = choixCout;
-        this.choixAffichage = affichageDeroulementAlgo;
-        //this.test = false;
-        this.TOUS = false;
-
-        mapLabel = new HashMap<Node, E>();
-        // a voir si on demande la zone ou le sommet directement
-        try {
-            this.zoneOrigine = gr.getZone();
-            this.origine = Integer.parseInt(JOptionPane.showInputDialog(null, "Numero du sommet d'origine ?"));
-            // this.origine = readarg.lireInt("Numero du sommet d'origine ? ");
-
-            // Demander la zone et le sommet destination.
-            this.zoneOrigine = gr.getZone();
-            // this.destination = readarg.lireInt("Numero du sommet destination ? ");
-            this.destination = Integer.parseInt(JOptionPane.showInputDialog(null, "Numero du sommet de destination ?"));
-            // Si le numero des noeuds n'est pas dans le graphe on doit arreter l'algo
-            if ((origine <= 0) || (origine > graphe.getArrayList().size())) {
-                System.out.println(" Le numero de sommet saisi : " + origine + " n'appartient pas au graphe");
-                return;
-            }
-            if ((destination <= 0) || (destination > graphe.getArrayList().size())) {
-                System.out.println(" Le numero de sommet saisi : " + origine + " n'appartient pas au graphe");
-                return;
-            }
-
-        } catch (NumberFormatException n) {
-            System.out.println("Erreur du type " + n);
-        }
-
-        }
-
-    public ArrayList<E> getLab() {
-        return lab;
+    public ArrayList<E> getLabels() {
+        return labels;
     }
 
     public void setLab(ArrayList<E> lab) {
-        this.lab = lab;
+        this.labels = lab;
     }
 
     /**
@@ -121,7 +89,7 @@ public class Pcc_Generique<E extends Comparable<E>> extends Algo {
         System.out.println();
         System.out.println("Lancement de l'algorithme de (zone,noeud) : (" + zoneOrigine + "," + origine + ") vers (" + zoneDestination + "," + destination + ")");
 // Initialisation de nos champs
-        this.lab = new ArrayList<E>();
+        this.labels = new ArrayList<E>();
         this.tas = new BinaryHeap<E>();
         // Nombre max des elements et ceux explores
         this.maxTas = tas.size();
@@ -199,28 +167,34 @@ public class Pcc_Generique<E extends Comparable<E>> extends Algo {
         ArrayList resultat = new ArrayList();
 
         if (choix == 0) {
-            JOptionPane.showMessageDialog(null, this.getClass().getName() + "\n\nLe cout est de " + ((Label) dest).getCout() / 1000 + "km\n" +
-                    "Temps de Calcul: " + duree + " ms\n" +
-                    "Nb max d'element: " + maxTas + "\n" +
-                    "Nb elements explores: " + nb_elements_tas);
+            if (POPUP) {
+                JOptionPane.showMessageDialog(null, this.getClass().getName() + "\n\nLe cout est de " + ((Label) dest).getCout() / 1000 + "km\n" +
+                        "Temps de Calcul: " + duree + " ms\n" +
+                        "Nb max d'element: " + maxTas + "\n" +
+                        "Nb elements explores: " + nb_elements_tas);
+            }
             sortieAlgo += "Le cout est de " + ((Label) dest).getCout() / 1000 + "km\n";
             resultat.add(((Label) dest).getCout() / 1000);
             resultat.add(duree);
             resultat.add(maxTas);
             resultat.add(nb_elements_tas);
 
-        } else {
-            //TODO : passer en minutes et heures etcs
-            JOptionPane.showMessageDialog(null, this.getClass().getName() + "\n\nLe cout est de " + ((Label) dest).getCout() + "min\n" +
-                    "Temps de Calcul: " + duree + " ms\n" +
-                    "Nb max d'element: " + maxTas + "\n" +
-                    "Nb elements explores: " + nb_elements_tas);
+            }
+        else {
+            if (POPUP) {
+                //TODO : passer en minutes et heures etcs
+                JOptionPane.showMessageDialog(null, this.getClass().getName() + "\n\nLe cout est de " + ((Label) dest).getCout() + "min\n" +
+                        "Temps de Calcul: " + duree + " ms\n" +
+                        "Nb max d'element: " + maxTas + "\n" +
+                        "Nb elements explores: " + nb_elements_tas);
+            }
             sortieAlgo += "Le cout est de " + ((Label) dest).getCout() + "min\n";
             resultat.add(((Label) dest).getCout());
             resultat.add(duree);
             resultat.add(maxTas);
             resultat.add(nb_elements_tas);
         }
+
 
         //Maj du fichier : ecriture
         sortieAlgo += "Temps de Calcul: " + duree + " ms\n" +

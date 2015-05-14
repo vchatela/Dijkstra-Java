@@ -34,7 +34,7 @@ public class DessinVisible extends Dessin {
         this.setImage(img);
         //frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         //frame.setSize(largeur + 45, hauteur + 45);
-        this.setSize(largeur + 45, hauteur + 45);
+        this.setSize(largeur, hauteur);
 
         this.bb_is_set = false;
 

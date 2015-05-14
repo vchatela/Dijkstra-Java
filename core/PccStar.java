@@ -7,15 +7,8 @@ import java.io.PrintStream;
 
 public class PccStar extends Pcc_Generique<Label_Star> {
 
-    public PccStar(Graphe gr, PrintStream sortie, Readarg readarg, int choixCout, int affichageDeroulementAlgo, int origine, int dest, boolean TOUS) {
-        super(gr, sortie, readarg, choixCout, affichageDeroulementAlgo, origine, dest, TOUS);
-
-        String chaine = (choix == 0) ? "distance" : "temps";
-        sortieAlgo = "Carte: " + graphe.getNomCarte() + "\n" + "Dijkstra A STAR de " + origine + " -> " + destination + " en " + chaine + "\n";
-        this.graphe.getDessin().setColor(Color.magenta);
-    }
-    public PccStar(Graphe gr, PrintStream sortie, Readarg readarg, int choixCout, int affichageDeroulementAlgo) {
-        super(gr, sortie, readarg, choixCout, affichageDeroulementAlgo);
+    public PccStar(Graphe gr, PrintStream sortie, int choixCout, int affichageDeroulementAlgo, int origine, int dest, boolean TOUS, boolean POPUP) {
+        super(gr, sortie, choixCout, affichageDeroulementAlgo, origine, dest, TOUS, POPUP);
 
         String chaine = (choix == 0) ? "distance" : "temps";
         sortieAlgo = "Carte: " + graphe.getNomCarte() + "\n" + "Dijkstra A STAR de " + origine + " -> " + destination + " en " + chaine + "\n";
@@ -32,7 +25,7 @@ public class PccStar extends Pcc_Generique<Label_Star> {
                 //Initialisation du tas avec le Label_Dijkstra sommet origine
                 tas.insert(l);
             }
-            lab.add(l);
+            labels.add(l);
 
             // sii on demande un calcul en temps on prendra une vitesse max car :
             // ce doit etre obligatoirement une borne INFERIEURE

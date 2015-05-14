@@ -161,7 +161,7 @@ public class Chemin {
     /**
      * Calcule le cout en distance d'un chemin
      */
-    public void cout_chemin_distance() {
+    public String cout_chemin_distance() {
         float longueur = 0;
         //float temps = 0;
         Arc arc = new Arc();
@@ -169,27 +169,23 @@ public class Chemin {
         for (int node = 0; node < this.getListNode().size() - 1; node++) {
             arc = renvoi_arc_distance(this.getListNode().get(node), this.getListNode().get(node + 1));
             longueur += ((float) arc.getLg_arete() / 1000);
-            //temps+= 60 * ((float) arc.getLg_arete()) / (1000 *((float) arc.getDescripteur().getVitMax())); // 60 * car en seconde
         }
-        System.out.println("Longueur finale= " + longueur + " km");
-        //System.out.println("Temps finale= "+temps +" mn");
+        return "Distance : " + longueur + " km";
     }
 
     /**
      * Calcule le cout en temps d'un chemin
      */
-    public void cout_chemin_temps() {
+    public String cout_chemin_temps() {
         //float longueur =0;
         float temps = 0;
         Arc arc = new Arc();
         // Pour chaque noeud du chemin
         for (int node = 0; node < this.getListNode().size() - 1; node++) {
             arc = renvoi_arc_temps(this.getListNode().get(node), this.getListNode().get(node + 1));
-            //longueur+= ((float) arc.getLg_arete()/1000);
             temps += 60 * ((float) arc.getLg_arete()) / (1000 * ((float) arc.getDescripteur().getVitMax())); // 60 * car en seconde
         }
-        //System.out.println("Longueur finale= "+longueur+" km");
-        System.out.println("Temps finale= " + temps + " mn");
+        return "Temps : " + temps + " mn";
     }
 
     public int getMagic_number() {

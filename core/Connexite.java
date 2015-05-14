@@ -7,8 +7,8 @@ import java.util.ArrayList;
 
 public class Connexite extends Algo {
 
-    public Connexite(Graphe gr, PrintStream sortie, Readarg readarg) {
-        super(gr, sortie, readarg);
+    public Connexite(Graphe gr, PrintStream sortie) {
+        super(gr, sortie);
     }
 
     public ArrayList run() {
@@ -17,7 +17,7 @@ public class Connexite extends Algo {
     }
 
     @Override
-    public ArrayList getLab() {
+    public ArrayList getLabels() {
         return null;
     }
 

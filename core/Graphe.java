@@ -338,7 +338,8 @@ public class Graphe {
                 System.exit(1);
             }
 
-        } catch (IOException e) {
+        }
+        catch (IOException e) {
             e.printStackTrace();
             System.exit(1);
         }

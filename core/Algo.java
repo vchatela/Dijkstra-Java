@@ -1,7 +1,5 @@
 package core;
 
-import base.Readarg;
-
 import java.io.PrintStream;
 import java.util.ArrayList;
 
@@ -13,12 +11,12 @@ public abstract class Algo {
     protected PrintStream sortie;
     protected Graphe graphe;
 
-    protected Algo(Graphe gr, PrintStream fichierSortie, Readarg readarg) {
+    protected Algo(Graphe gr, PrintStream fichierSortie) {
         this.graphe = gr;
         this.sortie = fichierSortie;
     }
 
     public abstract ArrayList run();
 
-    public abstract ArrayList getLab();
+    public abstract ArrayList getLabels();
 }

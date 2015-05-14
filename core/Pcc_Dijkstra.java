@@ -10,16 +10,8 @@ import java.io.PrintStream;
  */
 public class Pcc_Dijkstra extends Pcc_Generique<Label_Dijkstra> {
 
-    public Pcc_Dijkstra(Graphe gr, PrintStream sortie, Readarg readarg, int choixCout, int affichageDeroulementAlgo, int origine, int dest, boolean TOUS) {
-        super(gr, sortie, readarg, choixCout, affichageDeroulementAlgo, origine, dest, TOUS);
-
-        String chaine = (choix == 0) ? "distance" : "temps";
-        sortieAlgo = "Carte: " + graphe.getNomCarte() + "\n" + "Dijkstra Standard de " + origine + " -> " + destination + " en " + chaine + "\n";
-        //L'affichage du deroulement de l'algo est faite en magenta
-        this.graphe.getDessin().setColor(Color.magenta);
-    }
-    public Pcc_Dijkstra(Graphe gr, PrintStream sortie, Readarg readarg, int choixCout, int affichageDeroulementAlgo) {
-        super(gr, sortie, readarg, choixCout, affichageDeroulementAlgo);
+    public Pcc_Dijkstra(Graphe gr, PrintStream sortie, int choixCout, int affichageDeroulementAlgo, int origine, int dest, boolean TOUS, boolean POPUP) {
+        super(gr, sortie, choixCout, affichageDeroulementAlgo, origine, dest, TOUS, POPUP);
 
         String chaine = (choix == 0) ? "distance" : "temps";
         sortieAlgo = "Carte: " + graphe.getNomCarte() + "\n" + "Dijkstra Standard de " + origine + " -> " + destination + " en " + chaine + "\n";
@@ -37,7 +29,7 @@ public class Pcc_Dijkstra extends Pcc_Generique<Label_Dijkstra> {
                 //Initialisation du tas avec le Label_Dijkstra sommet origine
                 tas.insert(l);
             }
-            lab.add(l);
+            labels.add(l);
 
             //Noeud destinataire
             if ((node.getNum() == destination) && (graphe.getZone() == zoneDestination)) {
