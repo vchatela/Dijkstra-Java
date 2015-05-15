@@ -60,6 +60,7 @@ public class Graphe {
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frame.setContentPane(pb);
         frame.pack();
+        frame.setLocationRelativeTo(null);
         frame.setVisible(true);
 
         // Lecture du fichier MAP.
@@ -235,15 +236,10 @@ public class Graphe {
 
         if (dessin.waitClick()) {
 
-            System.out.println("Allez-y, cliquez donc.");
-
             float lon = dessin.getClickLon();
             float lat = dessin.getClickLat();
             ArrayList resultat = new ArrayList();
 
-            resultat.add("lon = " + lon + "  lat = " + lat);
-            //JOptionPane.showMessageDialog(null, "Clic aux coordonnees lon = " + lon + "  lat = " + lat);
-            //System.out.println("Clic aux coordonnees lon = " + lon + "  lat = " + lat);
 
             // On cherche le noeud le plus proche. O(n)
             float minDist = Float.MAX_VALUE;
@@ -259,15 +255,11 @@ public class Graphe {
                 }
             }
 
-            System.out.println();
-            System.out.println("Noeud le plus proche : " + noeud);
-            System.out.println();
-
             dessin.setColor(java.awt.Color.red);
             dessin.drawPoint(this.listNode.get(noeud).getLongitude(), this.listNode.get(noeud).getLatitude(), 5);
-            //JOptionPane.showMessageDialog(null, "Noeud le plus proche: " + noeud);
-            resultat.add(noeud);
 
+            resultat.add("lon = " + lon + "  lat = " + lat);
+            resultat.add(noeud);
             return resultat;
         }
 

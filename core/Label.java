@@ -17,8 +17,7 @@ public class Label {
     }
 
     public String toString() {
-        return "Sommet N" + this.num_node + " Cout: " + this.cout;
-
+        return "Sommet n°" + this.num_node + " - Cout=" + this.cout;
     }
 
     public int hashCode() {

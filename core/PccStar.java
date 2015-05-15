@@ -27,7 +27,7 @@ public class PccStar extends Pcc_Generique<Label_Star> {
 
             // sii on demande un calcul en temps on prendra une vitesse max car :
             // ce doit etre obligatoirement une borne INFERIEURE
-            if (choix == 1)
+            if (choixCout == 1)
                 l.setCout_oiseau(60.0f * l.getCout_oiseau() / (130.0f * 1000.0f));
 
             //Noeud destinataire

@@ -97,7 +97,6 @@ public class Openfile {
                     }
                     existepas++;
                 }
-                System.out.println();
             }
             System.exit(1);
         }

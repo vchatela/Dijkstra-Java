@@ -17,7 +17,6 @@ public class Pcc_Generique<E extends Comparable<E>> extends Algo {
     protected int zoneDestination;
     protected int destination;
 
-
     //liste de tous les Label_Dijkstras
     protected ArrayList<E> labels;
     //Le tas
@@ -26,8 +25,8 @@ public class Pcc_Generique<E extends Comparable<E>> extends Algo {
     protected E dest;
     //Afficher ou non le deroulement de l'algo
     protected int choixAffichage;
-    //en temps (choix=1),  en distance (choix=0)
-    protected int choix;
+    //en temps (choixCout=1),  en distance (choixCout=0)
+    protected int choixCout;
     //fait correspondre un noeud a un Label_Dijkstra
     protected HashMap<Node, E> mapLabel;
     //duree d'execution
@@ -41,7 +40,7 @@ public class Pcc_Generique<E extends Comparable<E>> extends Algo {
 
     public Pcc_Generique(Graphe gr, int choixCout, int affichageDeroulementAlgo, int origine, int dest, boolean TOUS) {
         super(gr);
-        this.choix = choixCout;
+        this.choixCout = choixCout;
         this.choixAffichage = affichageDeroulementAlgo;
         this.TOUS = TOUS;
 
@@ -50,23 +49,10 @@ public class Pcc_Generique<E extends Comparable<E>> extends Algo {
         this.origine = origine;
         this.zoneDestination = gr.getZone();
         this.destination = dest;
-
-        if ((origine <= 0) || (origine > graphe.getArrayList().size())) {
-            System.out.println(" Le numero de sommet saisi : " + origine + " n'appartient pas au graphe");
-            return;
-        }
-        if ((destination <= 0) || (destination > graphe.getArrayList().size())) {
-            System.out.println(" Le numero de sommet saisi : " + origine + " n'appartient pas au graphe");
-            return;
-        }
     }
 
     public ArrayList<E> getLabels() {
         return labels;
-    }
-
-    public void setLab(ArrayList<E> lab) {
-        this.labels = lab;
     }
 
     /**
@@ -77,8 +63,13 @@ public class Pcc_Generique<E extends Comparable<E>> extends Algo {
     }
 
     public ArrayList run() {
-        if (((origine <= 0) || (origine > graphe.getArrayList().size()) || (destination <= 0) || (destination > graphe.getArrayList().size()))) {
-            JOptionPane.showMessageDialog(null, "Un des sommets n'appartient pas au graphe.");
+
+        if ((origine <= 0) || (origine > graphe.getArrayList().size())) {
+            JOptionPane.showMessageDialog(null, "Le numero de sommet d'origine saisi : " + origine + " n'appartient pas au graphe");
+            return null;
+        }
+        if ((destination <= 0) || (destination > graphe.getArrayList().size())) {
+            JOptionPane.showMessageDialog(null, "Le numero de sommet de destination saisi : " + origine + " n'appartient pas au graphe");
             return null;
         }
         // a noter que : si booleen TOUS alors message de confirmation de vers tout le monde
@@ -127,7 +118,7 @@ public class Pcc_Generique<E extends Comparable<E>> extends Algo {
                 if (!(((Label) E_succ).isMarque())) {
                     // on met alors le cout a jour
                     // TODO : verifier temps !
-                    new_cout = (choix == 0) ? arc.getLg_arete() + ((Label) min).getCout() : 60.0f * ((float) arc.getLg_arete()) / (1000.0f * (float) arc.getDescripteur().getVitMax()) + ((Label) min).getCout();
+                    new_cout = (choixCout == 0) ? arc.getLg_arete() + ((Label) min).getCout() : 60.0f * ((float) arc.getLg_arete()) / (1000.0f * (float) arc.getDescripteur().getVitMax()) + ((Label) min).getCout();
                     // on verifie alors que ce cout est bien inferieur au precedent
                     if (new_cout < ((Label) E_succ).getCout()) {
                         ((Label) E_succ).setCout(new_cout);
@@ -155,16 +146,12 @@ public class Pcc_Generique<E extends Comparable<E>> extends Algo {
                 maxTas = tas.size();
             }
         }
-        // pour terminer on affichera le temps de calcul
-
-        duree = (System.currentTimeMillis() - duree);
-        System.out.println("Duree= " + duree + " ms");
         //Afficher le resultat du calcul - ou rediriger sur fichier
         chemin();
 
         // Mise à jour du résultat pour affichage et fichier de sortie
         ArrayList resultat = new ArrayList();
-        if (choix == 0)
+        if (choixCout == 0)
             resultat.add(((Label) dest).getCout() / 1000);
         else
             resultat.add(((Label) dest).getCout());

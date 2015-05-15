@@ -40,13 +40,14 @@ public class Launch extends JFrame {
     private JPanel		    controlPanel;               // Contient le menu de selection des choix
     private Dessin          dessinPanel;                     // Contient la map
     private Container 	    cp;                         // Conteneur de la fenetre, on y ajoute les deux précédents éléments
+    private Dimension       halfDimension;
     private JLabel		    jSpace;                     // Espace vertical dans le menu de selection des choix
     private JLabel                                      // Texte à afficher
             jLabelNames, jLabelTitle, jLabelCarte,
             jLabelAfficher, jLabelFichier, jLabelMenu,
             jLabelDeroulement, jLabelChoixCout,
             jLabelDepart, jLabelDepartVoiture, jLabelDepartPieton, jLabelArrivee,
-            jLabelCoordMan, jLabelCoordClick, jLabelCoordSitues,
+            jLabelCoordsMan, jLabelCoordsClick, jLabelCoordClick, jLabelCoordSitues,
             jLabelNoeudsProches, jLabelChemin;
     private JLabel          jLabelImageGraphe;          // Image de lancement (graphe) à afficher
     private JLabel          jLabelImageINSA;            // Logo de l'INSA à afficher
@@ -94,6 +95,7 @@ public class Launch extends JFrame {
      */
 
     public Launch() {
+        halfDimension = new Dimension(180, 25);
 
         // Paramétrage des textes à afficher
         jLabelTitle         = new JLabel("<html><br>PROGRAMME DE TESTS DES ALGORITHMES DE GRAPHE<br><br></html>");
@@ -107,34 +109,35 @@ public class Launch extends JFrame {
         jLabelDepartVoiture = new JLabel("Départ du conducteur : ");
         jLabelDepartPieton  = new JLabel("Départ du piéton : ");
         jLabelArrivee       = new JLabel("Arrivée : ");
-        jLabelCoordMan      = new JLabel("Saisir les noeuds manuellement");
-        jLabelCoordClick    = new JLabel("Obtenir les noeuds en cliquant");
+        jLabelCoordsMan     = new JLabel("Saisir les noeuds manuellement");
+        jLabelCoordClick    = new JLabel("Obtenir le noeud en cliquant");
+        jLabelCoordsClick   = new JLabel("Obtenir les noeuds en cliquant");
         jLabelCoordSitues   = new JLabel("Clic aux coordonnées : ");
         jLabelNoeudsProches = new JLabel("Noeud le plus proche : ");
-        jLabelNames         = new JLabel("<html>BUREAU D'ETUDE GRAPHE 3MIC-IR<br>" +
-                                         "Etudiants : J. Mangel - V. Chatelard<br>" +
-                                         "Enseignants : D. Le Botlan - M-J Huguet</html>");
+        jLabelNames         = new JLabel("<html>&nbsp;BUREAU D'ETUDE GRAPHE 3MIC-IR<br>" +
+                                         "&nbsp;Etudiants : J. Mangel - V. Chatelard<br>" +
+                                         "&nbsp;Enseignants : D. Le Botlan - M-J Huguet</html>");
         jLabelChemin        = new JLabel("Chemin .path à utiliser : ");
-        jLabelCarte.setPreferredSize(new Dimension(170, 25));
-        jLabelAfficher.setPreferredSize(new Dimension(170, 25));
-        jLabelFichier.setPreferredSize(new Dimension(170, 25));
-        jLabelMenu.setPreferredSize(new Dimension(170, 25));
-        jLabelDeroulement.setPreferredSize(new Dimension(170, 25));
-        jLabelChoixCout.setPreferredSize(new Dimension(170, 25));
-        jLabelDepart.setPreferredSize(new Dimension(170, 25));
-        jLabelDepartVoiture.setPreferredSize(new Dimension(170, 25));
-        jLabelDepartPieton.setPreferredSize(new Dimension(170, 25));
-        jLabelArrivee.setPreferredSize(new Dimension(170, 25));
-        jLabelCoordSitues.setPreferredSize(new Dimension(170, 25));
-        jLabelNoeudsProches.setPreferredSize(new Dimension(170, 25));
-        jLabelNames.setPreferredSize(new Dimension(255, 83));
+        jLabelCarte.setPreferredSize(halfDimension);
+        jLabelAfficher.setPreferredSize(halfDimension);
+        jLabelFichier.setPreferredSize(halfDimension);
+        jLabelMenu.setPreferredSize(halfDimension);
+        jLabelDeroulement.setPreferredSize(halfDimension);
+        jLabelChoixCout.setPreferredSize(halfDimension);
+        jLabelDepart.setPreferredSize(halfDimension);
+        jLabelDepartVoiture.setPreferredSize(halfDimension);
+        jLabelDepartPieton.setPreferredSize(halfDimension);
+        jLabelArrivee.setPreferredSize(halfDimension);
+        jLabelCoordSitues.setPreferredSize(halfDimension);
+        jLabelNoeudsProches.setPreferredSize(halfDimension);
+        jLabelNames.setPreferredSize(new Dimension(275, 83));
         jLabelNames.setOpaque(true);
         jLabelNames.setBackground(Color.white);
-        jLabelChemin.setPreferredSize(new Dimension(170, 25));
+        jLabelChemin.setPreferredSize(halfDimension);
 
         // Paramétrage de l'espace vertical
         jSpace = new JLabel();
-        jSpace.setPreferredSize(new Dimension(350, 25));
+        jSpace.setPreferredSize(new Dimension(380, 25));
 
         // Paramétrage des zone de saisie
         jTextField1         = new JTextField();
@@ -144,12 +147,12 @@ public class Launch extends JFrame {
         jTextFieldDest      = new JTextField();
         jTextFieldFichier   = new JTextField("sortie");
 
-        jTextField1.setPreferredSize(new Dimension(170, 25));
-        jTextField2.setPreferredSize(new Dimension(170, 25));
-        jTextFieldFichier.setPreferredSize(new Dimension(170, 25));
-        jTextFieldOrigine.setPreferredSize(new Dimension(170, 25));
-        jTextFieldPieton.setPreferredSize(new Dimension(170, 25));
-        jTextFieldDest.setPreferredSize(new Dimension(170, 25));
+        jTextField1.setPreferredSize(halfDimension);
+        jTextField2.setPreferredSize(halfDimension);
+        jTextFieldFichier.setPreferredSize(halfDimension);
+        jTextFieldOrigine.setPreferredSize(halfDimension);
+        jTextFieldPieton.setPreferredSize(halfDimension);
+        jTextFieldDest.setPreferredSize(halfDimension);
         jTextFieldOrigine.getDocument().addDocumentListener(new DocumentListener() {
             public void changedUpdate(DocumentEvent e) {
                 textFieldCoordChanged();
@@ -193,7 +196,7 @@ public class Launch extends JFrame {
         // Paramétrage du checkbox
         jCheckBox = new JCheckBox();
         jCheckBox.setSelected(true);
-        jCheckBox.setPreferredSize(new Dimension(170, 25));
+        jCheckBox.setPreferredSize(halfDimension);
 
         // Paramétrage des radiobuttons
         jRadioButtonChoixTemps    = new JRadioButton("Temps");
@@ -207,11 +210,11 @@ public class Launch extends JFrame {
         jComboBoxMenu    = new JComboBox();
         jComboBoxCartes  = new JComboBox();
         jComboBoxChemins = new JComboBox();
-        jComboBoxMenu.setPreferredSize(new Dimension(170, 25));
-        jComboBoxCartes.setPreferredSize(new Dimension(170, 25));
+        jComboBoxMenu.setPreferredSize(halfDimension);
+        jComboBoxCartes.setPreferredSize(halfDimension);
         for (String carte : cartes)
             jComboBoxCartes.addItem(carte);
-        jComboBoxChemins.setPreferredSize(new Dimension(170, 25));
+        jComboBoxChemins.setPreferredSize(halfDimension);
         for (String chemin : chemins)
             jComboBoxChemins.addItem(chemin);
 
@@ -225,17 +228,17 @@ public class Launch extends JFrame {
 
         // Paramétrage des buttons
         jButtonLoad = new JButton("CHARGER");
-        jButtonLoad.setPreferredSize(new Dimension(100, 25));
+        jButtonLoad.setPreferredSize(new Dimension(120, 30));
         jButtonLoad.setBackground(new Color(235, 235, 235));
         jButtonLoad.addActionListener(new BoutonListener());
         jButtonOk = new JButton("OK");
-        jButtonOk.setPreferredSize(new Dimension(100, 25));
+        jButtonOk.setPreferredSize(new Dimension(120, 30));
         jButtonOk.setBackground(new Color(235, 235, 235));
         jButtonOk.addActionListener(new BoutonListener());
 
         // Paramétrage du menu de selection des choix avec ajout des composants
         controlPanel = new JPanel();
-        controlPanel.setPreferredSize(new Dimension(350, 600));
+        controlPanel.setPreferredSize(new Dimension(380, 600));
         controlPanel.add(jLabelNames);
         controlPanel.add(jLabelImageINSA);
         controlPanel.add(jLabelTitle);
@@ -258,6 +261,7 @@ public class Launch extends JFrame {
         this.setTitle("INSA Toulouse - BE Graphes 3-MIC IR");
         this.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
         this.pack();
+        this.setLocationRelativeTo(null);
         this.setResizable(false);
         this.setVisible(true);
 
@@ -293,6 +297,7 @@ public class Launch extends JFrame {
             if(display)
                 cp.add(dessinPanel);
             this.pack();
+            this.setLocationRelativeTo(null);
 
             // Création du graphe en fonction de la map selectionnée
             graphe = new Graphe(nomcarte, mapdata, dessinPanel);
@@ -359,9 +364,13 @@ public class Launch extends JFrame {
                         int noeud_rejoint = -1;
                         double min = Double.POSITIVE_INFINITY;
                         Node node = null;
+                        long duree; // Durée d'execution
 
                         // Initialisation des algorithmes : cout en TEMPS !
                         initialiserCovoit();
+
+                        // Mesurer le temps d'execution de l'algorithme
+                        duree = System.currentTimeMillis();
 
                         // Lancement des algorithmes
 
@@ -405,16 +414,28 @@ public class Launch extends JFrame {
                                 min = covoitSomme.get(i).getCout();
                                 noeud_rejoint = i;
                             }
+
+                            // Affichage pour debug (attention : impact sur la durée d'execution)
+//                            System.out.println("----------------------------------------");
+//                            System.out.println("DEBUG : i = " + i);
+//                            System.out.println("- covoitPieton[i] = " + covoitPieton.get(i));
+//                            System.out.println("- covoitVoiture[i] = " + covoitVoiture.get(i));
+//                            System.out.println("- covoitDestination[i] = " + covoitDestination.get(i));
+//                            System.out.println("- covoitSomme[i] = " + covoitSomme.get(i));
+//                            System.out.println("----------------------------------------");
                         }
 
+                        // Determine le temps d'execution de lalgorithme
+                        duree = (System.currentTimeMillis() - duree);
+
                         // Test si le point de rencontre est trouvé
-                        if (noeud_rejoint != -1) {
+                        if (noeud_rejoint != -1 && display) {
                             // on trace le point de rencontre
                             node = this.graphe.getArrayList().get(noeud_rejoint);
                             this.graphe.getDessin().drawPoint(node.getLongitude(), node.getLatitude(), 12);
                         }
 
-                        afficherEtEcrireResultats(perfVoitureTous, perfPietonTous, perfDestTous, node, min);
+                        afficherEtEcrireResultats(perfVoitureTous, perfPietonTous, perfDestTous, node, min, duree);
 
                         break;
 
@@ -462,11 +483,12 @@ public class Launch extends JFrame {
                         graphe = null; //Pour detruire l'objet (methode finalize())
 
                         // Afficher ou non la map -> création d'un dessin associé et ajout à la fenetre
-                        dessinPanel = (display) ? new DessinVisible(800, 600) : new DessinInvisible();
                         display = jCheckBox.isSelected();
+                        dessinPanel = (display) ? new DessinVisible(800, 600) : new DessinInvisible();
                         if(display)
                             cp.add(dessinPanel);
                         this.pack();
+                        this.setLocationRelativeTo(null);
 
                         // Création du graphe en fonction de la map selectionnée
                         graphe = new Graphe(nomcarte, mapdata, dessinPanel);
@@ -483,8 +505,10 @@ public class Launch extends JFrame {
                         clickCoord = graphe.situerClick();
 
                         // On vérifie que l'on a bien récupéré les informations du click
-                        if(clickCoord == null)
-                            System.out.println("Le clic n'a rien retourné");
+                        if(clickCoord == null) {
+                            jTextField1.setText("Le clic n'a rien retourné");
+                            jTextField2.setText("Le clic n'a rien retourné");
+                        }
                         else {
                             // On affiche les information
                             jTextField1.setText(clickCoord.get(0).toString());
@@ -498,7 +522,6 @@ public class Launch extends JFrame {
                         break;
 
                     default:
-                        System.out.println("Choix de menu incorrect : " + choixMenu);
                         JOptionPane.showMessageDialog(null, "Choix de menu incorrect", "Choix menu", JOptionPane.ERROR_MESSAGE);
                         System.exit(1);
                 }
@@ -703,7 +726,7 @@ public class Launch extends JFrame {
                 jTextFieldOrigine.setText("");
                 jTextFieldPieton.setText("0"); // Obligé pour afficher le bouton OK
                 jTextFieldDest.setText("");
-                controlPanel.add(jLabelCoordMan);
+                controlPanel.add(jLabelCoordsMan);
                 if(display) {
                     controlPanel.add(jLabelDeroulement);
                     controlPanel.add(jCheckBox);
@@ -725,7 +748,7 @@ public class Launch extends JFrame {
                 jTextFieldOrigine.setText("");
                 jTextFieldPieton.setText("0"); // Obligé pour afficher le bouton OK
                 jTextFieldDest.setText("");
-                controlPanel.add(jLabelCoordClick);
+                controlPanel.add(jLabelCoordsClick);
                 if(display) {
                     controlPanel.add(jLabelDeroulement);
                     controlPanel.add(jCheckBox);
@@ -749,7 +772,7 @@ public class Launch extends JFrame {
                 jTextFieldOrigine.setText("");
                 jTextFieldPieton.setText("");
                 jTextFieldDest.setText("");
-                controlPanel.add(jLabelCoordMan);
+                controlPanel.add(jLabelCoordsMan);
                 controlPanel.add(jLabelDepartVoiture);
                 controlPanel.add(jTextFieldOrigine);
                 controlPanel.add(jLabelDepartPieton);
@@ -767,7 +790,7 @@ public class Launch extends JFrame {
                 jTextFieldOrigine.setText("");
                 jTextFieldPieton.setText("");
                 jTextFieldDest.setText("");
-                controlPanel.add(jLabelCoordClick);
+                controlPanel.add(jLabelCoordsClick);
                 controlPanel.add(jLabelDepartVoiture);
                 controlPanel.add(jTextFieldOrigine);
                 controlPanel.add(jLabelDepartPieton);
@@ -809,6 +832,7 @@ public class Launch extends JFrame {
             // Obtenir un numéro de sommet
             case 7:
                 jButtonOk.setEnabled(true);
+                controlPanel.add(jLabelCoordClick);
                 controlPanel.add(jLabelCoordSitues);
                 controlPanel.add(jTextField1);
                 controlPanel.add(jLabelNoeudsProches);
@@ -900,23 +924,23 @@ public class Launch extends JFrame {
         // On ecrit dans le fichier
         sortie.append(resultat);
     }
-    void afficherEtEcrireResultats(ArrayList perfVoitureTous, ArrayList perfPietonTous, ArrayList perfDestTous, Node node, double min) {
+    void afficherEtEcrireResultats(ArrayList perfVoitureTous, ArrayList perfPietonTous, ArrayList perfDestTous, Node node, double min, double duree) {
         cout = (choixCout == 0) ? "distance" : "temps";
         resultat = "Covoiturage\n";
         resultat += "Carte : " + nomcarte + "\n";
         resultat += "Origine Voiture : " + origine + "\n";
         resultat += "Origine Pieton : " + pieton + "\n";
         resultat += "Arrivée : " + dest + "\n";
-        if (perfVoitureTous == null || perfPietonTous == null || perfDestTous == null)
-            resultat += "Erreur)";
+        if (perfVoitureTous == null || perfPietonTous == null || perfDestTous == null || min == Double.POSITIVE_INFINITY)
+            resultat += "Aucun noeud de rencontre trouvé ! \n";
         else {
             resultat += "On est bien arrivé ! \n" +
                     "Rencontre au noeud  : " + node + "\n" +
                     "Avec pour temps : " + min + " min\n";
-            resultat += "Durée exécution : " + perfVoitureTous.get(1) + "+" + perfPietonTous.get(1) + "+" + perfDestTous.get(1) + " ms \n\n";
-            // Affichage résultats
-            JOptionPane.showMessageDialog(null, resultat);
         }
+        resultat += "Durée exécution : " + duree + " ms \n\n";
+        // Affichage résultats
+        JOptionPane.showMessageDialog(null, resultat);
         resultat += "\n\n";
         // On ecrit dans le fichier
         sortie.append(resultat);
@@ -950,7 +974,7 @@ public class Launch extends JFrame {
                 thread.sleep(200);
             }
             catch (InterruptedException e) {
-                System.out.println("Error thread sleep");
+                System.out.println("Error during thread sleep : " + e);
             }
         }
         buttonClicked = false;
