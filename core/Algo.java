@@ -11,9 +11,8 @@ public abstract class Algo {
     protected PrintStream sortie;
     protected Graphe graphe;
 
-    protected Algo(Graphe gr, PrintStream fichierSortie) {
+    protected Algo(Graphe gr) {
         this.graphe = gr;
-        this.sortie = fichierSortie;
     }
 
     public abstract ArrayList run();

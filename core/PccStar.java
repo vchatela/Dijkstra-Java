@@ -7,12 +7,10 @@ import java.io.PrintStream;
 
 public class PccStar extends Pcc_Generique<Label_Star> {
 
-    public PccStar(Graphe gr, PrintStream sortie, int choixCout, int affichageDeroulementAlgo, int origine, int dest, boolean TOUS, boolean POPUP) {
-        super(gr, sortie, choixCout, affichageDeroulementAlgo, origine, dest, TOUS, POPUP);
+    public PccStar(Graphe gr, int choixCout, int affichageDeroulementAlgo, int origine, int dest, boolean TOUS) {
+        super(gr, choixCout, affichageDeroulementAlgo, origine, dest, TOUS);
 
-        String chaine = (choix == 0) ? "distance" : "temps";
-        sortieAlgo = "Carte: " + graphe.getNomCarte() + "\n" + "Dijkstra A STAR de " + origine + " -> " + destination + " en " + chaine + "\n";
-        this.graphe.getDessin().setColor(Color.magenta);
+        this.graphe.getDessin().setColor(Color.red);
     }
 
     public void initialisation() {

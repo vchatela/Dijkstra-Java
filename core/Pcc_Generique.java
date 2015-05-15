@@ -37,16 +37,13 @@ public class Pcc_Generique<E extends Comparable<E>> extends Algo {
     //Nombre d'element explores
     protected int nb_elements_tas;
     //contient le resultat a enregister dans un fichier
-    protected String sortieAlgo;
     protected boolean TOUS;
-    protected boolean POPUP;
 
-    public Pcc_Generique(Graphe gr, PrintStream sortie, int choixCout, int affichageDeroulementAlgo, int origine, int dest, boolean TOUS, boolean POPUP) {
-        super(gr, sortie);
+    public Pcc_Generique(Graphe gr, int choixCout, int affichageDeroulementAlgo, int origine, int dest, boolean TOUS) {
+        super(gr);
         this.choix = choixCout;
         this.choixAffichage = affichageDeroulementAlgo;
         this.TOUS = TOUS;
-        this.POPUP = POPUP;
 
         mapLabel = new HashMap<Node, E>();
         this.zoneOrigine = gr.getZone();
@@ -137,7 +134,7 @@ public class Pcc_Generique<E extends Comparable<E>> extends Algo {
                         ((Label) E_succ).setPere(((Label) min).getNum_node());
                     }
                     // maintenant si le sommet n'est pas dans le tas il faut l'ajouter
-                    if (!(this.tas.getMap().get(E_succ) != null)) {
+                    if (this.tas.getMap().get(E_succ) == null) {
                         // on insere le sommet dans le tas
                         this.tas.insert(E_succ);
                         nb_elements_tas++;
@@ -164,43 +161,16 @@ public class Pcc_Generique<E extends Comparable<E>> extends Algo {
         System.out.println("Duree= " + duree + " ms");
         //Afficher le resultat du calcul - ou rediriger sur fichier
         chemin();
+
+        // Mise à jour du résultat pour affichage et fichier de sortie
         ArrayList resultat = new ArrayList();
-
-        if (choix == 0) {
-            if (POPUP) {
-                JOptionPane.showMessageDialog(null, this.getClass().getName() + "\n\nLe cout est de " + ((Label) dest).getCout() / 1000 + "km\n" +
-                        "Temps de Calcul: " + duree + " ms\n" +
-                        "Nb max d'element: " + maxTas + "\n" +
-                        "Nb elements explores: " + nb_elements_tas);
-            }
-            sortieAlgo += "Le cout est de " + ((Label) dest).getCout() / 1000 + "km\n";
+        if (choix == 0)
             resultat.add(((Label) dest).getCout() / 1000);
-            resultat.add(duree);
-            resultat.add(maxTas);
-            resultat.add(nb_elements_tas);
-
-            }
-        else {
-            if (POPUP) {
-                //TODO : passer en minutes et heures etcs
-                JOptionPane.showMessageDialog(null, this.getClass().getName() + "\n\nLe cout est de " + ((Label) dest).getCout() + "min\n" +
-                        "Temps de Calcul: " + duree + " ms\n" +
-                        "Nb max d'element: " + maxTas + "\n" +
-                        "Nb elements explores: " + nb_elements_tas);
-            }
-            sortieAlgo += "Le cout est de " + ((Label) dest).getCout() + "min\n";
+        else
             resultat.add(((Label) dest).getCout());
-            resultat.add(duree);
-            resultat.add(maxTas);
-            resultat.add(nb_elements_tas);
-        }
-
-
-        //Maj du fichier : ecriture
-        sortieAlgo += "Temps de Calcul: " + duree + " ms\n" +
-                "Nb max d'element: " + maxTas + "\n" +
-                "Nb elements explores: " + nb_elements_tas + "\n\n";
-        sortie.append(sortieAlgo);
+        resultat.add(duree);
+        resultat.add(maxTas);
+        resultat.add(nb_elements_tas);
 
         return resultat;
     }

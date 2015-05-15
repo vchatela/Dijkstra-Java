@@ -10,12 +10,9 @@ import java.io.PrintStream;
  */
 public class Pcc_Dijkstra extends Pcc_Generique<Label_Dijkstra> {
 
-    public Pcc_Dijkstra(Graphe gr, PrintStream sortie, int choixCout, int affichageDeroulementAlgo, int origine, int dest, boolean TOUS, boolean POPUP) {
-        super(gr, sortie, choixCout, affichageDeroulementAlgo, origine, dest, TOUS, POPUP);
+    public Pcc_Dijkstra(Graphe gr, int choixCout, int affichageDeroulementAlgo, int origine, int dest, boolean TOUS) {
+        super(gr, choixCout, affichageDeroulementAlgo, origine, dest, TOUS);
 
-        String chaine = (choix == 0) ? "distance" : "temps";
-        sortieAlgo = "Carte: " + graphe.getNomCarte() + "\n" + "Dijkstra Standard de " + origine + " -> " + destination + " en " + chaine + "\n";
-        //L'affichage du deroulement de l'algo est faite en magenta
         this.graphe.getDessin().setColor(Color.magenta);
     }
 
