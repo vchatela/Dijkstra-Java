@@ -32,14 +32,17 @@ public class Pcc_Generique<E extends Comparable<E>> extends Algo {
     protected int maxTas;
     //Nombre d'element explores
     protected int nb_elements_tas;
-    //contient le resultat a enregister dans un fichier
+    //Permet de ne pas bloquer l'algo pour le covoiturage
     protected boolean TOUS;
+    // Pour le pieton permet de changer sa vitesse etc
+    protected boolean pieton;
 
-    public Pcc_Generique(Graphe gr, int choixCout, int affichageDeroulementAlgo, int origine, int dest, boolean TOUS) {
+    public Pcc_Generique(Graphe gr, int choixCout, int affichageDeroulementAlgo, int origine, int dest, boolean TOUS, boolean pieton) {
         super(gr);
         this.choixCout = choixCout;
         this.choixAffichage = affichageDeroulementAlgo;
         this.TOUS = TOUS;
+        this.pieton = pieton;
 
         mapLabel = new HashMap<Node, E>();
         this.zoneOrigine = gr.getZone();
@@ -111,7 +114,17 @@ public class Pcc_Generique<E extends Comparable<E>> extends Algo {
                 if (!(((Label) E_succ).isMarque())) {
                     // on met alors le cout a jour
                     // TODO : verifier temps !
-                    new_cout = (choixCout == 0) ? arc.getLg_arete() + ((Label) min).getCout() : 60.0f * ((float) arc.getLg_arete()) / (1000.0f * (float) arc.getDescripteur().getVitMax()) + ((Label) min).getCout();
+                    if (!pieton) {
+                        new_cout = (choixCout == 0) ? arc.getLg_arete() + ((Label) min).getCout() : 60.0f * ((float) arc.getLg_arete()) / (1000.0f * (float) arc.getDescripteur().getVitMax()) + ((Label) min).getCout();
+                    } else {
+                        // TODO : verifier si 4f (4 en float) c'est bien en km/h etc ..
+                        // on vérifie que la route n'est pas une autoroute : dans le descripteur on a char type == a
+                        if (arc.getDescripteur().getType() != 'a') {
+                            new_cout = (choixCout == 0) ? arc.getLg_arete() + ((Label) min).getCout() : 60.0f * ((float) arc.getLg_arete()) / (1000.0f * 4f) + ((Label) min).getCout();
+                        } else {
+                            continue;
+                        }
+                    }
                     // on verifie alors que ce cout est bien inferieur au precedent
                     if (new_cout < ((Label) E_succ).getCout()) {
                         ((Label) E_succ).setCout(new_cout);

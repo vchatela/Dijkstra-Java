@@ -112,10 +112,6 @@ public class Graphe {
             for (int num_descr = 0; num_descr < nb_descripteurs; num_descr++) {
                 // Lecture du descripteur numero num_descr
                 descripteurs[num_descr] = new Descripteur(dis);
-
-                // On affiche quelques descripteurs parmi tous. - DEBUG
-                //if (0 == num_descr % (1 + nb_descripteurs / 400))
-                //	System.out.println("Descripteur " + num_descr + " = " + this.listNode.get(num_descr)) ;
             }
             // on verifie que la lecture des descripteurs est bonne (cf format .map)
             Utils.checkByte(254, dis);

@@ -1,14 +1,11 @@
 package core;
 
-import base.Readarg;
-
 import java.awt.*;
-import java.io.PrintStream;
 
 public class PccStar extends Pcc_Generique<Label_Star> {
 
-    public PccStar(Graphe gr, int choixCout, int affichageDeroulementAlgo, int origine, int dest, boolean TOUS) {
-        super(gr, choixCout, affichageDeroulementAlgo, origine, dest, TOUS);
+    public PccStar(Graphe gr, int choixCout, int affichageDeroulementAlgo, int origine, int dest, boolean TOUS, boolean pieton) {
+        super(gr, choixCout, affichageDeroulementAlgo, origine, dest, TOUS, pieton);
 
         this.graphe.getDessin().setColor(Color.red);
     }

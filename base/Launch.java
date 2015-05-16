@@ -322,7 +322,7 @@ public class Launch extends JFrame {
                     case 1:
                         // Initialisation et lancement de l'algorithme
                         initialiserAlgo();
-                        algo = new Pcc_Dijkstra(graphe, choixCout, affichageDeroulementAlgo, origine, dest, false);
+                        algo = new Pcc_Dijkstra(graphe, choixCout, affichageDeroulementAlgo, origine, dest, false, false);
                         ArrayList perfStandard = algo.run();
                         afficherEtEcrireResultats(1, perfStandard);
                         break;
@@ -332,7 +332,7 @@ public class Launch extends JFrame {
 
                         //Initialisation et lancement de l'algorithme
                         initialiserAlgo();
-                        algo = new PccStar(graphe, choixCout, affichageDeroulementAlgo, origine, dest, false);
+                        algo = new PccStar(graphe, choixCout, affichageDeroulementAlgo, origine, dest, false, false);
                         ArrayList perfAStar = algo.run();
                         afficherEtEcrireResultats(2, perfAStar);
                         break;
@@ -343,8 +343,8 @@ public class Launch extends JFrame {
                         initialiserAlgo();
 
                         // 1i algo -> PCC Standard : Dijkstra, 2i algo -> PCC A-Star : Dijkstra guidé
-                        algo1 = new Pcc_Dijkstra(graphe, choixCout, affichageDeroulementAlgo, origine, dest, false);
-                        algo = new PccStar(graphe, choixCout, affichageDeroulementAlgo, origine, dest, false);
+                        algo1 = new Pcc_Dijkstra(graphe, choixCout, affichageDeroulementAlgo, origine, dest, false, false);
+                        algo = new PccStar(graphe, choixCout, affichageDeroulementAlgo, origine, dest, false, false);
 
                         // Lancement des algorithmes et récupération des résultats
                         graphe.getDessin().setColor(Color.magenta);
@@ -374,17 +374,19 @@ public class Launch extends JFrame {
                         // Lancement des algorithmes
 
                         // PCC de la VOITURE vers TOUS : récupération de l'arraylist des couts
-                        algo = new Pcc_Dijkstra(graphe, choixCout, affichageDeroulementAlgo, origine, dest, true);
+                        algo = new Pcc_Dijkstra(graphe, choixCout, affichageDeroulementAlgo, origine, dest, true, false);
                         perfVoitureTous = algo.run();
                         ArrayList<Label_Dijkstra> covoitVoiture = algo.getLabels();
 
+                        // TODO : le pieton ne doit pas pouvoir prendre toutes les routes
+                        // TODO : vitesse max du pieton : 4 km/h
                         // PCC du PIETON vers TOUS : màj de l'arraylist s'il est plus grand
-                        algo = new Pcc_Dijkstra(graphe, choixCout, affichageDeroulementAlgo, pieton, dest, true);
+                        algo = new Pcc_Dijkstra(graphe, choixCout, affichageDeroulementAlgo, pieton, dest, true, true);
                         perfPietonTous = algo.run();
                         ArrayList<Label_Dijkstra> covoitPieton = algo.getLabels();
 
                         // PCC de la DESTINATION vers TOUS : màj de l'arraylist si max (x,y) < Pcc(dest, noeud) + Pcc( (x ou y) vers noeuds )
-                        algo = new Pcc_Dijkstra(graphe, choixCout, affichageDeroulementAlgo, dest, origine, true);
+                        algo = new Pcc_Dijkstra(graphe, choixCout, affichageDeroulementAlgo, dest, origine, true, false);
                         perfDestTous = algo.run();
                         ArrayList<Label_Dijkstra> covoitDestination = algo.getLabels();
 
@@ -430,9 +432,10 @@ public class Launch extends JFrame {
                         if (noeud_rejoint != -1 && display) {
                             // on trace le point de rencontre
                             node = this.graphe.getArrayList().get(noeud_rejoint);
+                            this.graphe.getDessin().setColor(Color.magenta);
                             this.graphe.getDessin().drawPoint(node.getLongitude(), node.getLatitude(), 12);
                         }
-
+                        // TODO : mettre les résultats sous la forme heure / min
                         afficherEtEcrireResultats(perfVoitureTous, perfPietonTous, perfDestTous, node, min, duree);
 
                         break;
