@@ -46,18 +46,17 @@ public class Graphe {
     // Le constructeur cree le graphe en lisant les donnees depuis le DataInputStream
     public Graphe(String nomCarte, DataInputStream dis, Dessin dessin) {
 
-        this.listNode = new ArrayList<Node>();
+        this.listNode = new ArrayList<>();
         this.nomCarte = nomCarte;
         this.dessin = dessin;
         Utils.calibrer(nomCarte, dessin);
 
-        //Petit outil pour verifier le chargement des cartes qui sont parfois longues
+        // Petit outil pour verifier le chargement des cartes qui sont parfois longues
         JProgressBar pb = new JProgressBar();
         pb.setStringPainted(true);
         JFrame frame = new JFrame("Affichage en cours");
         frame.setUndecorated(true);
         frame.setPreferredSize(new Dimension(150, 30));
-        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frame.setContentPane(pb);
         frame.pack();
         frame.setLocationRelativeTo(null);
@@ -79,12 +78,11 @@ public class Graphe {
             this.idcarte = dis.readInt();
             this.numzone = dis.readInt();
 
-            // Lecture du nombre de descripteurs, nombre de noeuds.
+            // Lecture du nombre de descripteurs et du nombre de noeuds.
             int nb_descripteurs = dis.readInt();
-
             int nb_Nodes = dis.readInt();
 
-            //reglage de la barre de progression
+            // Reglage de la barre de progression
             pb.setMinimum(0);
             pb.setMaximum(nb_Nodes);
 
@@ -112,12 +110,9 @@ public class Graphe {
             for (int num_descr = 0; num_descr < nb_descripteurs; num_descr++) {
                 // Lecture du descripteur numero num_descr
                 descripteurs[num_descr] = new Descripteur(dis);
-
-                // On affiche quelques descripteurs parmi tous. - DEBUG
-                //if (0 == num_descr % (1 + nb_descripteurs / 400))
-                //	System.out.println("Descripteur " + num_descr + " = " + this.listNode.get(num_descr)) ;
             }
-            // on verifie que la lecture des descripteurs est bonne (cf format .map)
+
+            // On verifie que la lecture des descripteurs est bonne (cf format .map)
             Utils.checkByte(254, dis);
 
             // Pour le noeud num_node,  des successeurs
@@ -126,16 +121,15 @@ public class Graphe {
                 //Mise a jour de la barre de progression
                 pb.setValue(num_Node);
 
-                //System.out.println("******Debug nombre arc pour le noeud "+num_Node+" : "+this.listNode.get(num_Node).getNumberArc());
                 //Initialisation de tous ces arcs (successeurs)
                 for (int num_succ = 0; num_succ < this.listNode.get(num_Node).getNumberArc(); num_succ++) {
 
                     // Lecture de tous les successeurs du noeud num_Node
-                    int succ_zone = dis.readUnsignedByte();    // zone du successeur
-                    int dest_Node = Utils.read24bits(dis);    // numero de noeud du successeur
-                    int descr_num = Utils.read24bits(dis);    // descripteur de l'arete
-                    int longueur = dis.readUnsignedShort();    // longueur de l'arete en metres
-                    int nb_segm = dis.readUnsignedShort();    // Nombre de segments constituant l'arete
+                    int succ_zone = dis.readUnsignedByte(); // zone du successeur
+                    int dest_Node = Utils.read24bits(dis);  // numero de noeud du successeur
+                    int descr_num = Utils.read24bits(dis);  // descripteur de l'arete
+                    int longueur = dis.readUnsignedShort(); // longueur de l'arete en metres
+                    int nb_segm = dis.readUnsignedShort();  // Nombre de segments constituant l'arete
 
                     // Creation d'un arc initialise avec toutes les lectures precedentes et ajout dans la liste des arcs du noeud num_node
                     Arc arc = new Arc(succ_zone, dest_Node, descr_num, longueur, nb_segm, descripteurs[descr_num], this.listNode.get(num_Node));
@@ -144,7 +138,7 @@ public class Graphe {
                     //Incrementation du nombre d'arretes
                     edges++;
 
-                    //si le sens n'est pas unique on doit ajouter une arete dans l'autre sens (noeud destinataire ->noeud actuel)
+                    // Si le sens n'est pas unique on doit ajouter une arete dans l'autre sens (noeud destinataire ->noeud actuel)
                     if (!descripteurs[descr_num].isSensUnique() && (succ_zone == numzone)) {
                         Arc arc_dest = new Arc(succ_zone, num_Node, descr_num, longueur, nb_segm, descripteurs[descr_num], this.listNode.get(dest_Node));
                         this.listNode.get(dest_Node).getArrayListArc().add(arc_dest);
@@ -190,7 +184,8 @@ public class Graphe {
             //JOptionPane.showMessageDialog(null, "Fichier lu : " + nb_Nodes + " sommets\n" + edges + " aretes\n"
             //      + nb_descripteurs + " descripteurs");
 
-        } catch (IOException e) {
+        }
+        catch (IOException e) {
             e.printStackTrace();
             System.exit(1);
         }
@@ -238,8 +233,8 @@ public class Graphe {
 
             float lon = dessin.getClickLon();
             float lat = dessin.getClickLat();
-            ArrayList resultat = new ArrayList();
-
+            ArrayList resultat;
+            resultat = new ArrayList();
 
             // On cherche le noeud le plus proche. O(n)
             float minDist = Float.MAX_VALUE;
@@ -258,7 +253,8 @@ public class Graphe {
             dessin.setColor(java.awt.Color.red);
             dessin.drawPoint(this.listNode.get(noeud).getLongitude(), this.listNode.get(noeud).getLatitude(), 5);
 
-            resultat.add("lon = " + lon + "  lat = " + lat);
+            resultat.add(lon);
+            resultat.add(lat);
             resultat.add(noeud);
             return resultat;
         }
@@ -337,10 +333,6 @@ public class Graphe {
         }
 
         return 0;
-    }
-
-    public String getNomCarte() {
-        return nomCarte;
     }
 
     public Chemin getChemin() {

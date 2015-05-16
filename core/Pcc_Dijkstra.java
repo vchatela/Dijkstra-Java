@@ -1,29 +1,26 @@
 package core;
 
-import base.Readarg;
-
 import java.awt.*;
-import java.io.PrintStream;
 
 /**
  * Created by valentin on 4/29/15.
  */
-public class Pcc_Dijkstra extends Pcc_Generique<Label_Dijkstra> {
+public class Pcc_Dijkstra extends Pcc_Generique<Label> {
 
-    public Pcc_Dijkstra(Graphe gr, int choixCout, int affichageDeroulementAlgo, int origine, int dest, boolean TOUS) {
-        super(gr, choixCout, affichageDeroulementAlgo, origine, dest, TOUS);
+    public Pcc_Dijkstra(Graphe gr, int choixCout, boolean affichageDeroulementAlgo, int origine, int destination, boolean TOUS) {
+        super(gr, choixCout, affichageDeroulementAlgo, origine, destination, TOUS);
 
         this.graphe.getDessin().setColor(Color.magenta);
     }
 
     public void initialisation() {
-        //Associe des Label_Dijkstras correspondant aux noeuds et le stocke dans la map !
+        //Associe des Labels correspondant aux noeuds et le stocke dans la map !
         for (Node node : this.graphe.getArrayList()) {
-            Label_Dijkstra l = new Label_Dijkstra(node);
+            Label l = new Label(node);
             mapLabel.put(node, l);
             if ((node.getNum() == origine) && (graphe.getZone() == zoneOrigine)) {
                 l.setCout(0);
-                //Initialisation du tas avec le Label_Dijkstra sommet origine
+                //Initialisation du tas avec le Label sommet origine
                 tas.insert(l);
             }
             labels.add(l);

@@ -3,58 +3,32 @@ package core;
 /**
  * Created by valentin on 4/29/15.
  */
-public class Label {
-    private int num_node; //numero du noeud actuel
-    private boolean marque;
-    private double cout;
-    private int pere;//numero du noeud pere
+public class Label extends Label_Generique implements Comparable<Label> {
 
     public Label(Node node) {
-        this.num_node = node.getNum();
-        this.marque = false;//marquage a faux
-        this.cout = Float.POSITIVE_INFINITY;// infini
-        this.pere = -1;//pas de pere
+        super(node);
     }
 
     public String toString() {
-        return "Sommet n°" + this.num_node + " - Cout=" + this.cout;
+        return "Sommet n°" + this.getNum_node() + " - Cout=" + this.getCout();
     }
 
-    public int hashCode() {
-        return getNum_node();
+    @Override
+    public int compareTo(Label o) {
+        if (this.getCout() < o.getCout())
+            return -1;
+        else {
+            if (this.getCout() == o.getCout())
+                return 0;
+            else return 1;
+        }
     }
 
-    public int getNum_node() {
-        return num_node;
+    public boolean equals(Object o) {
+        if (o instanceof Label) {
+            Label other = (Label) o;
+            return (this.getCout() == other.getCout() && this.isMarque() == other.isMarque() && this.getNum_node() == other.getNum_node() && this.getPere() == other.getPere());
+        }
+        return false;
     }
-
-    public void setNum_node(int num_node) {
-        this.num_node = num_node;
-    }
-
-    public boolean isMarque() {
-        return marque;
-    }
-
-    public void setMarque(boolean marque) {
-        this.marque = marque;
-    }
-
-    public double getCout() {
-        return cout;
-    }
-
-    public void setCout(double cout) {
-        this.cout = cout;
-    }
-
-    public int getPere() {
-        return pere;
-    }
-
-    public void setPere(int pere) {
-        this.pere = pere;
-    }
-
-
 }

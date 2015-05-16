@@ -142,14 +142,12 @@ public class Chemin {
      */
     public void tracerChemin(Dessin dessin) {
         float current_long, current_lat;
-        //Arc arc=new Arc();
         //System.out.println(" DEBUG -- Nbre noeud du chemin = " + this.getNb_nodes());
         //Pour chaque noeud du chemin
         for (int node = 0; node < this.getListNode().size() - 1; node++) {
             current_long = this.getListNode().get(node).getLongitude();
             current_lat = this.getListNode().get(node).getLatitude();
             //Pour chaque arc du noeud numero node
-            //arc = renvoi_arc_temps(this.getListNode().get(node),this.getListNode().get(node+1));
             //on regle la largeur des traits et la couleur de l'affichage
             dessin.setWidth(4);
             dessin.setColor(Color.green);
@@ -161,87 +159,37 @@ public class Chemin {
     /**
      * Calcule le cout en distance d'un chemin
      */
-    public String cout_chemin_distance() {
+    public String Calculer_cout_chemin_distance() {
         float longueur = 0;
-        //float temps = 0;
-        Arc arc = new Arc();
+        Arc arc;
+
         // Pour chaque noeud du chemin
         for (int node = 0; node < this.getListNode().size() - 1; node++) {
             arc = renvoi_arc_distance(this.getListNode().get(node), this.getListNode().get(node + 1));
             longueur += ((float) arc.getLg_arete() / 1000);
         }
+
         return "Distance : " + longueur + " km";
     }
 
     /**
      * Calcule le cout en temps d'un chemin
      */
-    public String cout_chemin_temps() {
-        //float longueur =0;
+    public String Calculer_cout_chemin_temps() {
         float temps = 0;
-        Arc arc = new Arc();
+        Arc arc;
+
         // Pour chaque noeud du chemin
         for (int node = 0; node < this.getListNode().size() - 1; node++) {
             arc = renvoi_arc_temps(this.getListNode().get(node), this.getListNode().get(node + 1));
             temps += 60 * ((float) arc.getLg_arete()) / (1000 * ((float) arc.getDescripteur().getVitMax())); // 60 * car en seconde
         }
+
         return "Temps : " + temps + " mn";
-    }
-
-    public int getMagic_number() {
-        return magic_number;
-    }
-
-    public void setMagic_number(int magic_number) {
-        this.magic_number = magic_number;
-    }
-
-    public int getVersion() {
-        return version;
-    }
-
-    public void setVersion(int version) {
-        this.version = version;
     }
 
     public ArrayList<Node> getListNode() {
         return listNode;
-    }
-
-    public void setListNode(ArrayList<Node> listNode) {
-        this.listNode = listNode;
-    }
-
-    public int getNum_noeud_dest() {
-        return num_noeud_dest;
-    }
-
-    public void setNum_noeud_dest(int num_noeud_dest) {
-        this.num_noeud_dest = num_noeud_dest;
-    }
-
-    public int getNum_noeud_origin() {
-        return num_noeud_origin;
-    }
-
-    public void setNum_noeud_origin(int num_noeud_origin) {
-        this.num_noeud_origin = num_noeud_origin;
-    }
-
-    public int getNb_nodes() {
-        return nb_nodes;
-    }
-
-    public void setNb_nodes(int nb_nodes) {
-        this.nb_nodes = nb_nodes;
-    }
-
-    public int getId() {
-        return id;
-    }
-
-    public void setId(int id) {
-        this.id = id;
     }
 
 }

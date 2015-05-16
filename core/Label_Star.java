@@ -3,23 +3,13 @@ package core;
 /**
  * Created by valentin on 4/29/15.
  */
-public class Label_Star extends Label implements Comparable<Label_Star>{
+public class Label_Star extends Label_Generique implements Comparable<Label_Star> {
 
     private double cout_oiseau;
 
     public Label_Star(Node node, Node node_dest) {
         super(node);
-        // this.cout_oiseau = Float.POSITIVE_INFINITY;
-        // calcul du cout a vol d'oiseau
-        this.cout_oiseau = distance(node, node_dest);
-    }
-
-    public static double distance(Node node, Node node_dest) {
-        double rayon_terre = 6378137.0;
-        double sinLat = Math.sin(Math.toRadians(node.getLatitude())) * Math.sin(Math.toRadians(node_dest.getLatitude()));
-        double cosLat = Math.cos(Math.toRadians(node.getLatitude())) * Math.cos(Math.toRadians(node_dest.getLatitude()));
-        double cosLong = Math.cos(Math.toRadians(node.getLongitude() - node_dest.getLongitude()));
-        return rayon_terre * Math.acos(sinLat + cosLat * cosLong);
+        this.cout_oiseau = distance(node, node_dest); // calcul du cout a vol d'oiseau
     }
 
     public String toString() {
@@ -34,24 +24,20 @@ public class Label_Star extends Label implements Comparable<Label_Star>{
         this.cout_oiseau = cout_oiseau;
     }
 
-    @Override
-    // comparaison des Label par rapport a leurs couts respectifs
-   /* public int compareTo(Label_Star o) {
-        if (this.getCout() + this.getCout_oiseau() < o.getCout() + this.getCout_oiseau())
-            return -1;
-        else {
-            if (this.getCout() + this.getCout_oiseau() == o.getCout() + o.getCout_oiseau()) {
-                if (this.getCout_oiseau() < o.getCout_oiseau())
-                    return -1;
-                else return 1;
-            } else return 1;
-        }
-    }*/
+    //Fonctions calcul de distance vol d'oiseau
+    public static double distance(Node node, Node node_dest) {
+        double rayon_terre = 6378137.0;
+        double sinLat = Math.sin(Math.toRadians(node.getLatitude())) * Math.sin(Math.toRadians(node_dest.getLatitude()));
+        double cosLat = Math.cos(Math.toRadians(node.getLatitude())) * Math.cos(Math.toRadians(node_dest.getLatitude()));
+        double cosLong = Math.cos(Math.toRadians(node.getLongitude() - node_dest.getLongitude()));
+        return rayon_terre * Math.acos(sinLat + cosLat * cosLong);
+    }
 
+    @Override
     public int compareTo(Label_Star lab) {
 
         int res = (int) (1000.0 * (this.getCout() + this.getCout_oiseau()) - 1000.0 * (lab.getCout() + lab.getCout_oiseau()));
-// si ?galit? alors plus petite estimation
+// si egalite, alors plus petite estimation
         if (res == 0) {
             res = (int) (1000.0 * this.getCout_oiseau() - 1000.0 * lab.getCout_oiseau());
         }
@@ -65,8 +51,4 @@ public class Label_Star extends Label implements Comparable<Label_Star>{
         }
         return false;
     }
-
-    //Fonctions calcul de distance vol d'oiseau
-
-
 }

@@ -10,6 +10,8 @@ import core.*;
 import core.Label;
 
 import javax.swing.*;
+import javax.swing.border.BevelBorder;
+import javax.swing.border.EmptyBorder;
 import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
 import java.awt.*;
@@ -27,9 +29,9 @@ public class Launch extends JFrame {
      */
 
     // Declaration et initialisation des tableaux d'informations
-    static private final String menuDisplay[] = {"Quitter", "PCC Standard", "PCC A-star", "Tester les performances", "Covoiturage",
-            "Charger un fichier de chemin", "Reinitialiser la carte", "Obtenir un numero de sommet "};
-    static private final String menuNotDisplay[] = {"Quitter", "PCC Standard", "PCC A-star", "Tester les performances", "Covoiturage",
+    static private final String menuDisplay[] = {"Quitter", "Connexite", "PCC Standard", "PCC A-star", "Tester les performances", "Covoiturage",
+            "Charger un fichier de chemin", "Reinitialiser la carte", "Situer un sommet"};
+    static private final String menuNotDisplay[] = {"Quitter", "Connexite", "PCC Standard", "PCC A-star", "Tester les performances", "Covoiturage",
             "Charger un fichier de chemin", "Reinitialiser la carte"};
     static private final String cartes[] = {"midip", "insa", "france",
             "fractal", "reunion", "newzealand", "morbihan", "mayotte", "paris", "carre-dense", "carre", "fractal-spiral"};
@@ -38,17 +40,12 @@ public class Launch extends JFrame {
 
     // Declaration de Variables lié à l'affichage graphique
     private JPanel		    controlPanel;               // Contient le menu de selection des choix
-    private Dessin          dessinPanel;                     // Contient la map
     private Container 	    cp;                         // Conteneur de la fenetre, on y ajoute les deux précédents éléments
-    private Dimension       halfDimension;
-    private JLabel		    jSpace;                     // Espace vertical dans le menu de selection des choix
     private JLabel                                      // Texte à afficher
-            jLabelNames, jLabelTitle, jLabelCarte,
-            jLabelAfficher, jLabelFichier, jLabelMenu,
-            jLabelDeroulement, jLabelChoixCout,
-            jLabelDepart, jLabelDepartVoiture, jLabelDepartPieton, jLabelArrivee,
-            jLabelCoordsMan, jLabelCoordsClick, jLabelCoordClick, jLabelCoordSitues,
-            jLabelNoeudsProches, jLabelChemin;
+            jLabelNames, jLabelTitle, jLabelCarte, jLabelAfficher, jLabelFichier, jLabelMenu,
+            jLabelDeroulement, jLabelChoixCout, jLabelDepart, jLabelDepartVoiture,
+            jLabelDepartPieton, jLabelArrivee, jLabelCoordsMan, jLabelCoordsClick,
+            jLabelCoordClick, jLabelCoordSitues, jLabelNoeudsProches, jLabelChemin;
     private JLabel          jLabelImageGraphe;          // Image de lancement (graphe) à afficher
     private JLabel          jLabelImageINSA;            // Logo de l'INSA à afficher
     private ImageIcon       imageGraphe;                // Image de lancement (graphe) en dur
@@ -62,7 +59,6 @@ public class Launch extends JFrame {
     private JCheckBox       jCheckBox;                  // Un checkbox (affichage graphique ou du déroulement d'execution d'algo)
     private JRadioButton    jRadioButtonChoixTemps;     // CHoix du cout en temps
     private JRadioButton    jRadioButtonChoixDistance;  // CHoix du cout en distance
-    private ButtonGroup     buttonGroup;                // Grouper les deux précédents boutons
     private JComboBox	    jComboBoxMenu;              // Contient les menus
     private JComboBox	    jComboBoxCartes;            // Contient les cartes
     private JComboBox	    jComboBoxChemins;          // Contient les chemins
@@ -71,8 +67,8 @@ public class Launch extends JFrame {
     private Thread          thread;                     // Utilisé pour afficher la map en parallèle du menu de selection des choix
 
     // Declaration de Variables lié à l'execution du programme
-    private String          nomcarte;                   // Nom de la carte à charger
-    private String          nomchemin;                  // Nom du chemin à charger
+    private String          nomCarte;                   // Nom de la carte à charger
+    private String          nomChemin;                  // Nom du chemin à charger
     private String          resultat;                   // Contient les resultats des algos
     private String          cout;                       // Contient le cout
     private PrintStream     sortie;                     // Fichier de sortie
@@ -82,9 +78,8 @@ public class Launch extends JFrame {
     private boolean         continuer = true;           // Boucle principale : le menu est accessible jusqu'a ce que l'on quitte.
     private ArrayList       clickCoord;                 // Pour avoir coordonnées d'un clic
     private int             sommetsConnus;              // L'utilisateur connait les sommets origine et dest ou non
-    private int             choixMenu;                  // Choix de la tache à effectuer
     private int             choixCout;                  // Plus court en Distance:0 ou Temps:1
-    private int             affichageDeroulementAlgo;   // Affichage des algorithmes ou non
+    private boolean         affichageDeroulementAlgo;   // Affichage des algorithmes ou non
     private int             origine, pieton, dest;      // Numéro des sommets origine, pieton et dest
     private Algo            algo;                       // Algorithme a executer
     private Algo            algo1;                      // Algorithme n°2 a executer si on lance le test de performance
@@ -95,7 +90,8 @@ public class Launch extends JFrame {
      */
 
     public Launch() {
-        halfDimension = new Dimension(180, 25);
+        Dimension halfDimension = new Dimension(180, 25);
+        Dimension fullDimension = new Dimension(360, 25);
 
         // Paramétrage des textes à afficher
         jLabelTitle         = new JLabel("<html><br>PROGRAMME DE TESTS DES ALGORITHMES DE GRAPHE<br><br></html>");
@@ -118,6 +114,8 @@ public class Launch extends JFrame {
                                          "&nbsp;Etudiants : J. Mangel - V. Chatelard<br>" +
                                          "&nbsp;Enseignants : D. Le Botlan - M-J Huguet</html>");
         jLabelChemin        = new JLabel("Chemin .path à utiliser : ");
+
+        jLabelTitle.setPreferredSize(fullDimension);
         jLabelCarte.setPreferredSize(halfDimension);
         jLabelAfficher.setPreferredSize(halfDimension);
         jLabelFichier.setPreferredSize(halfDimension);
@@ -128,6 +126,9 @@ public class Launch extends JFrame {
         jLabelDepartVoiture.setPreferredSize(halfDimension);
         jLabelDepartPieton.setPreferredSize(halfDimension);
         jLabelArrivee.setPreferredSize(halfDimension);
+        jLabelCoordsMan.setPreferredSize(fullDimension);
+        jLabelCoordClick.setPreferredSize(fullDimension);
+        jLabelCoordsClick.setPreferredSize(fullDimension);
         jLabelCoordSitues.setPreferredSize(halfDimension);
         jLabelNoeudsProches.setPreferredSize(halfDimension);
         jLabelNames.setPreferredSize(new Dimension(275, 83));
@@ -135,15 +136,16 @@ public class Launch extends JFrame {
         jLabelNames.setBackground(Color.white);
         jLabelChemin.setPreferredSize(halfDimension);
 
-        // Paramétrage de l'espace vertical
-        jSpace = new JLabel();
-        jSpace.setPreferredSize(new Dimension(380, 25));
+        jLabelTitle.setHorizontalAlignment(SwingConstants.CENTER);
+        jLabelCoordsMan.setHorizontalAlignment(SwingConstants.CENTER);
+        jLabelCoordClick.setHorizontalAlignment(SwingConstants.CENTER);
+        jLabelCoordsClick.setHorizontalAlignment(SwingConstants.CENTER);
 
         // Paramétrage des zone de saisie
         jTextField1         = new JTextField();
         jTextField2         = new JTextField();
         jTextFieldOrigine   = new JTextField();
-        jTextFieldPieton   = new JTextField();
+        jTextFieldPieton    = new JTextField();
         jTextFieldDest      = new JTextField();
         jTextFieldFichier   = new JTextField("sortie");
 
@@ -153,6 +155,8 @@ public class Launch extends JFrame {
         jTextFieldOrigine.setPreferredSize(halfDimension);
         jTextFieldPieton.setPreferredSize(halfDimension);
         jTextFieldDest.setPreferredSize(halfDimension);
+        jTextField1.setEditable(false);
+        jTextField2.setEditable(false);
         jTextFieldOrigine.getDocument().addDocumentListener(new DocumentListener() {
             public void changedUpdate(DocumentEvent e) {
                 textFieldCoordChanged();
@@ -197,12 +201,15 @@ public class Launch extends JFrame {
         jCheckBox = new JCheckBox();
         jCheckBox.setSelected(true);
         jCheckBox.setPreferredSize(halfDimension);
+        jCheckBox.setHorizontalAlignment(SwingConstants.CENTER);
 
         // Paramétrage des radiobuttons
         jRadioButtonChoixTemps    = new JRadioButton("Temps");
         jRadioButtonChoixDistance = new JRadioButton("Distance");
+        jRadioButtonChoixTemps.setPreferredSize(new Dimension(90, 25));
+        jRadioButtonChoixDistance.setPreferredSize(new Dimension(90, 25));
         jRadioButtonChoixTemps.setSelected(true);
-        buttonGroup = new ButtonGroup();
+        ButtonGroup buttonGroup = new ButtonGroup();
         buttonGroup.add(jRadioButtonChoixTemps);
         buttonGroup.add(jRadioButtonChoixDistance);
 
@@ -225,6 +232,7 @@ public class Launch extends JFrame {
         jLabelImageINSA   = new JLabel();
         jLabelImageGraphe.setIcon(imageGraphe);
         jLabelImageINSA.setIcon(imageINSA);
+        jLabelImageGraphe.setBorder(new EmptyBorder(0,0,25,0));
 
         // Paramétrage des buttons
         jButtonLoad = new JButton("CHARGER");
@@ -239,11 +247,11 @@ public class Launch extends JFrame {
         // Paramétrage du menu de selection des choix avec ajout des composants
         controlPanel = new JPanel();
         controlPanel.setPreferredSize(new Dimension(380, 600));
+        controlPanel.setBorder(new javax.swing.border.BevelBorder(BevelBorder.RAISED));
         controlPanel.add(jLabelNames);
         controlPanel.add(jLabelImageINSA);
         controlPanel.add(jLabelTitle);
         controlPanel.add(jLabelImageGraphe);
-        controlPanel.add(jSpace);
         controlPanel.add(jLabelCarte);
         controlPanel.add(jComboBoxCartes);
         controlPanel.add(jLabelAfficher);
@@ -288,28 +296,28 @@ public class Launch extends JFrame {
             jButtonLoad.setEnabled(false);
 
             // Récupérer la carte souhaitée
-            nomcarte = jComboBoxCartes.getSelectedItem().toString();
-            DataInputStream mapdata = Openfile.open(nomcarte);
+            nomCarte = jComboBoxCartes.getSelectedItem().toString();
+            DataInputStream mapdata = Openfile.open(nomCarte);
 
             // Afficher ou non la map -> création d'un dessin associé et ajout à la fenetre
             display = jCheckBox.isSelected();
-            dessinPanel = (display) ? new DessinVisible(800, 600) : new DessinInvisible();
+            Dessin dessinPanel = (display) ? new DessinVisible(800, 600) : new DessinInvisible();
             if(display)
                 cp.add(dessinPanel);
             this.pack();
             this.setLocationRelativeTo(null);
 
             // Création du graphe en fonction de la map selectionnée
-            graphe = new Graphe(nomcarte, mapdata, dessinPanel);
+            graphe = new Graphe(nomCarte, mapdata, dessinPanel);
 
             // Ouverture et initialisation du fichier de sortie contenant des resultats
-            sortie = this.fichierSortie();
+            sortie = fichierSortie();
 
             // Boucle principale : choix de la tache et execution
             while (continuer) {
 
                 // Affichage du menu : le choix correspond au numero du menu choisi.
-                choixMenu = this.afficherMenu();
+                int choixMenu = afficherMenu();
 
                 // On test ce que le menu choisi
                 switch (choixMenu) {
@@ -319,8 +327,17 @@ public class Launch extends JFrame {
                         continuer = false;
                         break;
 
-                    // PCC Standard : Dijkstra
+                    // Connexité
                     case 1:
+                        // Initialisation et lancement de l'algorithme
+                        initialiserAlgo();
+                        algo = new Connexite(graphe, affichageDeroulementAlgo, origine, dest);
+                        ArrayList perfConnexite = algo.run();
+                        afficherEtEcrireResultats(3, perfConnexite);
+                        break;
+
+                    // PCC Standard : Dijkstra
+                    case 2:
                         // Initialisation et lancement de l'algorithme
                         initialiserAlgo();
                         algo = new Pcc_Dijkstra(graphe, choixCout, affichageDeroulementAlgo, origine, dest, false);
@@ -329,23 +346,23 @@ public class Launch extends JFrame {
                         break;
 
                     // PCC A-Star : Dijkstra guidé
-                    case 2:
+                    case 3:
 
                         //Initialisation et lancement de l'algorithme
                         initialiserAlgo();
-                        algo = new PccStar(graphe, choixCout, affichageDeroulementAlgo, origine, dest, false);
+                        algo = new Pcc_Star(graphe, choixCout, affichageDeroulementAlgo, origine, dest, false);
                         ArrayList perfAStar = algo.run();
                         afficherEtEcrireResultats(2, perfAStar);
                         break;
 
                     // Programme de test des 2 algos Dijkstra : PCC Standard + PCC A-Star
-                    case 3:
+                    case 4:
                         // Initialisation des algorithmes
                         initialiserAlgo();
 
                         // 1i algo -> PCC Standard : Dijkstra, 2i algo -> PCC A-Star : Dijkstra guidé
                         algo1 = new Pcc_Dijkstra(graphe, choixCout, affichageDeroulementAlgo, origine, dest, false);
-                        algo = new PccStar(graphe, choixCout, affichageDeroulementAlgo, origine, dest, false);
+                        algo = new Pcc_Star(graphe, choixCout, affichageDeroulementAlgo, origine, dest, false);
 
                         // Lancement des algorithmes et récupération des résultats
                         graphe.getDessin().setColor(Color.magenta);
@@ -357,9 +374,9 @@ public class Launch extends JFrame {
                         break;
 
                     // Covoiturage
-                    case 4:
+                    case 5:
                         // ArrayList contenant les couts màj
-                        ArrayList<Label_Dijkstra> covoitSomme = new ArrayList<Label_Dijkstra>();
+                        ArrayList<Label> covoitSomme = new ArrayList<>();
                         ArrayList perfVoitureTous, perfPietonTous, perfDestTous;
                         int noeud_rejoint = -1;
                         double min = Double.POSITIVE_INFINITY;
@@ -377,17 +394,17 @@ public class Launch extends JFrame {
                         // PCC de la VOITURE vers TOUS : récupération de l'arraylist des couts
                         algo = new Pcc_Dijkstra(graphe, choixCout, affichageDeroulementAlgo, origine, dest, true);
                         perfVoitureTous = algo.run();
-                        ArrayList<Label_Dijkstra> covoitVoiture = algo.getLabels();
+                        ArrayList<Label> covoitVoiture = algo.getLabels();
 
                         // PCC du PIETON vers TOUS : màj de l'arraylist s'il est plus grand
                         algo = new Pcc_Dijkstra(graphe, choixCout, affichageDeroulementAlgo, pieton, dest, true);
                         perfPietonTous = algo.run();
-                        ArrayList<Label_Dijkstra> covoitPieton = algo.getLabels();
+                        ArrayList<Label> covoitPieton = algo.getLabels();
 
                         // PCC de la DESTINATION vers TOUS : màj de l'arraylist si max (x,y) < Pcc(dest, noeud) + Pcc( (x ou y) vers noeuds )
                         algo = new Pcc_Dijkstra(graphe, choixCout, affichageDeroulementAlgo, dest, dest, true);
                         perfDestTous = algo.run();
-                        ArrayList<Label_Dijkstra> covoitDestination = algo.getLabels();
+                        ArrayList<Label> covoitDestination = algo.getLabels();
 
                         for (int i=0; i<covoitPieton.size()||i<covoitVoiture.size(); i++) {
                             // Mise à jour de l'ArrayList covoitSomme :
@@ -431,8 +448,8 @@ public class Launch extends JFrame {
                         // Test si le point de rencontre est trouvé
                         if (noeud_rejoint != -1 && display) {
                             // on trace le point de rencontre
-                            node = this.graphe.getArrayList().get(noeud_rejoint);
-                            this.graphe.getDessin().drawPoint(node.getLongitude(), node.getLatitude(), 12);
+                            node = graphe.getArrayList().get(noeud_rejoint);
+                            graphe.getDessin().drawPoint(node.getLongitude(), node.getLatitude(), 12);
                         }
 
                         afficherEtEcrireResultats(perfVoitureTous, perfPietonTous, perfDestTous, node, min, duree);
@@ -440,7 +457,7 @@ public class Launch extends JFrame {
                         break;
 
                     // Charger un fichier de chemin
-                    case 5:
+                    case 6:
                         // Paramétrer le menu de selection
                         makeControlPanel(51);
 
@@ -448,18 +465,18 @@ public class Launch extends JFrame {
                         waitButtonOk();
 
                         // On récupère le nom de la carte
-                        nomchemin = jComboBoxChemins.getSelectedItem().toString();
+                        nomChemin = jComboBoxChemins.getSelectedItem().toString();
 
                         // Paramétrer le menu de selection
                         makeControlPanel(52);
 
-                        if (graphe.verifierChemin(Openfile.open(nomchemin), nomchemin) == -1)
+                        if (graphe.verifierChemin(Openfile.open(nomChemin), nomChemin) == -1)
                             continue;
 
-                        graphe.verifierChemin(Openfile.open(nomchemin), nomchemin);
+                        graphe.verifierChemin(Openfile.open(nomChemin), nomChemin);
                         graphe.getChemin().tracerChemin(graphe.getDessin());
-                        jTextField1.setText(graphe.getChemin().cout_chemin_distance());
-                        jTextField2.setText(graphe.getChemin().cout_chemin_temps());
+                        jTextField1.setText(graphe.getChemin().Calculer_cout_chemin_distance());
+                        jTextField2.setText(graphe.getChemin().Calculer_cout_chemin_temps());
 
                         // On doit cliquer sur OK pour continuer
                         waitButtonOk();
@@ -467,7 +484,7 @@ public class Launch extends JFrame {
                         break;
 
                     // Réinitialiser la map
-                    case 6:
+                    case 7:
                         // Paramétrer le menu de selection
                         makeControlPanel(6);
 
@@ -475,8 +492,8 @@ public class Launch extends JFrame {
                         waitButtonOk();
 
                         // Récupérer la carte souhaitée
-                        nomcarte = jComboBoxCartes.getSelectedItem().toString();
-                        mapdata = Openfile.open(nomcarte);
+                        nomCarte = jComboBoxCartes.getSelectedItem().toString();
+                        mapdata = Openfile.open(nomCarte);
 
                         // On supprime l'ancienne carte
                         cp.remove(dessinPanel);
@@ -491,14 +508,14 @@ public class Launch extends JFrame {
                         this.setLocationRelativeTo(null);
 
                         // Création du graphe en fonction de la map selectionnée
-                        graphe = new Graphe(nomcarte, mapdata, dessinPanel);
+                        graphe = new Graphe(nomCarte, mapdata, dessinPanel);
 
                         break;
 
                     // Obtenir un numéro de sommet
-                    case 7:
+                    case 8:
                         // Paramétrer le menu de selection
-                        makeControlPanel(7);
+                        makeControlPanel(8);
                         jButtonOk.setEnabled(false);
 
                         // On récupère les informations du click
@@ -511,8 +528,8 @@ public class Launch extends JFrame {
                         }
                         else {
                             // On affiche les information
-                            jTextField1.setText(clickCoord.get(0).toString());
-                            jTextField2.setText(clickCoord.get(1).toString());
+                            jTextField1.setText("Lon = " + clickCoord.get(0).toString() + " - Lat = " + clickCoord.get(1).toString());
+                            jTextField2.setText(clickCoord.get(2).toString());
                         }
 
                         // On doit cliquer sur OK pour continuer
@@ -580,9 +597,9 @@ public class Launch extends JFrame {
                 makeControlPanel(12);
                 try {
                     clickCoord = graphe.situerClick();
-                    jTextFieldOrigine.setText(clickCoord.get(1).toString());
+                    jTextFieldOrigine.setText(clickCoord.get(2).toString());
                     clickCoord = graphe.situerClick();
-                    jTextFieldDest.setText(clickCoord.get(1).toString());
+                    jTextFieldDest.setText(clickCoord.get(2).toString());
                 }
                 catch (NumberFormatException n) {
                     System.out.println(n);
@@ -597,13 +614,13 @@ public class Launch extends JFrame {
 
         // Choix du coup en temps ou distance
         if (jRadioButtonChoixDistance.isSelected())
-            this.choixCout = 0;
-        else this.choixCout = 1;
+            choixCout = 0;
+        else choixCout = 1;
 
         // Choix de l'affichage des algo
         if (jCheckBox.isSelected())
-            this.affichageDeroulementAlgo = 1;
-        else this.affichageDeroulementAlgo = 0;
+            affichageDeroulementAlgo = true;
+        else affichageDeroulementAlgo = false;
     }
 
 
@@ -637,11 +654,11 @@ public class Launch extends JFrame {
                 makeControlPanel(22);
                 try {
                     clickCoord = graphe.situerClick();
-                    jTextFieldOrigine.setText(clickCoord.get(1).toString());
+                    jTextFieldOrigine.setText(clickCoord.get(2).toString());
                     clickCoord = graphe.situerClick();
-                    jTextFieldPieton.setText(clickCoord.get(1).toString());
+                    jTextFieldPieton.setText(clickCoord.get(2).toString());
                     clickCoord = graphe.situerClick();
-                    jTextFieldDest.setText(clickCoord.get(1).toString());
+                    jTextFieldDest.setText(clickCoord.get(2).toString());
                 }
                 catch (NumberFormatException n) {
                     System.out.println(n);
@@ -659,7 +676,7 @@ public class Launch extends JFrame {
         choixCout = 1;
 
         // Choix de ne pas affichager le déroulement des algo
-        affichageDeroulementAlgo = 0;
+        affichageDeroulementAlgo = false;
     }
 
 
@@ -830,7 +847,8 @@ public class Launch extends JFrame {
                 break;
 
             // Obtenir un numéro de sommet
-            case 7:
+            case 8:
+
                 jButtonOk.setEnabled(true);
                 controlPanel.add(jLabelCoordClick);
                 controlPanel.add(jLabelCoordSitues);
@@ -838,6 +856,8 @@ public class Launch extends JFrame {
                 controlPanel.add(jLabelNoeudsProches);
                 controlPanel.add(jTextField2);
                 controlPanel.add(jButtonOk);
+                break;
+            default:
                 break;
         }
         cp.add(controlPanel, 0);
@@ -875,25 +895,38 @@ public class Launch extends JFrame {
      * Afficher les résultats dans un pop-up
      */
 
-    void afficherEtEcrireResultats(int choix, ArrayList performances) {
-        if (choix == 1)
-            resultat = "PCC Standard : Dijkstra non guidé\n";
-        else
-            resultat = "PCC A-Star : Dijkstra guidé\n";
-        resultat += "Carte : " + nomcarte + "\n";
+    void afficherEtEcrireResultats(int choixAlgo, ArrayList performances) {
+        switch (choixAlgo) {
+            // Menu de lancement de l'application
+            case 1:
+                resultat = "PCC Standard : Dijkstra non guidé\n";
+                break;
+            case 2:
+                resultat = "PCC A-Star : Dijkstra guidé\n";
+                break;
+            case 3:
+                resultat = "Connexité\n";
+                break;
+            default:
+                break;
+        }
+        resultat += "Carte : " + nomCarte + "\n";
         resultat += "Origine : " + origine + "\n";
         resultat += "Arrivée : " + dest + "\n";
         if (performances == null)
             resultat += "Erreur)";
         else {
-            cout = (choixCout == 0) ? "distance" : "temps";
-            if (choixCout == 0)
-                resultat += "Le cout en " + cout + " est de : " + performances.get(0) + "km\n";
-            else
-                resultat += "Le cout en " + cout + " est de : " + performances.get(0) + "min\n";
+            resultat += "Connexité : " + performances.get(0) + "\n";
             resultat += "Temps de Calcul : " + performances.get(1) + " ms\n";
-            resultat += "Nb max d'element : " + performances.get(2) + "\n";
-            resultat += "Nb elements explores : " + performances.get(3);
+            if(choixAlgo != 3) {
+                cout = (choixCout == 0) ? "distance" : "temps";
+                if (choixCout == 0)
+                    resultat += "Le cout en " + cout + " est de : " + performances.get(2) + "km\n";
+                else
+                    resultat += "Le cout en " + cout + " est de : " + performances.get(2) + "min\n";
+                resultat += "Nb max d'element : " + performances.get(3) + "\n";
+                resultat += "Nb elements explores : " + performances.get(4);
+            }
             // Affichage résultats
             JOptionPane.showMessageDialog(null, resultat);
         }
@@ -903,20 +936,21 @@ public class Launch extends JFrame {
     }
     void afficherEtEcrireResultats(ArrayList perf1, ArrayList perf2) {
         resultat = "Programme de test des algorithmes Dijkstra : PCC Standard vs. PCC A-Star\n";
-        resultat += "Carte : " + nomcarte + "\n";
+        resultat += "Carte : " + nomCarte + "\n";
         resultat += "Origine : " + origine + "\n";
         resultat += "Arrivée : " + dest + "\n";
         if (perf1 == null || perf2 == null)
             resultat += "Erreur)";
         else {
+            resultat += "Connexité : " + perf1.get(0) + "\n";
+            resultat += "Temps de Calcul : " + perf1.get(1) + " ms - " + perf2.get(1) + " ms \n";
             cout = (choixCout == 0) ? "distance" : "temps";
             if (choixCout == 0)
-                resultat += "Le cout en " + cout + " est de : " + perf1.get(0) + " km - " + perf2.get(0) + " km \n";
+                resultat += "Le cout en " + cout + " est de : " + perf1.get(2) + " km - " + perf2.get(2) + " km \n";
             else
-                resultat += "Le cout en " + cout + " est de : " + perf1.get(0) + " min - " + perf2.get(0) + " min \n";
-            resultat += "Temps de Calcul : " + perf1.get(1) + " ms - " + perf2.get(1) + " ms \n";
-            resultat += "Nbr max éléments dans le tas : " + perf1.get(2) + " - " + perf2.get(2) + "\n";
-            resultat += "Nombre d'éléments parcourut : " + perf1.get(3) + " - " + perf2.get(3) + "\n\n";
+                resultat += "Le cout en " + cout + " est de : " + perf1.get(2) + " min - " + perf2.get(2) + " min \n";
+            resultat += "Nbr max éléments dans le tas : " + perf1.get(3) + " - " + perf2.get(3) + "\n";
+            resultat += "Nombre d'éléments parcourut : " + perf1.get(4) + " - " + perf2.get(4) + "\n\n";
             // Affichage résultats
             JOptionPane.showMessageDialog(null, resultat);
         }
@@ -927,18 +961,22 @@ public class Launch extends JFrame {
     void afficherEtEcrireResultats(ArrayList perfVoitureTous, ArrayList perfPietonTous, ArrayList perfDestTous, Node node, double min, double duree) {
         cout = (choixCout == 0) ? "distance" : "temps";
         resultat = "Covoiturage\n";
-        resultat += "Carte : " + nomcarte + "\n";
+        resultat += "Carte : " + nomCarte + "\n";
         resultat += "Origine Voiture : " + origine + "\n";
         resultat += "Origine Pieton : " + pieton + "\n";
         resultat += "Arrivée : " + dest + "\n";
-        if (perfVoitureTous == null || perfPietonTous == null || perfDestTous == null || min == Double.POSITIVE_INFINITY)
-            resultat += "Aucun noeud de rencontre trouvé ! \n";
+        if (perfVoitureTous == null || perfPietonTous == null || perfDestTous == null)
+            resultat += "Erreur)";
         else {
-            resultat += "On est bien arrivé ! \n" +
-                    "Rencontre au noeud  : " + node + "\n" +
-                    "Avec pour temps : " + min + " min\n";
+            if (min == Double.POSITIVE_INFINITY)
+                resultat += "Aucun noeud de rencontre trouvé ! \n";
+            else {
+                resultat += "On est bien arrivé ! \n" +
+                        "Rencontre au noeud  : " + node + "\n" +
+                        "Avec pour temps : " + min + " min\n";
+            }
+            resultat += "Durée exécution : " + duree + " ms \n\n";
         }
-        resultat += "Durée exécution : " + duree + " ms \n\n";
         // Affichage résultats
         JOptionPane.showMessageDialog(null, resultat);
         resultat += "\n\n";
