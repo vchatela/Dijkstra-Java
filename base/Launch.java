@@ -898,8 +898,8 @@ public class Launch extends JFrame {
             if (choixCout == 0)
                 resultat += "Le cout en " + cout + " est de : " + performances.get(0) + "km\n";
             else
-                resultat += "Le cout en " + cout + " est de : " + performances.get(0) + "min\n";
-            resultat += "Temps de Calcul : " + performances.get(1) + " ms\n";
+                resultat += "Le cout en " + cout + " est de : " + AffichageTempsHeureMin((double) performances.get(0));
+            resultat += "Temps de Calcul : " + AffichageTempsCalcul((double) performances.get(1));
             resultat += "Nb max d'element : " + performances.get(2) + "\n";
             resultat += "Nb elements explores : " + performances.get(3);
             // Affichage résultats
@@ -909,6 +909,31 @@ public class Launch extends JFrame {
         // On ecrit dans le fichier
         sortie.append(resultat);
     }
+
+    String AffichageTempsHeureMin(double min) {
+        int heure = 0;
+        double minute;
+
+        if (min >= 60) {
+            heure = (int) min / 60;
+            minute = min % 60;
+            return (heure + " heure(s) et " + minute + " minute(s) \n");
+        }
+        return (min + "min \n");
+    }
+
+    String AffichageTempsCalcul(double ms) {
+        int sec = 0;
+        double milli;
+
+        if (ms >= 1000) {
+            sec = (int) ms / 1000;
+            milli = ms % 1000;
+            return (sec + " seconde(s) " + milli + "\n");
+        }
+        return (ms + "ms \n");
+    }
+
     void afficherEtEcrireResultats(ArrayList perf1, ArrayList perf2) {
         resultat = "Programme de test des algorithmes Dijkstra : PCC Standard vs. PCC A-Star\n";
         resultat += "Carte : " + nomcarte + "\n";
@@ -921,8 +946,8 @@ public class Launch extends JFrame {
             if (choixCout == 0)
                 resultat += "Le cout en " + cout + " est de : " + perf1.get(0) + " km - " + perf2.get(0) + " km \n";
             else
-                resultat += "Le cout en " + cout + " est de : " + perf1.get(0) + " min - " + perf2.get(0) + " min \n";
-            resultat += "Temps de Calcul : " + perf1.get(1) + " ms - " + perf2.get(1) + " ms \n";
+                resultat += "Le cout en " + cout + " est de : " + AffichageTempsHeureMin((double) perf1.get(0)) + " - " + AffichageTempsHeureMin((double) perf2.get(0));
+            resultat += "Temps de Calcul : " + AffichageTempsCalcul((double) perf1.get(1)) + " - " + AffichageTempsCalcul((double) perf2.get(1));
             resultat += "Nbr max éléments dans le tas : " + perf1.get(2) + " - " + perf2.get(2) + "\n";
             resultat += "Nombre d'éléments parcourut : " + perf1.get(3) + " - " + perf2.get(3) + "\n\n";
             // Affichage résultats
@@ -943,9 +968,9 @@ public class Launch extends JFrame {
             resultat += "Aucun noeud de rencontre trouvé ! \n";
         else {
             resultat += "Rencontre au noeud  : " + node.getNum() + "\n" +
-                    "Avec pour temps : " + min + " min\n";
+                    "Avec pour temps : " + AffichageTempsHeureMin(min);
         }
-        resultat += "Durée exécution : " + duree + " ms \n\n";
+        resultat += "Durée exécution : " + AffichageTempsCalcul(duree) + "\n";
         // Affichage résultats
         JOptionPane.showMessageDialog(null, resultat);
         resultat += "\n\n";

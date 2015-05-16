@@ -27,7 +27,7 @@ public class Pcc_Generique<E extends Comparable<E>> extends Algo {
     //fait correspondre un noeud a un Label
     protected HashMap<Node, E> mapLabel;
     //duree d'execution
-    protected long duree;
+    protected double duree;
     //Nombre maximum d'elemnt dans le tas
     protected int maxTas;
     //Nombre d'element explores
