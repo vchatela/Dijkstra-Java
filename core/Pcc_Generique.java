@@ -151,7 +151,7 @@ public class Pcc_Generique<E extends Comparable<E>> extends Algo {
         }
         //Afficher le resultat du calcul - ou rediriger sur fichier
         chemin();
-
+        duree = System.currentTimeMillis() - duree;
         // Mise à jour du résultat pour affichage et fichier de sortie
         ArrayList resultat = new ArrayList();
         if (choixCout == 0)
