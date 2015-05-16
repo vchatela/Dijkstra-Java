@@ -5,11 +5,13 @@ import java.awt.*;
 /**
  * Created by valentin on 4/29/15.
  */
-public class Pcc_Dijkstra extends Pcc_Generique<Label> {
+public class Pcc_Dijkstra extends Pcc_Generique<Label_Dijkstra> {
 
-    public Pcc_Dijkstra(Graphe gr, int choixCout, boolean affichageDeroulementAlgo, int origine, int destination, boolean TOUS) {
-        super(gr, choixCout, affichageDeroulementAlgo, origine, destination, TOUS);
 
+    public Pcc_Dijkstra(Graphe gr, int choixCout, int affichageDeroulementAlgo, int origine, int dest, boolean TOUS, boolean pieton) {
+        super(gr, choixCout, affichageDeroulementAlgo, origine, dest, TOUS, pieton);
+
+        this.pieton = pieton;
         this.graphe.getDessin().setColor(Color.magenta);
     }
 

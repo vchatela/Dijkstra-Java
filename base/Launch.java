@@ -7,7 +7,6 @@ package base;
 
 
 import core.*;
-import core.Label;
 
 import javax.swing.*;
 import javax.swing.border.BevelBorder;
@@ -340,7 +339,7 @@ public class Launch extends JFrame {
                     case 2:
                         // Initialisation et lancement de l'algorithme
                         initialiserAlgo();
-                        algo = new Pcc_Dijkstra(graphe, choixCout, affichageDeroulementAlgo, origine, dest, false);
+                        algo = new Pcc_Dijkstra(graphe, choixCout, affichageDeroulementAlgo, origine, dest, false, false);
                         ArrayList perfStandard = algo.run();
                         afficherEtEcrireResultats(1, perfStandard);
                         break;
@@ -350,7 +349,7 @@ public class Launch extends JFrame {
 
                         //Initialisation et lancement de l'algorithme
                         initialiserAlgo();
-                        algo = new Pcc_Star(graphe, choixCout, affichageDeroulementAlgo, origine, dest, false);
+                        algo = new Pcc_Star(graphe, choixCout, affichageDeroulementAlgo, origine, dest, false, false);
                         ArrayList perfAStar = algo.run();
                         afficherEtEcrireResultats(2, perfAStar);
                         break;
@@ -361,8 +360,8 @@ public class Launch extends JFrame {
                         initialiserAlgo();
 
                         // 1i algo -> PCC Standard : Dijkstra, 2i algo -> PCC A-Star : Dijkstra guidé
-                        algo1 = new Pcc_Dijkstra(graphe, choixCout, affichageDeroulementAlgo, origine, dest, false);
-                        algo = new Pcc_Star(graphe, choixCout, affichageDeroulementAlgo, origine, dest, false);
+                        algo1 = new Pcc_Dijkstra(graphe, choixCout, affichageDeroulementAlgo, origine, dest, false, false);
+                        algo = new Pcc_Star(graphe, choixCout, affichageDeroulementAlgo, origine, dest, false, false);
 
                         // Lancement des algorithmes et récupération des résultats
                         graphe.getDessin().setColor(Color.magenta);
@@ -392,17 +391,17 @@ public class Launch extends JFrame {
                         // Lancement des algorithmes
 
                         // PCC de la VOITURE vers TOUS : récupération de l'arraylist des couts
-                        algo = new Pcc_Dijkstra(graphe, choixCout, affichageDeroulementAlgo, origine, dest, true);
+                        algo = new Pcc_Dijkstra(graphe, choixCout, affichageDeroulementAlgo, origine, dest, true, false);
                         perfVoitureTous = algo.run();
                         ArrayList<Label> covoitVoiture = algo.getLabels();
 
                         // PCC du PIETON vers TOUS : màj de l'arraylist s'il est plus grand
-                        algo = new Pcc_Dijkstra(graphe, choixCout, affichageDeroulementAlgo, pieton, dest, true);
+                        algo = new Pcc_Dijkstra(graphe, choixCout, affichageDeroulementAlgo, pieton, dest, true, true);
                         perfPietonTous = algo.run();
                         ArrayList<Label> covoitPieton = algo.getLabels();
 
                         // PCC de la DESTINATION vers TOUS : màj de l'arraylist si max (x,y) < Pcc(dest, noeud) + Pcc( (x ou y) vers noeuds )
-                        algo = new Pcc_Dijkstra(graphe, choixCout, affichageDeroulementAlgo, dest, dest, true);
+                        algo = new Pcc_Dijkstra(graphe, choixCout, affichageDeroulementAlgo, dest, origine, true, false);
                         perfDestTous = algo.run();
                         ArrayList<Label> covoitDestination = algo.getLabels();
 
@@ -411,7 +410,7 @@ public class Launch extends JFrame {
                             // Choisir le cout (temps) le plus élevé entre :
                             // - celui de la VOITURE vers TOUS
                             // - celui du PIETONS vers TOUS
-                            // -> determine le temps minimum
+                            // -> determine le temps minimum pour se rejoindre
                             // Il y aura un cout INFINY s'il n'y a pas de noeud en commun entre les deux
                             if (covoitVoiture.get(i).getCout() < covoitPieton.get(i).getCout())
                                 covoitSomme.add(i, covoitPieton.get(i));
@@ -419,11 +418,18 @@ public class Launch extends JFrame {
                                 covoitSomme.add(i, covoitVoiture.get(i));
 
                             // Mise à jour entre : le max des 2 couts entre PIETON et VOITURE plus celui de la DESTINATION :
-                            // Si ce nouveau cout est inférieur au maximum PRECEDENT, on
-                            //TODO : t'es sur pour ceci ? car on utilise jamais covoitDestination...
                             covoitSomme.get(i).setCout(covoitSomme.get(i).getCout() + covoitDestination.get(i).getCout());
-                            if (covoitSomme.get(i).getCout() < Math.max(covoitVoiture.get(i).getCout(), covoitPieton.get(i).getCout()))
-                                covoitDestination.set(i, covoitSomme.get(i));
+                            // si ce temps est > au temps qu'aurait mis les deux alors ils y vont directs
+                            if (covoitSomme.get(i).getCout() > Math.max(covoitVoiture.get(i).getCout(), covoitPieton.get(i).getCout()))
+                                if (covoitVoiture.get(i).getCout() > covoitPieton.get(i).getCout())
+                                    covoitDestination.set(i, covoitVoiture.get(i));
+                                else
+                                    covoitDestination.set(i, covoitPieton.get(i));
+
+                            // if (covoitSomme.get(i).getCout() < Math.max(covoitVoiture.get(i).getCout(), covoitPieton.get(i).getCout()))
+                                // TODO : je comprend pas cette ligne ... je pense que l'erreur vient d'ici ...
+                            // covoitDestination.set(i, covoitSomme.get(i));
+
 
                             // Ici covoitSomme nous donne le coup du noeud i (PIETON inter VOITURE) vers DESTINATION
                             // On garde le minimum
@@ -448,10 +454,14 @@ public class Launch extends JFrame {
                         // Test si le point de rencontre est trouvé
                         if (noeud_rejoint != -1 && display) {
                             // on trace le point de rencontre
+                            node = this.graphe.getArrayList().get(noeud_rejoint);
+                            this.graphe.getDessin().setColor(Color.magenta);
+                            this.graphe.getDessin().drawPoint(node.getLongitude(), node.getLatitude(), 12);
                             node = graphe.getArrayList().get(noeud_rejoint);
                             graphe.getDessin().drawPoint(node.getLongitude(), node.getLatitude(), 12);
                         }
-
+                        // TODO : par contre tracer le chemin final ! cad du départ à l'arrivée pour les 2 !
+                        // TODO : mettre les résultats sous la forme heure / min
                         afficherEtEcrireResultats(perfVoitureTous, perfPietonTous, perfDestTous, node, min, duree);
 
                         break;
@@ -927,6 +937,14 @@ public class Launch extends JFrame {
                 resultat += "Nb max d'element : " + performances.get(3) + "\n";
                 resultat += "Nb elements explores : " + performances.get(4);
             }
+            cout = (choixCout == 0) ? "distance" : "temps";
+            if (choixCout == 0)
+                resultat += "Le cout en " + cout + " est de : " + performances.get(0) + "km\n";
+            else
+                resultat += "Le cout en " + cout + " est de : " + AffichageTempsHeureMin((double) performances.get(0));
+            resultat += "Temps de Calcul : " + AffichageTempsCalcul((double) performances.get(1));
+            resultat += "Nb max d'element : " + performances.get(2) + "\n";
+            resultat += "Nb elements explores : " + performances.get(3);
             // Affichage résultats
             JOptionPane.showMessageDialog(null, resultat);
         }
@@ -934,6 +952,31 @@ public class Launch extends JFrame {
         // On ecrit dans le fichier
         sortie.append(resultat);
     }
+
+    String AffichageTempsHeureMin(double min) {
+        int heure = 0;
+        double minute;
+
+        if (min >= 60) {
+            heure = (int) min / 60;
+            minute = min % 60;
+            return (heure + " heure(s) et " + minute + " minute(s) \n");
+        }
+        return (min + "min \n");
+    }
+
+    String AffichageTempsCalcul(double ms) {
+        int sec = 0;
+        double milli;
+
+        if (ms >= 1000) {
+            sec = (int) ms / 1000;
+            milli = ms % 1000;
+            return (sec + " seconde(s) " + milli + "\n");
+        }
+        return (ms + "ms \n");
+    }
+
     void afficherEtEcrireResultats(ArrayList perf1, ArrayList perf2) {
         resultat = "Programme de test des algorithmes Dijkstra : PCC Standard vs. PCC A-Star\n";
         resultat += "Carte : " + nomCarte + "\n";
@@ -948,6 +991,10 @@ public class Launch extends JFrame {
             if (choixCout == 0)
                 resultat += "Le cout en " + cout + " est de : " + perf1.get(2) + " km - " + perf2.get(2) + " km \n";
             else
+                resultat += "Le cout en " + cout + " est de : " + AffichageTempsHeureMin((double) perf1.get(0)) + " - " + AffichageTempsHeureMin((double) perf2.get(0));
+            resultat += "Temps de Calcul : " + AffichageTempsCalcul((double) perf1.get(1)) + " - " + AffichageTempsCalcul((double) perf2.get(1));
+            resultat += "Nbr max éléments dans le tas : " + perf1.get(2) + " - " + perf2.get(2) + "\n";
+            resultat += "Nombre d'éléments parcourut : " + perf1.get(3) + " - " + perf2.get(3) + "\n\n";
                 resultat += "Le cout en " + cout + " est de : " + perf1.get(2) + " min - " + perf2.get(2) + " min \n";
             resultat += "Nbr max éléments dans le tas : " + perf1.get(3) + " - " + perf2.get(3) + "\n";
             resultat += "Nombre d'éléments parcourut : " + perf1.get(4) + " - " + perf2.get(4) + "\n\n";
@@ -968,6 +1015,8 @@ public class Launch extends JFrame {
         if (perfVoitureTous == null || perfPietonTous == null || perfDestTous == null)
             resultat += "Erreur)";
         else {
+            resultat += "Rencontre au noeud  : " + node.getNum() + "\n" +
+                    "Avec pour temps : " + AffichageTempsHeureMin(min);
             if (min == Double.POSITIVE_INFINITY)
                 resultat += "Aucun noeud de rencontre trouvé ! \n";
             else {
@@ -977,6 +1026,7 @@ public class Launch extends JFrame {
             }
             resultat += "Durée exécution : " + duree + " ms \n\n";
         }
+        resultat += "Durée exécution : " + AffichageTempsCalcul(duree) + "\n";
         // Affichage résultats
         JOptionPane.showMessageDialog(null, resultat);
         resultat += "\n\n";

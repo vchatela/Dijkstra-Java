@@ -5,10 +5,10 @@ import base.Readarg;
 import java.awt.*;
 import java.io.PrintStream;
 
-public class Pcc_Star extends Pcc_Generique<Label_Star> {
+public class PccStar extends Pcc_Generique<Label_Star> {
 
-    public Pcc_Star(Graphe gr, int choixCout, boolean affichageDeroulementAlgo, int origine, int destination, boolean TOUS) {
-        super(gr, choixCout, affichageDeroulementAlgo, origine, destination, TOUS);
+    public PccStar(Graphe gr, int choixCout, int affichageDeroulementAlgo, int origine, int dest, boolean TOUS, boolean pieton) {
+        super(gr, choixCout, affichageDeroulementAlgo, origine, dest, TOUS, pieton);
 
         this.graphe.getDessin().setColor(Color.red);
     }
