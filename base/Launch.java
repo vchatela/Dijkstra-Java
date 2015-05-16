@@ -7,7 +7,6 @@ package base;
 
 
 import core.*;
-import core.Label;
 
 import javax.swing.*;
 import javax.swing.event.DocumentEvent;
@@ -385,7 +384,7 @@ public class Launch extends JFrame {
                         ArrayList<Label_Dijkstra> covoitPieton = algo.getLabels();
 
                         // PCC de la DESTINATION vers TOUS : màj de l'arraylist si max (x,y) < Pcc(dest, noeud) + Pcc( (x ou y) vers noeuds )
-                        algo = new Pcc_Dijkstra(graphe, choixCout, affichageDeroulementAlgo, dest, dest, true);
+                        algo = new Pcc_Dijkstra(graphe, choixCout, affichageDeroulementAlgo, dest, origine, true);
                         perfDestTous = algo.run();
                         ArrayList<Label_Dijkstra> covoitDestination = algo.getLabels();
 
@@ -402,8 +401,7 @@ public class Launch extends JFrame {
                                 covoitSomme.add(i, covoitVoiture.get(i));
 
                             // Mise à jour entre : le max des 2 couts entre PIETON et VOITURE plus celui de la DESTINATION :
-                            // Si ce nouveau cout est inférieur au maximum PRECEDENT, on
-                            //TODO : t'es sur pour ceci ? car on utilise jamais covoitDestination...
+                            // Si ce nouveau cout est inférieur au maximum PRECEDENT
                             covoitSomme.get(i).setCout(covoitSomme.get(i).getCout() + covoitDestination.get(i).getCout());
                             if (covoitSomme.get(i).getCout() < Math.max(covoitVoiture.get(i).getCout(), covoitPieton.get(i).getCout()))
                                 covoitDestination.set(i, covoitSomme.get(i));

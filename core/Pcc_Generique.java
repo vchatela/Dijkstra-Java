@@ -1,9 +1,6 @@
 package core;
 
-import base.Readarg;
-
 import javax.swing.*;
-import java.io.PrintStream;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
@@ -17,17 +14,17 @@ public class Pcc_Generique<E extends Comparable<E>> extends Algo {
     protected int zoneDestination;
     protected int destination;
 
-    //liste de tous les Label_Dijkstras
+    //liste de tous les Labels
     protected ArrayList<E> labels;
     //Le tas
     protected BinaryHeap<E> tas;
-    //Label_Dijkstra destinataire
+    //Label destinataire
     protected E dest;
     //Afficher ou non le deroulement de l'algo
     protected int choixAffichage;
     //en temps (choixCout=1),  en distance (choixCout=0)
     protected int choixCout;
-    //fait correspondre un noeud a un Label_Dijkstra
+    //fait correspondre un noeud a un Label
     protected HashMap<Node, E> mapLabel;
     //duree d'execution
     protected long duree;
@@ -95,10 +92,6 @@ public class Pcc_Generique<E extends Comparable<E>> extends Algo {
 		 * Si ils sont pas marque alors on met a jour leur valeur du cout : valeur du cout du noeud + cout de l'arc
 		 * Si ils sont deja marque, alors teste si cette valeur est inferieure a la valeur qu'a deja ce noeud
 		 * 			si < alors update sinon rien
-		 * 
-		 * 
-		 * A reflechir : est il possible qu'un noeud deja traite soit modifie et qu'il faille modifier les cout
-		 * de tous les noeuds qui utilise sur leur chemin ce noeud ?
 		 */
 
 		/* Boucle principale*/
