@@ -150,6 +150,7 @@ public class Pcc_Generique<E extends Comparable<E>> extends Algo {
             }
         }
         //Afficher le resultat du calcul - ou rediriger sur fichier
+        // TODO : si on est dans le cas du covoit ne pas afficher les chemins ! Inutile
         chemin();
         duree = System.currentTimeMillis() - duree;
         // Mise à jour du résultat pour affichage et fichier de sortie

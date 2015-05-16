@@ -403,9 +403,16 @@ public class Launch extends JFrame {
                             // Mise à jour entre : le max des 2 couts entre PIETON et VOITURE plus celui de la DESTINATION :
                             covoitSomme.get(i).setCout(covoitSomme.get(i).getCout() + covoitDestination.get(i).getCout());
                             // si ce temps est > au temps qu'aurait mis les deux alors ils y vont directs
-                            if (covoitSomme.get(i).getCout() < Math.max(covoitVoiture.get(i).getCout(), covoitPieton.get(i).getCout()))
+                            if (covoitSomme.get(i).getCout() > Math.max(covoitVoiture.get(i).getCout(), covoitPieton.get(i).getCout()))
+                                if (covoitVoiture.get(i).getCout() > covoitPieton.get(i).getCout())
+                                    covoitDestination.set(i, covoitVoiture.get(i));
+                                else
+                                    covoitDestination.set(i, covoitPieton.get(i));
+
+                            // if (covoitSomme.get(i).getCout() < Math.max(covoitVoiture.get(i).getCout(), covoitPieton.get(i).getCout()))
                                 // TODO : je comprend pas cette ligne ... je pense que l'erreur vient d'ici ...
-                                covoitDestination.set(i, covoitSomme.get(i));
+                            // covoitDestination.set(i, covoitSomme.get(i));
+
 
                             // Ici covoitSomme nous donne le coup du noeud i (PIETON inter VOITURE) vers DESTINATION
                             // On garde le minimum
@@ -434,6 +441,7 @@ public class Launch extends JFrame {
                             this.graphe.getDessin().setColor(Color.magenta);
                             this.graphe.getDessin().drawPoint(node.getLongitude(), node.getLatitude(), 12);
                         }
+                        // TODO : par contre tracer le chemin final ! cad du départ à l'arrivée pour les 2 !
                         // TODO : mettre les résultats sous la forme heure / min
                         afficherEtEcrireResultats(perfVoitureTous, perfPietonTous, perfDestTous, node, min, duree);
 
