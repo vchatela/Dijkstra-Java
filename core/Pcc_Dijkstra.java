@@ -5,10 +5,10 @@ import java.awt.*;
 /**
  * Created by valentin on 4/29/15.
  */
-public class Pcc_Dijkstra extends Pcc_Generique<Label_Dijkstra> {
+public class Pcc_Dijkstra extends Pcc_Generique<Label> {
 
 
-    public Pcc_Dijkstra(Graphe gr, int choixCout, int affichageDeroulementAlgo, int origine, int dest, boolean TOUS, boolean pieton) {
+    public Pcc_Dijkstra(Graphe gr, int choixCout, boolean affichageDeroulementAlgo, int origine, int dest, boolean TOUS, boolean pieton) {
         super(gr, choixCout, affichageDeroulementAlgo, origine, dest, TOUS, pieton);
 
         this.pieton = pieton;

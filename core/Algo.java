@@ -17,7 +17,7 @@ public abstract class Algo<E extends Comparable<E>> {
     protected int destination;
     protected Label_Generique dest;        // Label destinataire
     protected boolean affichageDeroulementAlgo;      // Affichage du deroulement de l'algo
-    protected long duree;                  // Duree d'execution
+    protected double duree;                  // Duree d'execution
     protected boolean connexes;            // Les noeuds origine et destination sont-ils connexes
 
     protected Algo(Graphe gr) {

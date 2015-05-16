@@ -7,6 +7,7 @@ package base;
 
 
 import core.*;
+import core.Label;
 
 import javax.swing.*;
 import javax.swing.border.BevelBorder;
@@ -454,14 +455,11 @@ public class Launch extends JFrame {
                         // Test si le point de rencontre est trouvé
                         if (noeud_rejoint != -1 && display) {
                             // on trace le point de rencontre
-                            node = this.graphe.getArrayList().get(noeud_rejoint);
-                            this.graphe.getDessin().setColor(Color.magenta);
-                            this.graphe.getDessin().drawPoint(node.getLongitude(), node.getLatitude(), 12);
                             node = graphe.getArrayList().get(noeud_rejoint);
+                            graphe.getDessin().setColor(Color.magenta);
                             graphe.getDessin().drawPoint(node.getLongitude(), node.getLatitude(), 12);
                         }
                         // TODO : par contre tracer le chemin final ! cad du départ à l'arrivée pour les 2 !
-                        // TODO : mettre les résultats sous la forme heure / min
                         afficherEtEcrireResultats(perfVoitureTous, perfPietonTous, perfDestTous, node, min, duree);
 
                         break;
@@ -927,24 +925,15 @@ public class Launch extends JFrame {
             resultat += "Erreur)";
         else {
             resultat += "Connexité : " + performances.get(0) + "\n";
-            resultat += "Temps de Calcul : " + performances.get(1) + " ms\n";
+            resultat += "Temps de Calcul : " + AffichageTempsCalcul((double) performances.get(1)) + "\n";
             if(choixAlgo != 3) {
-                cout = (choixCout == 0) ? "distance" : "temps";
                 if (choixCout == 0)
-                    resultat += "Le cout en " + cout + " est de : " + performances.get(2) + "km\n";
+                    resultat += "Le cout en distance est de : " + performances.get(2) + "km\n";
                 else
-                    resultat += "Le cout en " + cout + " est de : " + performances.get(2) + "min\n";
+                    resultat += "Le cout en temps est de : " + AffichageTempsHeureMin((double) performances.get(2)) + "\n";
                 resultat += "Nb max d'element : " + performances.get(3) + "\n";
                 resultat += "Nb elements explores : " + performances.get(4);
             }
-            cout = (choixCout == 0) ? "distance" : "temps";
-            if (choixCout == 0)
-                resultat += "Le cout en " + cout + " est de : " + performances.get(0) + "km\n";
-            else
-                resultat += "Le cout en " + cout + " est de : " + AffichageTempsHeureMin((double) performances.get(0));
-            resultat += "Temps de Calcul : " + AffichageTempsCalcul((double) performances.get(1));
-            resultat += "Nb max d'element : " + performances.get(2) + "\n";
-            resultat += "Nb elements explores : " + performances.get(3);
             // Affichage résultats
             JOptionPane.showMessageDialog(null, resultat);
         }
@@ -960,9 +949,9 @@ public class Launch extends JFrame {
         if (min >= 60) {
             heure = (int) min / 60;
             minute = min % 60;
-            return (heure + " heure(s) et " + minute + " minute(s) \n");
+            return (heure + " heure(s) et " + minute + " minute(s) ");
         }
-        return (min + "min \n");
+        return (min + "min ");
     }
 
     String AffichageTempsCalcul(double ms) {
@@ -972,9 +961,9 @@ public class Launch extends JFrame {
         if (ms >= 1000) {
             sec = (int) ms / 1000;
             milli = ms % 1000;
-            return (sec + " seconde(s) " + milli + "\n");
+            return (sec + " seconde(s) " + milli);
         }
-        return (ms + "ms \n");
+        return (ms + "ms");
     }
 
     void afficherEtEcrireResultats(ArrayList perf1, ArrayList perf2) {
@@ -986,16 +975,11 @@ public class Launch extends JFrame {
             resultat += "Erreur)";
         else {
             resultat += "Connexité : " + perf1.get(0) + "\n";
-            resultat += "Temps de Calcul : " + perf1.get(1) + " ms - " + perf2.get(1) + " ms \n";
-            cout = (choixCout == 0) ? "distance" : "temps";
+            resultat += "Temps de Calcul : " + AffichageTempsCalcul((double) perf1.get(1)) + " - " + AffichageTempsCalcul((double) perf2.get(1)) + "\n";
             if (choixCout == 0)
-                resultat += "Le cout en " + cout + " est de : " + perf1.get(2) + " km - " + perf2.get(2) + " km \n";
+                resultat += "Le cout en distance est de : " + perf1.get(2) + " km - " + perf2.get(2) + " km \n";
             else
-                resultat += "Le cout en " + cout + " est de : " + AffichageTempsHeureMin((double) perf1.get(0)) + " - " + AffichageTempsHeureMin((double) perf2.get(0));
-            resultat += "Temps de Calcul : " + AffichageTempsCalcul((double) perf1.get(1)) + " - " + AffichageTempsCalcul((double) perf2.get(1));
-            resultat += "Nbr max éléments dans le tas : " + perf1.get(2) + " - " + perf2.get(2) + "\n";
-            resultat += "Nombre d'éléments parcourut : " + perf1.get(3) + " - " + perf2.get(3) + "\n\n";
-                resultat += "Le cout en " + cout + " est de : " + perf1.get(2) + " min - " + perf2.get(2) + " min \n";
+                resultat += "Le cout en temps est de : " + AffichageTempsHeureMin((double) perf1.get(2)) + " - " + AffichageTempsHeureMin((double) perf2.get(2)) + "\n";
             resultat += "Nbr max éléments dans le tas : " + perf1.get(3) + " - " + perf2.get(3) + "\n";
             resultat += "Nombre d'éléments parcourut : " + perf1.get(4) + " - " + perf2.get(4) + "\n\n";
             // Affichage résultats
@@ -1015,18 +999,15 @@ public class Launch extends JFrame {
         if (perfVoitureTous == null || perfPietonTous == null || perfDestTous == null)
             resultat += "Erreur)";
         else {
-            resultat += "Rencontre au noeud  : " + node.getNum() + "\n" +
-                    "Avec pour temps : " + AffichageTempsHeureMin(min);
             if (min == Double.POSITIVE_INFINITY)
                 resultat += "Aucun noeud de rencontre trouvé ! \n";
             else {
-                resultat += "On est bien arrivé ! \n" +
-                        "Rencontre au noeud  : " + node + "\n" +
-                        "Avec pour temps : " + min + " min\n";
+                resultat += "On est bien arrivé ! \n";
+                resultat += "Rencontre au noeud  : " + node.getNum() + "\n";
+                resultat += "Avec pour temps : " + AffichageTempsHeureMin(min) + "\n";
             }
-            resultat += "Durée exécution : " + duree + " ms \n\n";
+            resultat += "Durée exécution : " + AffichageTempsHeureMin(duree) + "\n\n";
         }
-        resultat += "Durée exécution : " + AffichageTempsCalcul(duree) + "\n";
         // Affichage résultats
         JOptionPane.showMessageDialog(null, resultat);
         resultat += "\n\n";
