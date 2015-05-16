@@ -378,8 +378,6 @@ public class Launch extends JFrame {
                         perfVoitureTous = algo.run();
                         ArrayList<Label_Dijkstra> covoitVoiture = algo.getLabels();
 
-                        // TODO : le pieton ne doit pas pouvoir prendre toutes les routes
-                        // TODO : vitesse max du pieton : 4 km/h
                         // PCC du PIETON vers TOUS : màj de l'arraylist s'il est plus grand
                         algo = new Pcc_Dijkstra(graphe, choixCout, affichageDeroulementAlgo, pieton, dest, true, true);
                         perfPietonTous = algo.run();
@@ -935,8 +933,7 @@ public class Launch extends JFrame {
         if (perfVoitureTous == null || perfPietonTous == null || perfDestTous == null || min == Double.POSITIVE_INFINITY)
             resultat += "Aucun noeud de rencontre trouvé ! \n";
         else {
-            resultat += "On est bien arrivé ! \n" +
-                    "Rencontre au noeud  : " + node + "\n" +
+            resultat += "Rencontre au noeud  : " + node + "\n" +
                     "Avec pour temps : " + min + " min\n";
         }
         resultat += "Durée exécution : " + duree + " ms \n\n";

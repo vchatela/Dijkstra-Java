@@ -105,15 +105,12 @@ public class Pcc_Generique<E extends Comparable<E>> extends Algo {
             ((Label) min).setMarque(true);
             // pour chaque successeurs / arc
             for (Arc arc : this.graphe.getArrayList().get(((Label) min).getNum_node()).getArrayListArc()) {
-
-                //TODO pour pfrance.x : si on sort de la map, ca plante
                 node_suc = this.graphe.getArrayList().get(arc.getNum_dest());
                 // Label_Dijkstra correspondant au noeud destinataire
                 E_succ = mapLabel.get(node_suc);
                 // si le noeud n'est pas marque
                 if (!(((Label) E_succ).isMarque())) {
                     // on met alors le cout a jour
-                    // TODO : verifier temps !
                     if (!pieton) {
                         new_cout = (choixCout == 0) ? arc.getLg_arete() + ((Label) min).getCout() : 60.0f * ((float) arc.getLg_arete()) / (1000.0f * (float) arc.getDescripteur().getVitMax()) + ((Label) min).getCout();
                     } else {
