@@ -393,7 +393,7 @@ public class Launch extends JFrame {
                             // Choisir le cout (temps) le plus élevé entre :
                             // - celui de la VOITURE vers TOUS
                             // - celui du PIETONS vers TOUS
-                            // -> determine le temps minimum
+                            // -> determine le temps minimum pour se rejoindre
                             // Il y aura un cout INFINY s'il n'y a pas de noeud en commun entre les deux
                             if (covoitVoiture.get(i).getCout() < covoitPieton.get(i).getCout())
                                 covoitSomme.add(i, covoitPieton.get(i));
@@ -401,9 +401,10 @@ public class Launch extends JFrame {
                                 covoitSomme.add(i, covoitVoiture.get(i));
 
                             // Mise à jour entre : le max des 2 couts entre PIETON et VOITURE plus celui de la DESTINATION :
-                            // Si ce nouveau cout est inférieur au maximum PRECEDENT
                             covoitSomme.get(i).setCout(covoitSomme.get(i).getCout() + covoitDestination.get(i).getCout());
+                            // si ce temps est > au temps qu'aurait mis les deux alors ils y vont directs
                             if (covoitSomme.get(i).getCout() < Math.max(covoitVoiture.get(i).getCout(), covoitPieton.get(i).getCout()))
+                                // TODO : je comprend pas cette ligne ... je pense que l'erreur vient d'ici ...
                                 covoitDestination.set(i, covoitSomme.get(i));
 
                             // Ici covoitSomme nous donne le coup du noeud i (PIETON inter VOITURE) vers DESTINATION
