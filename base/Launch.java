@@ -934,7 +934,7 @@ public class Launch extends JFrame {
         if (perfVoitureTous == null || perfPietonTous == null || perfDestTous == null || min == Double.POSITIVE_INFINITY)
             resultat += "Aucun noeud de rencontre trouvé ! \n";
         else {
-            resultat += "Rencontre au noeud  : " + node + "\n" +
+            resultat += "Rencontre au noeud  : " + node.getNum() + "\n" +
                     "Avec pour temps : " + min + " min\n";
         }
         resultat += "Durée exécution : " + duree + " ms \n\n";
