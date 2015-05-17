@@ -905,7 +905,6 @@ public class Launch extends JFrame {
 
     void afficherEtEcrireResultats(int choixAlgo, ArrayList performances) {
         switch (choixAlgo) {
-            // Menu de lancement de l'application
             case 1:
                 resultat = "PCC Standard : Dijkstra non guidé\n";
                 break;
@@ -925,45 +924,17 @@ public class Launch extends JFrame {
             resultat += "Erreur)";
         else {
             resultat += "Connexité : " + performances.get(0) + "\n";
-            resultat += "Temps de Calcul : " + AffichageTempsCalcul((double) performances.get(1)) + "\n";
+            resultat += "Temps de Calcul : " + performances.get(1) + "\n";
             if(choixAlgo != 3) {
-                if (choixCout == 0)
-                    resultat += "Le cout en distance est de : " + performances.get(2) + "km\n";
-                else
-                    resultat += "Le cout en temps est de : " + AffichageTempsHeureMin((double) performances.get(2)) + "\n";
+                if (choixCout == 0) resultat += "Le cout en distance est de : " + performances.get(2) + "\n";
+                else                resultat += "Le cout en temps est de : " + performances.get(2) + "\n";
                 resultat += "Nb max d'element : " + performances.get(3) + "\n";
-                resultat += "Nb elements explores : " + performances.get(4);
+                resultat += "Nb elements explorés : " + performances.get(4) + "\n";
+
             }
-            // Affichage résultats
-            JOptionPane.showMessageDialog(null, resultat);
         }
-        resultat += "\n\n";
-        // On ecrit dans le fichier
-        sortie.append(resultat);
-    }
-
-    String AffichageTempsHeureMin(double min) {
-        int heure = 0;
-        double minute;
-
-        if (min >= 60) {
-            heure = (int) min / 60;
-            minute = min % 60;
-            return (heure + " heure(s) et " + minute + " minute(s) ");
-        }
-        return (min + "min ");
-    }
-
-    String AffichageTempsCalcul(double ms) {
-        int sec = 0;
-        double milli;
-
-        if (ms >= 1000) {
-            sec = (int) ms / 1000;
-            milli = ms % 1000;
-            return (sec + " seconde(s) " + milli);
-        }
-        return (ms + "ms");
+        JOptionPane.showMessageDialog(null, resultat); // On affiche le resultats en popup
+        sortie.append(resultat + "\n\n"); // On ecrit dans le fichier
     }
 
     void afficherEtEcrireResultats(ArrayList perf1, ArrayList perf2) {
@@ -974,20 +945,15 @@ public class Launch extends JFrame {
         if (perf1 == null || perf2 == null)
             resultat += "Erreur)";
         else {
-            resultat += "Connexité : " + perf1.get(0) + "\n";
-            resultat += "Temps de Calcul : " + AffichageTempsCalcul((double) perf1.get(1)) + " - " + AffichageTempsCalcul((double) perf2.get(1)) + "\n";
-            if (choixCout == 0)
-                resultat += "Le cout en distance est de : " + perf1.get(2) + " km - " + perf2.get(2) + " km \n";
-            else
-                resultat += "Le cout en temps est de : " + AffichageTempsHeureMin((double) perf1.get(2)) + " - " + AffichageTempsHeureMin((double) perf2.get(2)) + "\n";
-            resultat += "Nbr max éléments dans le tas : " + perf1.get(3) + " - " + perf2.get(3) + "\n";
-            resultat += "Nombre d'éléments parcourut : " + perf1.get(4) + " - " + perf2.get(4) + "\n\n";
-            // Affichage résultats
-            JOptionPane.showMessageDialog(null, resultat);
+            resultat += "Connexité : " + perf1.get(0) + " - " + perf2.get(0) + "\n";
+            resultat += "Temps de Calcul : " + perf1.get(1) + " - " + perf2.get(1) + "\n";
+            if (choixCout == 0) resultat += "Le cout en distance est de : " + perf1.get(2) + " - " + perf2.get(2) + "\n";
+            else                resultat += "Le cout en temps est de : " + perf1.get(2) + " - " + perf2.get(2) + "\n";
+            resultat += "Nb max d'element : " + perf1.get(3) + " - " + perf2.get(3) + "\n";
+            resultat += "Nb elements explorés : " + perf1.get(4) + " - " + perf2.get(4) + "\n";
         }
-        resultat += "\n\n";
-        // On ecrit dans le fichier
-        sortie.append(resultat);
+        JOptionPane.showMessageDialog(null, resultat); // On affiche le resultats en popup
+        sortie.append(resultat + "\n\n"); // On ecrit dans le fichier
     }
     void afficherEtEcrireResultats(ArrayList perfVoitureTous, ArrayList perfPietonTous, ArrayList perfDestTous, Node node, double min, double duree) {
         cout = (choixCout == 0) ? "distance" : "temps";
@@ -1004,15 +970,12 @@ public class Launch extends JFrame {
             else {
                 resultat += "On est bien arrivé ! \n";
                 resultat += "Rencontre au noeud  : " + node.getNum() + "\n";
-                resultat += "Avec pour temps : " + AffichageTempsHeureMin(min) + "\n";
+                resultat += "Avec pour temps : " + algo.AffichageTempsHeureMin(min) + "\n";
             }
-            resultat += "Durée exécution : " + AffichageTempsHeureMin(duree) + "\n\n";
+            resultat += "Durée exécution : " + algo.AffichageTempsHeureMin(duree) + "\n\n";
         }
-        // Affichage résultats
-        JOptionPane.showMessageDialog(null, resultat);
-        resultat += "\n\n";
-        // On ecrit dans le fichier
-        sortie.append(resultat);
+        JOptionPane.showMessageDialog(null, resultat); // On affiche le resultats en popup
+        sortie.append(resultat + "\n\n"); // On ecrit dans le fichier
     }
 
 

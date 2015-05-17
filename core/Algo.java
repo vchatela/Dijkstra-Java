@@ -27,4 +27,28 @@ public abstract class Algo<E extends Comparable<E>> {
     public abstract ArrayList run();
 
     public abstract ArrayList getLabels();
+
+    public String AffichageTempsHeureMin(double min) {
+        int heure = 0;
+        double minute;
+
+        if (min >= 60) {
+            heure = (int) min / 60;
+            minute = min % 60;
+            return (heure + " heure(s) et " + minute + " minute(s) ");
+        }
+        return (min + "min ");
+    }
+
+    public String AffichageTempsCalcul(double ms) {
+        int sec = 0;
+        double milli;
+
+        if (ms >= 1000) {
+            sec = (int) ms / 1000;
+            milli = ms % 1000;
+            return (sec + " seconde(s) " + milli);
+        }
+        return (ms + "ms");
+    }
 }
