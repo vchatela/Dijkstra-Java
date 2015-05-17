@@ -17,7 +17,7 @@ public class Pcc_Generique<E extends Comparable<E>> extends Algo {
     protected boolean TOUS;             //contient le resultat a enregister dans un fichier
     protected boolean pieton;           // Pour le pieton permet de changer sa vitesse etc
 
-    public Pcc_Generique(Graphe gr, int choixCout, boolean affichageDeroulementAlgo, int origine, int dest, boolean TOUS, boolean pieton) {
+    public Pcc_Generique(Graphe gr, int origine, int dest, boolean affichageDeroulementAlgo, int choixCout, boolean TOUS, boolean pieton) {
         super(gr);
         this.choixCout = choixCout;
         this.affichageDeroulementAlgo = affichageDeroulementAlgo;
@@ -53,33 +53,36 @@ public class Pcc_Generique<E extends Comparable<E>> extends Algo {
         else {
 
             System.out.println();
-            System.out.println("Lancement de l'algorithme de (zone,noeud) : (" + zoneOrigine + "," + origine + ") vers (" + zoneDestination + "," + destination + ")");
-// Initialisation de nos champs
+            System.out.println("Lancement de l'algorithme " + this.getClass().getName() + " de (zone,noeud) : (" + zoneOrigine + "," + origine + ") vers (" + zoneDestination + "," + destination + ")");
+
+            // Initialisation de nos champs
             labels = new ArrayList<>();
             tas = new BinaryHeap<>();
             mapLabel = new HashMap();
             maxTas = tas.size();    // Nombre max des elements et ceux explores
             nb_elements_tas = 1;
             double new_cout = 0;
-            // afin de mesurer le temps d'execution on mettra une duree
+
+            // Mesurer le temps d'execution de l'algorithme
             duree = System.currentTimeMillis();
 
             // Il faut Initialiser l'algo
             initialisation();
 
-		/*Algorithme (a ameliorer)
-		 * On part du noeud d'origine
-		 * On parcourt tous ses successeurs
-		 * Si ils sont pas marque alors on met a jour leur valeur du cout : valeur du cout du noeud + cout de l'arc
-		 * Si ils sont deja marque, alors teste si cette valeur est inferieure a la valeur qu'a deja ce noeud
-		 * 			si < alors update sinon rien
-		 *
-		 *
-		 * A reflechir : est il possible qu'un noeud deja traite soit modifie et qu'il faille modifier les cout
-		 * de tous les noeuds qui utilise sur leur chemin ce noeud ?
-		 */
+            /*Algorithme (a ameliorer)
+             * On part du noeud d'origine
+             * On parcourt tous ses successeurs
+             * Si ils sont pas marque alors on met a jour leur valeur du cout : valeur du cout du noeud + cout de l'arc
+             * Si ils sont deja marque, alors teste si cette valeur est inferieure a la valeur qu'a deja ce noeud
+             * 			si < alors update sinon rien
+             *
+             *
+             * A reflechir : est il possible qu'un noeud deja traite soit modifie et qu'il faille modifier les cout
+             * de tous les noeuds qui utilise sur leur chemin ce noeud ?
+             */
 
-		/* Boucle principale*/
+            /* Boucle principale*/
+
             E min, succ;
             Node node_succ;
             while (!((tas.isEmpty() || dest.isMarque()) && !TOUS) && !(TOUS && tas.isEmpty())) {
@@ -133,15 +136,20 @@ public class Pcc_Generique<E extends Comparable<E>> extends Algo {
                 }
             }
 
+            // Origine et Destination sont-ils connexes ?
             connexes = dest.isMarque();
+
             // Tracer le chemin si les 2 points sont connexes
             if (connexes)
                 chemin();
 
+            // On enregistre le temps d'execution de l'algorithme
+            duree = (System.currentTimeMillis() - duree);
+
             // Mise à jour du résultat pour affichage et fichier de sortie
             ArrayList<String> resultat = new ArrayList<>();
-            if(connexes)    resultat.add("Connexes");
-            else            resultat.add("Non connexes");
+            if(connexes)    resultat.add("connexes");
+            else            resultat.add("non connexes");
             resultat.add(AffichageTempsCalcul(duree));
             if (choixCout == 0) resultat.add(String.valueOf(dest.getCout() / 1000) + "km");
             else                resultat.add(AffichageTempsHeureMin(dest.getCout()));

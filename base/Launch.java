@@ -82,7 +82,6 @@ public class Launch extends JFrame {
     private boolean         affichageDeroulementAlgo;   // Affichage des algorithmes ou non
     private int             origine, pieton, dest;      // Numéro des sommets origine, pieton et dest
     private Algo            algo;                       // Algorithme a executer
-    private Algo            algo1;                      // Algorithme n°2 a executer si on lance le test de performance
 
 
     /**
@@ -331,7 +330,7 @@ public class Launch extends JFrame {
                     case 1:
                         // Initialisation et lancement de l'algorithme
                         initialiserAlgo();
-                        algo = new Connexite(graphe, affichageDeroulementAlgo, origine, dest);
+                        algo = new Connexite(graphe, origine, dest, affichageDeroulementAlgo);
                         ArrayList perfConnexite = algo.run();
                         afficherEtEcrireResultats(3, perfConnexite);
                         break;
@@ -340,7 +339,7 @@ public class Launch extends JFrame {
                     case 2:
                         // Initialisation et lancement de l'algorithme
                         initialiserAlgo();
-                        algo = new Pcc_Dijkstra(graphe, choixCout, affichageDeroulementAlgo, origine, dest, false, false);
+                        algo = new Pcc_Dijkstra(graphe, origine, dest, affichageDeroulementAlgo, choixCout, false, false);
                         ArrayList perfStandard = algo.run();
                         afficherEtEcrireResultats(1, perfStandard);
                         break;
@@ -350,27 +349,34 @@ public class Launch extends JFrame {
 
                         //Initialisation et lancement de l'algorithme
                         initialiserAlgo();
-                        algo = new Pcc_Star(graphe, choixCout, affichageDeroulementAlgo, origine, dest, false, false);
+                        algo = new Pcc_Star(graphe, origine, dest, affichageDeroulementAlgo, choixCout, false, false);
                         ArrayList perfAStar = algo.run();
                         afficherEtEcrireResultats(2, perfAStar);
                         break;
 
-                    // Programme de test des 2 algos Dijkstra : PCC Standard + PCC A-Star
+                    // Programme de test algo connexité et des 2 algos Dijkstra : PCC Standard + PCC A-Star
                     case 4:
                         // Initialisation des algorithmes
                         initialiserAlgo();
 
-                        // 1i algo -> PCC Standard : Dijkstra, 2i algo -> PCC A-Star : Dijkstra guidé
-                        algo1 = new Pcc_Dijkstra(graphe, choixCout, affichageDeroulementAlgo, origine, dest, false, false);
-                        algo = new Pcc_Star(graphe, choixCout, affichageDeroulementAlgo, origine, dest, false, false);
+                        // 1i algo -> Connexité
+                        algo = new Connexite(graphe, origine, dest, affichageDeroulementAlgo);
+                        // Lancement des algorithmes et récupération des résultats
+                        graphe.getDessin().setColor(Color.cyan);
+                        ArrayList perf3 = algo.run();
 
+                        // 2i algo -> PCC Standard : Dijkstra
+                        algo = new Pcc_Dijkstra(graphe, origine, dest, affichageDeroulementAlgo, choixCout, false, false);
                         // Lancement des algorithmes et récupération des résultats
                         graphe.getDessin().setColor(Color.magenta);
-                        ArrayList perf1 = algo1.run();
+                        ArrayList perf1 = algo.run();
+
+                        // 3i algo -> PCC A-Star : Dijkstra guidé
+                        algo = new Pcc_Star(graphe, origine, dest, affichageDeroulementAlgo, choixCout, false, false);
                         graphe.getDessin().setColor(Color.red);
                         ArrayList perf2 = algo.run();
 
-                        afficherEtEcrireResultats(perf1, perf2);
+                        afficherEtEcrireResultats(perf1, perf2, perf3);
                         break;
 
                     // Covoiturage
@@ -392,17 +398,17 @@ public class Launch extends JFrame {
                         // Lancement des algorithmes
 
                         // PCC de la VOITURE vers TOUS : récupération de l'arraylist des couts
-                        algo = new Pcc_Dijkstra(graphe, choixCout, affichageDeroulementAlgo, origine, dest, true, false);
+                        algo = new Pcc_Dijkstra(graphe, origine, dest, affichageDeroulementAlgo, choixCout, true, false);
                         perfVoitureTous = algo.run();
                         ArrayList<Label> covoitVoiture = algo.getLabels();
 
                         // PCC du PIETON vers TOUS : màj de l'arraylist s'il est plus grand
-                        algo = new Pcc_Dijkstra(graphe, choixCout, affichageDeroulementAlgo, pieton, dest, true, true);
+                        algo = new Pcc_Dijkstra(graphe, origine, dest, affichageDeroulementAlgo, choixCout, true, true);
                         perfPietonTous = algo.run();
                         ArrayList<Label> covoitPieton = algo.getLabels();
 
                         // PCC de la DESTINATION vers TOUS : màj de l'arraylist si max (x,y) < Pcc(dest, noeud) + Pcc( (x ou y) vers noeuds )
-                        algo = new Pcc_Dijkstra(graphe, choixCout, affichageDeroulementAlgo, dest, origine, true, false);
+                        algo = new Pcc_Dijkstra(graphe, origine, dest, affichageDeroulementAlgo, choixCout, true, false);
                         perfDestTous = algo.run();
                         ArrayList<Label> covoitDestination = algo.getLabels();
 
@@ -603,22 +609,22 @@ public class Launch extends JFrame {
             default:
                 // Paramétrer le menu de selection
                 makeControlPanel(12);
-                try {
-                    clickCoord = graphe.situerClick();
-                    jTextFieldOrigine.setText(clickCoord.get(2).toString());
-                    clickCoord = graphe.situerClick();
-                    jTextFieldDest.setText(clickCoord.get(2).toString());
-                }
-                catch (NumberFormatException n) {
-                    System.out.println(n);
-                    origine = -1;
-                    dest = -1;
-                }
+                clickCoord = graphe.situerClick();
+                jTextFieldOrigine.setText(clickCoord.get(2).toString());
+                clickCoord = graphe.situerClick();
+                jTextFieldDest.setText(clickCoord.get(2).toString());
                 break;
         }
         // Récupérer les valeurs des noeuds
-        origine = Integer.parseInt(jTextFieldOrigine.getText());
-        dest = Integer.parseInt(jTextFieldDest.getText());
+        try {
+            origine = Integer.parseInt(jTextFieldOrigine.getText());
+            dest = Integer.parseInt(jTextFieldDest.getText());
+        }
+        catch (NumberFormatException n) {
+            System.out.println(n);
+            origine = -1;
+            dest = -1;
+        }
 
         // Choix du coup en temps ou distance
         if (jRadioButtonChoixDistance.isSelected())
@@ -660,25 +666,25 @@ public class Launch extends JFrame {
             default:
                 // Paramétrer le menu de selection
                 makeControlPanel(22);
-                try {
-                    clickCoord = graphe.situerClick();
-                    jTextFieldOrigine.setText(clickCoord.get(2).toString());
-                    clickCoord = graphe.situerClick();
-                    jTextFieldPieton.setText(clickCoord.get(2).toString());
-                    clickCoord = graphe.situerClick();
-                    jTextFieldDest.setText(clickCoord.get(2).toString());
-                }
-                catch (NumberFormatException n) {
-                    System.out.println(n);
-                    origine = -1;
-                    dest = -1;
-                }
+                clickCoord = graphe.situerClick();
+                jTextFieldOrigine.setText(clickCoord.get(2).toString());
+                clickCoord = graphe.situerClick();
+                jTextFieldPieton.setText(clickCoord.get(2).toString());
+                clickCoord = graphe.situerClick();
+                jTextFieldDest.setText(clickCoord.get(2).toString());
                 break;
         }
         // Récupérer les valeurs des noeuds
-        origine = Integer.parseInt(jTextFieldOrigine.getText());
-        pieton = Integer.parseInt(jTextFieldPieton.getText());
-        dest = Integer.parseInt(jTextFieldDest.getText());
+        try {
+            origine = Integer.parseInt(jTextFieldOrigine.getText());
+            pieton = Integer.parseInt(jTextFieldPieton.getText());
+            dest = Integer.parseInt(jTextFieldDest.getText());
+        }
+        catch (NumberFormatException n) {
+            System.out.println(n);
+            origine = -1;
+            dest = -1;
+        }
 
         // Choix du coup en temps
         choixCout = 1;
@@ -921,7 +927,7 @@ public class Launch extends JFrame {
         resultat += "Origine : " + origine + "\n";
         resultat += "Arrivée : " + dest + "\n";
         if (performances == null)
-            resultat += "Erreur)";
+            resultat += "Erreur - Un des sommets saisis n'appartient pas au graphe";
         else {
             resultat += "Connexité : " + performances.get(0) + "\n";
             resultat += "Temps de Calcul : " + performances.get(1) + "\n";
@@ -934,26 +940,28 @@ public class Launch extends JFrame {
             }
         }
         JOptionPane.showMessageDialog(null, resultat); // On affiche le resultats en popup
-        sortie.append(resultat + "\n\n"); // On ecrit dans le fichier
+        sortie.append(resultat + "\n\n\n"); // On ecrit dans le fichier
     }
 
-    void afficherEtEcrireResultats(ArrayList perf1, ArrayList perf2) {
-        resultat = "Programme de test des algorithmes Dijkstra : PCC Standard vs. PCC A-Star\n";
+    void afficherEtEcrireResultats(ArrayList perf1, ArrayList perf2, ArrayList perf3) {
+        resultat = "           Programme de test des algorithmes Dijkstra :\n";
         resultat += "Carte : " + nomCarte + "\n";
         resultat += "Origine : " + origine + "\n";
-        resultat += "Arrivée : " + dest + "\n";
+        resultat += "Arrivée : " + dest + "\n\n";
         if (perf1 == null || perf2 == null)
-            resultat += "Erreur)";
+            resultat += "Erreur - Un des sommets saisis n'appartient pas au graphe";
         else {
-            resultat += "Connexité : " + perf1.get(0) + " - " + perf2.get(0) + "\n";
-            resultat += "Temps de Calcul : " + perf1.get(1) + " - " + perf2.get(1) + "\n";
+            resultat += " - PCC Standard vs. PCC A-Star vs. Connexité :\n";
+            resultat += "Connexité : " + perf1.get(0) + " - " + perf2.get(0) + " - " + perf3.get(0) + "\n";
+            resultat += "Temps de Calcul : " + perf1.get(1) + " - " + perf2.get(1) + " - " + perf3.get(1) + "\n\n";
+            resultat += " - PCC Standard vs. PCC A-Star :\n";
             if (choixCout == 0) resultat += "Le cout en distance est de : " + perf1.get(2) + " - " + perf2.get(2) + "\n";
             else                resultat += "Le cout en temps est de : " + perf1.get(2) + " - " + perf2.get(2) + "\n";
             resultat += "Nb max d'element : " + perf1.get(3) + " - " + perf2.get(3) + "\n";
             resultat += "Nb elements explorés : " + perf1.get(4) + " - " + perf2.get(4) + "\n";
         }
         JOptionPane.showMessageDialog(null, resultat); // On affiche le resultats en popup
-        sortie.append(resultat + "\n\n"); // On ecrit dans le fichier
+        sortie.append(resultat + "\n\n\n"); // On ecrit dans le fichier
     }
     void afficherEtEcrireResultats(ArrayList perfVoitureTous, ArrayList perfPietonTous, ArrayList perfDestTous, Node node, double min, double duree) {
         cout = (choixCout == 0) ? "distance" : "temps";
@@ -963,7 +971,7 @@ public class Launch extends JFrame {
         resultat += "Origine Pieton : " + pieton + "\n";
         resultat += "Arrivée : " + dest + "\n";
         if (perfVoitureTous == null || perfPietonTous == null || perfDestTous == null)
-            resultat += "Erreur)";
+            resultat += "Erreur - Un des sommets saisis n'appartient pas au graphe";
         else {
             if (min == Double.POSITIVE_INFINITY)
                 resultat += "Aucun noeud de rencontre trouvé ! \n";
@@ -975,7 +983,7 @@ public class Launch extends JFrame {
             resultat += "Durée exécution : " + algo.AffichageTempsHeureMin(duree) + "\n\n";
         }
         JOptionPane.showMessageDialog(null, resultat); // On affiche le resultats en popup
-        sortie.append(resultat + "\n\n"); // On ecrit dans le fichier
+        sortie.append(resultat + "\n\n\n"); // On ecrit dans le fichier
     }
 
 

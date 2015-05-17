@@ -11,7 +11,7 @@ public class Connexite extends Algo {
         protected ArrayList<Label> labels;         // Liste de tous les Labels
         protected HashMap<Node, Label> mapLabel;   // Correspondre un noeud à un Label
 
-        public Connexite(Graphe gr, boolean affichageDeroulementAlgo, int origine, int destination) {
+        public Connexite(Graphe gr, int origine, int destination, boolean affichageDeroulementAlgo) {
             super(gr);
             this.affichageDeroulementAlgo = affichageDeroulementAlgo;
 
@@ -63,8 +63,7 @@ public class Connexite extends Algo {
         else {
             System.out.println("Lancement de l'algorithme Connexité de (zone,noeud) : (" + zoneOrigine + "," + origine + ") vers (" + zoneDestination + "," + destination + ")");
 
-
-            // afin de mesurer le temps d'execution on mettra une duree
+            // Mesurer le temps d'execution de l'algorithme
             duree = System.currentTimeMillis();
 
             // Il faut Initialiser l'algo
@@ -102,15 +101,16 @@ public class Connexite extends Algo {
                 }
             }
 
+            // Origine et Destination sont-ils connexes ?
+            connexes = dest.isMarque();
+
             // On enregistre le temps d'execution de l'algorithme
             duree = (System.currentTimeMillis() - duree);
 
-            connexes = dest.isMarque();
-
             // Mise à jour du résultat pour affichage et fichier de sortie
             ArrayList<String> resultat = new ArrayList<>();
-            if(connexes)    resultat.add("Les points sont connexes");
-            else            resultat.add("Les points ne sont pas connexes");
+            if(connexes)    resultat.add("connexes");
+            else            resultat.add("non connexes");
             resultat.add(AffichageTempsCalcul(duree));
 
             return resultat;

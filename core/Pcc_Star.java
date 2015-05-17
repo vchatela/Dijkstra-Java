@@ -7,8 +7,8 @@ import java.io.PrintStream;
 
 public class Pcc_Star extends Pcc_Generique<Label_Star> {
 
-    public Pcc_Star(Graphe gr, int choixCout, boolean affichageDeroulementAlgo, int origine, int dest, boolean TOUS, boolean pieton) {
-        super(gr, choixCout, affichageDeroulementAlgo, origine, dest, TOUS, pieton);
+    public Pcc_Star(Graphe gr, int origine, int dest, boolean affichageDeroulementAlgo, int choixCout, boolean TOUS, boolean pieton) {
+        super(gr, origine, dest, affichageDeroulementAlgo, choixCout, TOUS, pieton);
 
         this.graphe.getDessin().setColor(Color.red);
     }
