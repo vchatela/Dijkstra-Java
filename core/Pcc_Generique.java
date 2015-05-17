@@ -61,7 +61,7 @@ public class Pcc_Generique<E extends Comparable<E>> extends Algo {
             mapLabel = new HashMap();
             maxTas = tas.size();    // Nombre max des elements et ceux explores
             nb_elements_tas = 1;
-            double new_cout = 0;
+            double new_cout;
 
             // Mesurer le temps d'execution de l'algorithme
             duree = System.currentTimeMillis();
@@ -85,52 +85,67 @@ public class Pcc_Generique<E extends Comparable<E>> extends Algo {
 
             E min, succ;
             Node node_succ;
+
             while (!((tas.isEmpty() || dest.isMarque()) && !TOUS) && !(TOUS && tas.isEmpty())) {
+
+                // On récupère l'élément minimum du tas que l'on marque comme visité
                 min = tas.deleteMin();
                 ((Label_Generique) min).setMarque(true);
-                // pour chaque successeurs / arc
+
+                // Pour chaque successeur / arc
                 for (Arc arc : graphe.getArrayList().get(((Label_Generique) min).getNum_node()).getArrayListArc()) {
+
+                    // On récupère le noeud successeur de l'arc en cours
                     node_succ = graphe.getArrayList().get(arc.getNum_dest());
-                    // Label_Dijkstra correspondant au noeud destinataire
+
+                    // Label correspondant au noeud destinataire
                     succ = mapLabel.get(node_succ);
-                    // si le noeud n'est pas marque
+
+                    // Si le sommet n'est pas marque
                     if (!(((Label_Generique) succ).isMarque())) {
-                        // on met alors le cout a jour
+
+                        // On met alors le cout a jour : si pieton -> vérifier type de route
                         if (!pieton) {
                             new_cout = (choixCout == 0) ? arc.getLg_arete() + ((Label_Generique) min).getCout() : 60.0f * ((float) arc.getLg_arete()) / (1000.0f * (float) arc.getDescripteur().getVitMax()) + ((Label_Generique) min).getCout();
-                        } else {
+                        }
+                        else {
                             // TODO : verifier si 4f (4 en float) c'est bien en km/h etc ..
-                            // on vérifie que la route n'est pas une autoroute : dans le descripteur on a char type == a
+                            // On vérifie que la route n'est pas une autoroute : dans le descripteur on a char type == a
                             if (arc.getDescripteur().getType() != 'a') {
                                 new_cout = (choixCout == 0) ? arc.getLg_arete() + ((Label_Generique) min).getCout() : 60.0f * ((float) arc.getLg_arete()) / (1000.0f * 4f) + ((Label_Generique) min).getCout();
                             }
+                            // Sinon on continu
                             else {
                                 continue;
                             }
                         }
-                        // on verifie alors que ce cout est bien inferieur au precedent
+
+                        // On verifie si ce cout est inferieur au precedent
                         if (new_cout < ((Label_Generique) succ).getCout()) {
+                            // Si oui, on met à jour les valeurs des couts
                             ((Label_Generique) succ).setCout(new_cout);
                             ((Label_Generique) succ).setPere(((Label_Generique) min).getNum_node());
                         }
-                        // maintenant si le sommet n'est pas dans le tas il faut l'ajouter
+
+                        // On insere le sommet dans le tas s'il n'y est pas
                         if (tas.getMap().get(succ) == null) {
-                            // on insere le sommet dans le tas
+
                             tas.insert(succ);
                             nb_elements_tas++;
+
                             // On peut afficher le sommet sur la carte
                             if (affichageDeroulementAlgo) {
-                                //graphe.getDessin().setColor(Color.magenta);
                                 graphe.getDessin().drawPoint(node_succ.getLongitude(), node_succ.getLatitude(), 3);
                             }
                         }
-                        // sinon il ne faut pas oublier de mettre a jour le tas !
+
+                        // Sinon il ne faut pas oublier de mettre a jour le tas en fonction du nouveau cout
                         else {
                             tas.update(succ);
                         }
                     }
                 }
-                // on met a jours la valeur max du tas
+                // On met a jours la valeur max du tas
                 if (maxTas < tas.size()) {
                     maxTas = tas.size();
                 }

@@ -48,8 +48,6 @@ public class Launch extends JFrame {
             jLabelCoordClick, jLabelCoordSitues, jLabelNoeudsProches, jLabelChemin;
     private JLabel          jLabelImageGraphe;          // Image de lancement (graphe) à afficher
     private JLabel          jLabelImageINSA;            // Logo de l'INSA à afficher
-    private ImageIcon       imageGraphe;                // Image de lancement (graphe) en dur
-    private ImageIcon       imageINSA;                  // Logo de l'INSA en dur
     private JTextField      jTextFieldFichier;          // Zone de saisie du fichier
     private JTextField      jTextField1;                // Zone de saisie n°1
     private JTextField      jTextField2;                // Zone de saisie n°2
@@ -61,7 +59,7 @@ public class Launch extends JFrame {
     private JRadioButton    jRadioButtonChoixDistance;  // CHoix du cout en distance
     private JComboBox	    jComboBoxMenu;              // Contient les menus
     private JComboBox	    jComboBoxCartes;            // Contient les cartes
-    private JComboBox	    jComboBoxChemins;          // Contient les chemins
+    private JComboBox jComboBoxChemins;          // Contient les chemins
     private JButton		    jButtonOk;                  // Button ok (lancement de l'appli, chagement de menu, attente de lecture des coord du clic)
     private JButton		    jButtonLoad;                // Button charger (lancement de l'appli)
     private Thread          thread;                     // Utilisé pour afficher la map en parallèle du menu de selection des choix
@@ -70,7 +68,6 @@ public class Launch extends JFrame {
     private String          nomCarte;                   // Nom de la carte à charger
     private String          nomChemin;                  // Nom du chemin à charger
     private String          resultat;                   // Contient les resultats des algos
-    private String          cout;                       // Contient le cout
     private PrintStream     sortie;                     // Fichier de sortie
     private Graphe          graphe;                     // La map
     private boolean         display;                    // Affichage graphique ou non
@@ -225,8 +222,8 @@ public class Launch extends JFrame {
             jComboBoxChemins.addItem(chemin);
 
         // Paramétrage des images : graphe et logo INSA
-        imageGraphe       = new ImageIcon("arbre.jpg");
-        imageINSA         = new ImageIcon("logoINSA.png");
+        ImageIcon imageGraphe = new ImageIcon("arbre.jpg");
+        ImageIcon imageINSA = new ImageIcon("logoINSA.png");
         jLabelImageGraphe = new JLabel();
         jLabelImageINSA   = new JLabel();
         jLabelImageGraphe.setIcon(imageGraphe);
@@ -964,7 +961,6 @@ public class Launch extends JFrame {
         sortie.append(resultat + "\n\n\n"); // On ecrit dans le fichier
     }
     void afficherEtEcrireResultats(ArrayList perfVoitureTous, ArrayList perfPietonTous, ArrayList perfDestTous, Node node, double min, double duree) {
-        cout = (choixCout == 0) ? "distance" : "temps";
         resultat = "Covoiturage\n";
         resultat += "Carte : " + nomCarte + "\n";
         resultat += "Origine Voiture : " + origine + "\n";

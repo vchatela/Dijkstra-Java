@@ -1,9 +1,6 @@
 package core;
 
-import base.Readarg;
-
 import java.awt.*;
-import java.io.PrintStream;
 
 public class Pcc_Star extends Pcc_Generique<Label_Star> {
 
@@ -25,7 +22,7 @@ public class Pcc_Star extends Pcc_Generique<Label_Star> {
             }
             labels.add(l);
 
-            // sii on demande un calcul en temps on prendra une vitesse max car :
+            // si on demande un calcul en temps on prendra une vitesse max car :
             // ce doit etre obligatoirement une borne INFERIEURE
             if (choixCout == 1)
                 l.setCout_oiseau(60.0f * l.getCout_oiseau() / (130.0f * 1000.0f));

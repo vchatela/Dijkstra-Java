@@ -11,12 +11,12 @@ public class Pcc_Dijkstra extends Pcc_Generique<Label> {
     public Pcc_Dijkstra(Graphe gr, int origine, int dest, boolean affichageDeroulementAlgo, int choixCout, boolean TOUS, boolean pieton) {
         super(gr, origine, dest, affichageDeroulementAlgo, choixCout, TOUS, pieton);
 
-        this.pieton = pieton;
         this.graphe.getDessin().setColor(Color.magenta);
     }
 
     public void initialisation() {
-        //Associe des Labels correspondant aux noeuds et le stocke dans la map !
+
+        // Associe des Labels correspondant aux noeuds et le stocke dans la map !
         for (Node node : this.graphe.getArrayList()) {
             Label l = new Label(node);
             mapLabel.put(node, l);

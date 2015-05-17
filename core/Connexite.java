@@ -69,12 +69,13 @@ public class Connexite extends Algo {
             // Il faut Initialiser l'algo
             initialisation();
 
-		/* Boucle principale*/
             Label current, succ;
             Node node_succ;
+            double new_cout;
 
             while (!((tas.isEmpty() || dest.isMarque()))) {
-                //
+
+                // On récupère un élément du tas que l'on marque comme visité
                 current = tas.deleteMin();
                 current.setMarque(true);
 
@@ -86,6 +87,14 @@ public class Connexite extends Algo {
 
                     // Label correspondant au noeud destinataire
                     succ = mapLabel.get(node_succ);
+
+//                    // On verifie si le cout est inferieur au precedent
+//                    new_cout = arc.getLg_arete() + current.getCout();
+//                    if (new_cout < succ.getCout()) {
+//                        // Si oui, on met à jour les valeurs des couts
+//                        succ.setCout(new_cout);
+//                        succ.setPere(((Label_Generique) current).getNum_node());
+//                    }
 
                     // Si le sommet n'est pas marque ET qu'il n'est pas dans le tas
                     if (!(succ.isMarque()) && tas.getMap().get(succ) == null) {
