@@ -51,6 +51,11 @@ public class Connexite extends Algo {
         }
     }
 
+    @Override
+    public int getNb_elements_tas() {
+        return 0;
+    }
+
     public ArrayList run() {
 
         if ((origine <= 0) || (origine > graphe.getArrayList().size())) {

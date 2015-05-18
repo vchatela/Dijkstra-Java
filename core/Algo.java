@@ -1,7 +1,6 @@
 package core;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 
 /**
  * Classe abstraite representant un algorithme (connexite, plus court chemin, etc.)
@@ -22,6 +21,16 @@ public abstract class Algo<E extends Comparable<E>> {
 
     protected Algo(Graphe gr) {
         this.graphe = gr;
+    }
+
+    public abstract int getNb_elements_tas();
+
+    public double getDuree() {
+        return duree;
+    }
+
+    public void setDuree(double duree) {
+        this.duree = duree;
     }
 
     public abstract ArrayList run();

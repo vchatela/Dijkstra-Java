@@ -30,6 +30,7 @@ public class Graphe {
     private final String nomCarte;
     // Fenetre graphique
     private final Dessin dessin;
+    public int max;
 
 
     /*
@@ -81,6 +82,7 @@ public class Graphe {
             // Lecture du nombre de descripteurs et du nombre de noeuds.
             int nb_descripteurs = dis.readInt();
             int nb_Nodes = dis.readInt();
+            max = nb_Nodes;
 
             // Reglage de la barre de progression
             pb.setMinimum(0);

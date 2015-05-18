@@ -16,7 +16,6 @@ public class Pcc_Generique<E extends Comparable<E>> extends Algo {
     protected int nb_elements_tas;      //Nombre d'element explores
     protected boolean TOUS;             //contient le resultat a enregister dans un fichier
     protected boolean pieton;           // Pour le pieton permet de changer sa vitesse etc
-
     public Pcc_Generique(Graphe gr, int origine, int dest, boolean affichageDeroulementAlgo, int choixCout, boolean TOUS, boolean pieton) {
         super(gr);
         this.choixCout = choixCout;
@@ -28,6 +27,14 @@ public class Pcc_Generique<E extends Comparable<E>> extends Algo {
         this.origine = origine;
         this.zoneDestination = gr.getZone();
         this.destination = dest;
+    }
+
+    public int getNb_elements_tas() {
+        return nb_elements_tas;
+    }
+
+    public void setNb_elements_tas(int nb_elements_tas) {
+        this.nb_elements_tas = nb_elements_tas;
     }
 
     public ArrayList<E> getLabels() {
@@ -52,8 +59,8 @@ public class Pcc_Generique<E extends Comparable<E>> extends Algo {
         // a noter que : si booleen TOUS alors message de confirmation de vers tout le monde
         else {
 
-            System.out.println();
-            System.out.println("Lancement de l'algorithme " + this.getClass().getName() + " de (zone,noeud) : (" + zoneOrigine + "," + origine + ") vers (" + zoneDestination + "," + destination + ")");
+            //System.out.println();
+           // System.out.println("Lancement de l'algorithme " + this.getClass().getName() + " de (zone,noeud) : (" + zoneOrigine + "," + origine + ") vers (" + zoneDestination + "," + destination + ")");
 
             // Initialisation de nos champs
             labels = new ArrayList<>();
