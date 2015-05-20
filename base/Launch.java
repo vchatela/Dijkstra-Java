@@ -402,22 +402,19 @@ public class Launch extends JFrame {
                         perfVoitureTous = algo.run();
                         ArrayList<Label> covoitVoiture = algo.getLabels();
                         HashMap<Node, Label_Generique> mapVoit = algo.getMapLabel();
-                        System.out.println("Origine : " + covoitVoiture.get(origine));
 
                         // PCC du PIETON vers TOUS : màj de l'arraylist s'il est plus grand
-                        algo = new Pcc_Dijkstra(graphe, origine, dest, affichageDeroulementAlgo, choixCout, true, true, false);
+                        algo = new Pcc_Dijkstra(graphe, pieton, dest, affichageDeroulementAlgo, choixCout, true, true, false);
                         perfPietonTous = algo.run();
                         ArrayList<Label> covoitPieton = algo.getLabels();
                         HashMap<Node, Label_Generique> mapPiet = algo.getMapLabel();
                         System.out.println("Pieton : " + covoitPieton.get(pieton));
-                        System.out.println("Pieton pour origine : " + covoitPieton.get(origine));
 
                         // PCC de la DESTINATION vers TOUS : màj de l'arraylist si max (x,y) < Pcc(dest, noeud) + Pcc( (x ou y) vers noeuds )
-                        algo = new Pcc_Dijkstra(graphe, origine, dest, affichageDeroulementAlgo, choixCout, true, false, false);
+                        algo = new Pcc_Dijkstra(graphe, dest, pieton, affichageDeroulementAlgo, choixCout, true, false, false);
                         perfDestTous = algo.run();
                         ArrayList<Label> covoitDestination = algo.getLabels();
                         HashMap<Node, Label_Generique> mapDest = algo.getMapLabel();
-                        System.out.println("Dest : " + covoitDestination.get(dest));
 
                         for (int i=0; i<covoitPieton.size()||i<covoitVoiture.size(); i++) {
                             // Mise à jour de l'ArrayList covoitSomme :
