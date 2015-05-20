@@ -20,9 +20,7 @@ import java.awt.event.ActionListener;
 import java.io.DataInputStream;
 import java.io.PrintStream;
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.Date;
-import java.util.HashMap;
 
 public class Launch extends JFrame {
 
@@ -907,23 +905,6 @@ public class Launch extends JFrame {
         this.pack();
     }
 
-    public void chemin(int origine, int destination, HashMap<Node, Label_Generique> mapLabel) {
-        // on construit le chemin du dest->origine
-        Chemin chemin = new Chemin(origine, destination);
-        chemin.addNode(this.graphe.getArrayList().get(destination));
-        Label_Generique E_en_cours = mapLabel.get(this.graphe.getArrayList().get(destination));
-        Node node;
-        // On remonte avec l'aide du pere !
-        // Tant qu'on n'atteint pas le sommet d'origine qui a pour pere -1
-        while (((Label_Generique) E_en_cours).getPere() != -1) {
-            node = this.graphe.getArrayList().get(((Label_Generique) E_en_cours).getPere());
-            chemin.addNode(node);
-            E_en_cours = mapLabel.get(node);
-        }
-        // cout et affichage du chemin
-        Collections.reverse(chemin.getListNode());
-        chemin.tracerChemin(this.graphe.getDessin());
-    }
     /**
      * Ouvre un fichier de sortie pour ecrire les résultats des algorithmes
      */
