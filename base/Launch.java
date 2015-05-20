@@ -43,7 +43,7 @@ public class Launch extends JFrame {
     private Container 	    cp;                         // Conteneur de la fenetre, on y ajoute les deux précédents éléments
     private JLabel                                      // Texte à afficher
             jLabelNames, jLabelTitle, jLabelCarte, jLabelAfficher, jLabelFichier, jLabelMenu,
-            jLabelDeroulement, jLabelChoixCout, jLabelDepart, jLabelDepartVoiture,
+            jLabelDeroulement, jLabelChoixCout, jLabelDepart, jLabelDepartVoiture, jLabelAffChemin,
             jLabelDepartPieton, jLabelArrivee, jLabelCoordsMan, jLabelCoordsClick,
             jLabelCoordClick, jLabelCoordSitues, jLabelNoeudsProches, jLabelChemin;
     private JLabel          jLabelImageGraphe;          // Image de lancement (graphe) à afficher
@@ -59,7 +59,7 @@ public class Launch extends JFrame {
     private JRadioButton    jRadioButtonChoixDistance;  // CHoix du cout en distance
     private JComboBox	    jComboBoxMenu;              // Contient les menus
     private JComboBox	    jComboBoxCartes;            // Contient les cartes
-    private JComboBox jComboBoxChemins;          // Contient les chemins
+    private JComboBox       jComboBoxChemins;          // Contient les chemins
     private JButton		    jButtonOk;                  // Button ok (lancement de l'appli, chagement de menu, attente de lecture des coord du clic)
     private JButton		    jButtonLoad;                // Button charger (lancement de l'appli)
     private Thread          thread;                     // Utilisé pour afficher la map en parallèle du menu de selection des choix
@@ -77,6 +77,7 @@ public class Launch extends JFrame {
     private int             sommetsConnus;              // L'utilisateur connait les sommets origine et dest ou non
     private int             choixCout;                  // Plus court en Distance:0 ou Temps:1
     private boolean         affichageDeroulementAlgo;   // Affichage des algorithmes ou non
+    private boolean         affichageChemin;            // Affichage des chemins ou non (covoit)
     private int             origine, pieton, dest;      // Numéro des sommets origine, pieton et dest
     private Algo            algo;                       // Algorithme a executer
 
@@ -96,6 +97,7 @@ public class Launch extends JFrame {
         jLabelFichier       = new JLabel("Fichier de sortie : ");
         jLabelMenu          = new JLabel("Que voulez-vous faire : ");
         jLabelDeroulement   = new JLabel("Afficher le deroulement : ");
+        jLabelAffChemin     = new JLabel("<html>Afficher les chemins<br>(Cela est plus long) :</html>");
         jLabelChoixCout     = new JLabel("Choix du coup : ");
         jLabelDepart        = new JLabel("Départ : ");
         jLabelDepartVoiture = new JLabel("Départ du conducteur : ");
@@ -117,6 +119,7 @@ public class Launch extends JFrame {
         jLabelFichier.setPreferredSize(halfDimension);
         jLabelMenu.setPreferredSize(halfDimension);
         jLabelDeroulement.setPreferredSize(halfDimension);
+        jLabelAffChemin.setPreferredSize(new Dimension(180, 40));
         jLabelChoixCout.setPreferredSize(halfDimension);
         jLabelDepart.setPreferredSize(halfDimension);
         jLabelDepartVoiture.setPreferredSize(halfDimension);
@@ -380,22 +383,24 @@ public class Launch extends JFrame {
                     case 5:
                         // ArrayList contenant les couts màj
                         ArrayList<Label> covoitSomme = new ArrayList<>();
-                        ArrayList perfVoitureTous, perfPietonTous, perfDestTous;
+                        ArrayList<String> perfVoitureTous, perfPietonTous, perfDestTous, perf;
                         int noeud_rejoint = -1;
                         double min = Double.POSITIVE_INFINITY;
                         Node node = null;
-                        long duree; // Durée d'execution
+                        double dureeExe; // Durée d'execution
+                        double minPieton, minVoiture; // Temps min vers point de rencontre
+                        ArrayList<String> durees = new ArrayList<>();
                         ArrayList<Boolean> seul = new ArrayList<>();
-                        boolean affichage = true;
                         // ICI ON A DEUX CHOIX : Soit on lance normalement (3disjktras) sans affichages
                         // Soit on en lance 6 pour les tracer
 
+//TODO : si pieton et dest =, ca marche pas
 
                         // Initialisation des algorithmes : cout en TEMPS !
                         initialiserCovoit();
 
                         // Mesurer le temps d'execution de l'algorithme
-                        duree = System.currentTimeMillis();
+                        dureeExe = System.currentTimeMillis();
 
                         // Lancement des algorithmes
 
@@ -414,85 +419,101 @@ public class Launch extends JFrame {
                         perfDestTous = algo.run();
                         ArrayList<Label> covoitDestination = algo.getLabels();
 
-                        // Ici on a récupérer les temps de origine vers tous - dest vers tous - et pieton vers tous
-                        // Mise à jour de l'ArrayList covoitSomme :
-                        // Choisir le cout (temps) le plus élevé entre :
-                        // - celui de la VOITURE vers TOUS
-                        // - celui du PIETONS vers TOUS
-                        // -> determine le temps minimum pour se rejoindre
-                        // Il y aura un cout INFINY s'il n'y a pas de noeud en commun entre les deux
+                        // On continue si les points saisis existent
+                        if (perfVoitureTous != null && perfPietonTous != null && perfDestTous != null) {
 
-                        for (int i = 0; i < covoitVoiture.size(); i++) {
-                            // TODO : noter le temps d'attente final via la différence des 2 (mettre ca ds un arrayList)
-                            // On prend le max des deux pour avoir le temps minimum qu'il faut pour se rejoindre
-                            if (covoitVoiture.get(i).getCout() < covoitPieton.get(i).getCout())
-                                covoitSomme.add(i, covoitPieton.get(i));
-                            else
-                                covoitSomme.add(i, covoitVoiture.get(i));
+                            // Ici on a récupérer les temps de origine vers tous - dest vers tous - et pieton vers tous
+                            // Mise à jour de l'ArrayList covoitSomme :
+                            // Choisir le cout (temps) le plus élevé entre :
+                            // - celui de la VOITURE vers TOUS
+                            // - celui du PIETONS vers TOUS
+                            // -> determine le temps minimum pour se rejoindre
+                            // Il y aura un cout INFINY s'il n'y a pas de noeud en commun entre les deux
 
-                            // On ajoute le temps qu'il faut depuis ce point de ralliement vers la dest
-                            covoitSomme.get(i).setCout(covoitSomme.get(i).getCout() + covoitDestination.get(i).getCout());
-
-                            // si ce temps est > au temps qu'aurait mis les deux alors ils y vont directs
-                            if (covoitSomme.get(i).getCout() > Math.max(covoitVoiture.get(i).getCout(), covoitPieton.get(i).getCout())) {
-                                // Ici ca veut dire qu'ils y vont chacun pour soit !
-                                if (covoitVoiture.get(i).getCout() > covoitPieton.get(i).getCout())
-                                    covoitSomme.set(i, covoitVoiture.get(i));
+                            for (int i = 0; i < covoitVoiture.size(); i++) {
+                                // TODO : noter le temps d'attente final via la différence des 2 (mettre ca ds un arrayList)
+                                // On prend le max des deux pour avoir le temps minimum qu'il faut pour se rejoindre
+                                if (covoitVoiture.get(i).getCout() < covoitPieton.get(i).getCout())
+                                    covoitSomme.add(i, covoitPieton.get(i));
                                 else
-                                    covoitSomme.set(i, covoitPieton.get(i));
-                                seul.add(i, true);
-                            } else
-                                seul.add(i, false);
-                            if (covoitSomme.get(i).getCout() < min) {
-                                min = covoitSomme.get(i).getCout();
-                                noeud_rejoint = i;
+                                    covoitSomme.add(i, covoitVoiture.get(i));
+
+                                // On ajoute le temps qu'il faut depuis ce point de ralliement vers la dest
+                                covoitSomme.get(i).setCout(covoitSomme.get(i).getCout() + covoitDestination.get(i).getCout());
+
+                                // si ce temps est > au temps qu'aurait mis les deux alors ils y vont directs
+                                if (covoitSomme.get(i).getCout() > Math.max(covoitVoiture.get(i).getCout(), covoitPieton.get(i).getCout())) {
+                                    // Ici ca veut dire qu'ils y vont chacun pour soit !
+                                    if (covoitVoiture.get(i).getCout() > covoitPieton.get(i).getCout())
+                                        covoitSomme.set(i, covoitVoiture.get(i));
+                                    else
+                                        covoitSomme.set(i, covoitPieton.get(i));
+                                    seul.add(i, true);
+                                }
+                                else
+                                    seul.add(i, false);
+
+                                //mise à jour du cout minimum
+                                if (covoitSomme.get(i).getCout() < min) {
+                                    min = covoitSomme.get(i).getCout();
+                                    noeud_rejoint = i;
+                                }
                             }
-                        }
 
-
-                        if (noeud_rejoint != -1) {
-                            System.out.println("On se rejoins au noeud : " + covoitSomme.get(noeud_rejoint));
-                            if (affichage) {
-                                // Ca signifie qu'on veut tracer les 3 chemins
-                                if (seul.get(noeud_rejoint)) {
-                                    // Cela signifie que chacun y va tout seul
-                                    algo = new Pcc_Dijkstra(graphe, origine, dest, affichageDeroulementAlgo, choixCout, false, false, true);
-                                    algo.run();
-                                    algo = new Pcc_Dijkstra(graphe, pieton, dest, affichageDeroulementAlgo, choixCout, false, false, true);
-                                    algo.run();
-                                    // TODO : afficher les résultats des 2 dans la même fenêtre
-                                } else {
-                                    // Ici on doit faire rejoindre les deux puis jusqu'à la fin
-                                    algo = new Pcc_Star(graphe, origine, noeud_rejoint, affichageDeroulementAlgo, choixCout, false, false, true);
-                                    algo.run();
-                                    algo = new Pcc_Star(graphe, pieton, noeud_rejoint, affichageDeroulementAlgo, choixCout, false, false, true);
-                                    algo.run();
-                                    algo = new Pcc_Star(graphe, noeud_rejoint, dest, affichageDeroulementAlgo, choixCout, false, false, true);
-                                    algo.run();
+                            if (noeud_rejoint != -1) {
+                                System.out.println("On se rejoins au noeud : " + covoitSomme.get(noeud_rejoint));
+                                if (affichageChemin) {
+                                    // Ca signifie qu'on veut tracer les 3 chemins
+                                    if (seul.get(noeud_rejoint)) {
+                                        // Cela signifie que chacun y va tout seul
+                                        algo = new Pcc_Dijkstra(graphe, origine, dest, affichageDeroulementAlgo, choixCout, false, false, true);
+                                        perf = algo.run();
+                                        durees.add(perf.get(2));
+                                        algo = new Pcc_Dijkstra(graphe, pieton, dest, affichageDeroulementAlgo, choixCout, false, false, true);
+                                        perf = algo.run();
+                                        durees.add(perf.get(2));
+                                        // TODO : afficher les résultats des 2 dans la même fenêtre
+                                    } else {
+                                        // Ici on doit faire rejoindre les deux puis jusqu'à la fin
+                                        algo = new Pcc_Star(graphe, origine, noeud_rejoint, affichageDeroulementAlgo, choixCout, false, false, true);
+                                        perf = algo.run();
+                                        durees.add(perf.get(2));
+                                        minVoiture = algo.getCoutMinTemps();
+                                        algo = new Pcc_Star(graphe, pieton, noeud_rejoint, affichageDeroulementAlgo, choixCout, false, false, true);
+                                        perf = algo.run();
+                                        durees.add(perf.get(2));
+                                        minPieton = algo.getCoutMinTemps();
+                                        if(minVoiture > minPieton) {
+                                            durees.add("Pas d'attente");
+                                            durees.add(algo.AffichageTempsHeureMin(minVoiture - minPieton));
+                                        }
+                                        else {
+                                            durees.add(algo.AffichageTempsHeureMin(minPieton - minVoiture));
+                                            durees.add("Pas d'attente");
+                                        }
+                                        algo = new Pcc_Star(graphe, noeud_rejoint, dest, affichageDeroulementAlgo, choixCout, false, false, true);
+                                        perf = algo.run();
+                                        durees.add(perf.get(2));
+                                    }
                                 }
                             } else {
-                                // pas d'affichage : donc rien a faire je crois
+                                System.out.println("Impossible de se rejoindre.");
                             }
 
-
-                        } else {
-                            System.out.println("Impossible de se rejoindre.");
+                            // Test si le point de rencontre est trouvé
+                            if (noeud_rejoint != -1 && display) {
+                                // on trace le point de rencontre
+                                node = graphe.getArrayList().get(noeud_rejoint);
+                                graphe.getDessin().setColor(Color.magenta);
+                                graphe.getDessin().drawPoint(node.getLongitude(), node.getLatitude(), 12);
+                            }
                         }
 
-
-                        // Determine le temps d'execution de lalgorithme
-                        duree = (System.currentTimeMillis() - duree);
-
-                        // Test si le point de rencontre est trouvé
-                        if (noeud_rejoint != -1 && display) {
-                            // on trace le point de rencontre
-                            node = graphe.getArrayList().get(noeud_rejoint);
-                            graphe.getDessin().setColor(Color.magenta);
-                            graphe.getDessin().drawPoint(node.getLongitude(), node.getLatitude(), 12);
-                        }
+                        // On enregistre le temps d'execution de l'algorithme
+                        dureeExe = (System.currentTimeMillis() - dureeExe);
 
                         // TODO : erreur dans l'affichage des résulats : cf (temps d'éxécution = 12h .......)
-                        afficherEtEcrireResultats(perfVoitureTous, perfPietonTous, perfDestTous, node, min, duree);
+                        afficherEtEcrireResultats(perfVoitureTous, perfPietonTous, perfDestTous, node, min, dureeExe, durees, seul.get(noeud_rejoint));
 
                         break;
 
@@ -715,8 +736,13 @@ public class Launch extends JFrame {
         // Choix du coup en temps
         choixCout = 1;
 
-        // Choix de ne pas affichager le déroulement des algo
+        // Pas d'affichage des algo
         affichageDeroulementAlgo = false;
+
+        // Choix de l'affichage des chemin
+        if (jCheckBox.isSelected())
+            affichageChemin = true;
+        else affichageChemin = false;
     }
 
 
@@ -830,6 +856,8 @@ public class Launch extends JFrame {
                 jTextFieldPieton.setText("");
                 jTextFieldDest.setText("");
                 controlPanel.add(jLabelCoordsMan);
+                controlPanel.add(jLabelAffChemin);
+                controlPanel.add(jCheckBox);
                 controlPanel.add(jLabelDepartVoiture);
                 controlPanel.add(jTextFieldOrigine);
                 controlPanel.add(jLabelDepartPieton);
@@ -848,6 +876,8 @@ public class Launch extends JFrame {
                 jTextFieldPieton.setText("");
                 jTextFieldDest.setText("");
                 controlPanel.add(jLabelCoordsClick);
+                controlPanel.add(jLabelAffChemin);
+                controlPanel.add(jCheckBox);
                 controlPanel.add(jLabelDepartVoiture);
                 controlPanel.add(jTextFieldOrigine);
                 controlPanel.add(jLabelDepartPieton);
@@ -988,12 +1018,13 @@ public class Launch extends JFrame {
         JOptionPane.showMessageDialog(null, resultat); // On affiche le resultats en popup
         sortie.append(resultat + "\n\n\n"); // On ecrit dans le fichier
     }
-    void afficherEtEcrireResultats(ArrayList perfVoitureTous, ArrayList perfPietonTous, ArrayList perfDestTous, Node node, double min, double duree) {
+
+    void afficherEtEcrireResultats(ArrayList perfVoitureTous, ArrayList perfPietonTous, ArrayList perfDestTous, Node node, double min, double dureeExe, ArrayList<String> durees, boolean isSeul) {
         resultat = "Covoiturage\n";
         resultat += "Carte : " + nomCarte + "\n";
         resultat += "Origine Voiture : " + origine + "\n";
         resultat += "Origine Pieton : " + pieton + "\n";
-        resultat += "Arrivée : " + dest + "\n";
+        resultat += "Arrivée : " + dest + "\n\n";
         if (perfVoitureTous == null || perfPietonTous == null || perfDestTous == null)
             resultat += "Erreur - Un des sommets saisis n'appartient pas au graphe";
         else {
@@ -1001,10 +1032,22 @@ public class Launch extends JFrame {
                 resultat += "Aucun noeud de rencontre trouvé ! \n";
             else {
                 resultat += "On est bien arrivé ! \n";
-                resultat += "Rencontre au noeud  : " + node.getNum() + "\n";
-                resultat += "Avec pour temps : " + algo.AffichageTempsHeureMin(min) + "\n";
+                if (isSeul) {
+                    resultat += "Le conducteur et le pieton se rendent chacun seuls à la destination\n\n";
+                    resultat += "Temps de la voiture vers la destination : " + durees.get(0) + "\n";
+                    resultat += "Temps du pieton vers la destination : " + durees.get(1) + "\n";
+                }
+                else {
+                    resultat += "Le conducteur et le pieton se rendent ensemble à la destination\n";
+                    resultat += "Rencontre au noeud  : " + node.getNum() + "\n\n";
+                    resultat += "Temps de la voiture vers le point rencontre : " + durees.get(0) + "\n";
+                    resultat += "Temps du pieton vers le point rencontre : " + durees.get(1) + "\n";
+                    resultat += "Temps d'attente de la voiture : " + durees.get(2) + "\n";
+                    resultat += "Temps d'attente du pieton : " + durees.get(3) + "\n";
+                    resultat += "Temps du point de rencontre vers la destination : " + durees.get(4) + "\n";
+                }
             }
-            resultat += "Durée exécution : " + algo.AffichageTempsHeureMin(duree) + "\n\n";
+            resultat += "\nDurée exécution : " + algo.AffichageTempsCalcul(dureeExe) + "\n\n";
         }
         JOptionPane.showMessageDialog(null, resultat); // On affiche le resultats en popup
         sortie.append(resultat + "\n\n\n"); // On ecrit dans le fichier
@@ -1077,5 +1120,4 @@ public class Launch extends JFrame {
             go();
         }
     }
-
 }

@@ -26,33 +26,29 @@ public abstract class Algo<E extends Comparable<E>> {
 
     public abstract int getNb_elements_tas();
 
-    public double getDuree() {
-        return duree;
-    }
-
-    public void setDuree(double duree) {
-        this.duree = duree;
-    }
+    public abstract double getCoutMinTemps();
 
     public abstract ArrayList run();
 
     public abstract ArrayList getLabels();
 
-    public String AffichageTempsHeureMin(double min) {
-        int heure = 0;
-        double minute;
-
-        if (min >= 60) {
-            heure = (int) min / 60;
-            minute = min % 60;
-            return (heure + " heure(s) et " + minute + " minute(s) ");
-        }
-        return (min + "min ");
-    }
-
     public abstract HashMap<Node, Label_Generique> getMapLabel();
 
     public abstract void setMapLabel(HashMap<Node, E> mapLabel);
+
+    public String AffichageTempsHeureMin(double min) {
+        int heures, minutes;
+        int totalSecondes = (int)Math.round(min) * 60;
+
+        minutes = (totalSecondes / 60) % 60;
+        heures = (totalSecondes / (60 * 60));
+
+        if (min >= 60) {
+            return (heures + " heure(s) et " + minutes + " minute(s)");
+        }
+        return (minutes + " minute(s)");
+    }
+
     public String AffichageTempsCalcul(double ms) {
         int sec = 0;
         double milli;
