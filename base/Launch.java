@@ -465,11 +465,11 @@ public class Launch extends JFrame {
                                     // TODO : afficher les résultats des 2 dans la même fenêtre
                                 } else {
                                     // Ici on doit faire rejoindre les deux puis jusqu'à la fin
-                                    algo = new Pcc_Dijkstra(graphe, origine, noeud_rejoint, affichageDeroulementAlgo, choixCout, false, false, true);
+                                    algo = new Pcc_Star(graphe, origine, noeud_rejoint, affichageDeroulementAlgo, choixCout, false, false, true);
                                     algo.run();
-                                    algo = new Pcc_Dijkstra(graphe, pieton, noeud_rejoint, affichageDeroulementAlgo, choixCout, false, false, true);
+                                    algo = new Pcc_Star(graphe, pieton, noeud_rejoint, affichageDeroulementAlgo, choixCout, false, false, true);
                                     algo.run();
-                                    algo = new Pcc_Dijkstra(graphe, noeud_rejoint, dest, affichageDeroulementAlgo, choixCout, false, false, true);
+                                    algo = new Pcc_Star(graphe, noeud_rejoint, dest, affichageDeroulementAlgo, choixCout, false, false, true);
                                     algo.run();
                                 }
                             } else {
