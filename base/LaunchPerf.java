@@ -13,20 +13,20 @@ import java.util.ArrayList;
  * Created by Valentin on 18/05/2015.
  */
 public class LaunchPerf {
-    // Declaration de Variables lié à l'execution du programme
-    private String nomCarte;                   // Nom de la carte à charger
-    private String nomChemin;                  // Nom du chemin à charger
+    // Declaration de Variables liï¿½ ï¿½ l'execution du programme
+    private String nomCarte;                   // Nom de la carte ï¿½ charger
+    private String nomChemin;                  // Nom du chemin ï¿½ charger
     private String resultat;                   // Contient les resultats des algos
     private PrintStream sortie;                     // Fichier de sortie
     private Graphe graphe;                     // La map
     private boolean display;                    // Affichage graphique ou non
-    private boolean buttonClicked = false;      // Un bouton a été cliqué ou non
+    private boolean buttonClicked = false;      // Un bouton a ï¿½tï¿½ cliquï¿½ ou non
     private boolean continuer = true;           // Boucle principale : le menu est accessible jusqu'a ce que l'on quitte.
-    private ArrayList clickCoord;                 // Pour avoir coordonnées d'un clic
+    private ArrayList clickCoord;                 // Pour avoir coordonnï¿½es d'un clic
     private int sommetsConnus;              // L'utilisateur connait les sommets origine et dest ou non
     private int choixCout;                  // Plus court en Distance:0 ou Temps:1
     private boolean affichageDeroulementAlgo;   // Affichage des algorithmes ou non
-    private int origine, pieton, dest;      // Numéro des sommets origine, pieton et dest
+    private int origine, pieton, dest;      // Numï¿½ro des sommets origine, pieton et dest
     private Algo algo;                       // Algorithme a executer
 
     public LaunchPerf() {
@@ -47,13 +47,13 @@ public class LaunchPerf {
         int Perf[] = {0, 0};
         int dureeP, dureeA;
         ArrayList test = null;
-        // on veut lancer 100 algos sur la carte avec des sommets différents aléatoires
+        // on veut lancer 100 algos sur la carte avec des sommets diffï¿½rents alï¿½atoires
         for (int i = 0; i < 100; i++) {
             origine = (int) (Math.random() * graphe.max);
             dest = (int) (Math.random() * graphe.max);
 
             // algo -> PCC Standard : Dijkstra
-            algo = new Pcc_Dijkstra(graphe, origine, dest, false, 0, false, false);
+            algo = new Pcc_Dijkstra(graphe, origine, dest, false, 0, false, false, true);
             test = algo.run();
             dureeP = algo.getNb_elements_tas();
             System.out.println(test.get(4));
@@ -62,8 +62,8 @@ public class LaunchPerf {
             } catch (Exception e) {
             }
 
-            // algo -> PCC A-Star : Dijkstra guidé
-            algo = new Pcc_Star(graphe, origine, dest, false, 0, false, false);
+            // algo -> PCC A-Star : Dijkstra guidï¿½
+            algo = new Pcc_Star(graphe, origine, dest, false, 0, false, false, true);
             test = algo.run();
             System.out.println(test.get(4));
 

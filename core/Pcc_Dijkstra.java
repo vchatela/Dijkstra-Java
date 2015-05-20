@@ -8,8 +8,8 @@ import java.awt.*;
 public class Pcc_Dijkstra extends Pcc_Generique<Label> {
 
 
-    public Pcc_Dijkstra(Graphe gr, int origine, int dest, boolean affichageDeroulementAlgo, int choixCout, boolean TOUS, boolean pieton) {
-        super(gr, origine, dest, affichageDeroulementAlgo, choixCout, TOUS, pieton);
+    public Pcc_Dijkstra(Graphe gr, int origine, int dest, boolean affichageDeroulementAlgo, int choixCout, boolean TOUS, boolean pieton, boolean afficherChemin) {
+        super(gr, origine, dest, affichageDeroulementAlgo, choixCout, TOUS, pieton, afficherChemin);
 
         this.graphe.getDessin().setColor(Color.magenta);
     }

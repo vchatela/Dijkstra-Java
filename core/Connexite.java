@@ -137,4 +137,9 @@ public class Connexite extends Algo {
         return labels;
     }
 
+    @Override
+    public HashMap getMapLabel() {
+        return null;
+    }
+
 }

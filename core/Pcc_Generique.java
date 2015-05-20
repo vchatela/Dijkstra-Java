@@ -10,23 +10,33 @@ public class Pcc_Generique<E extends Comparable<E>> extends Algo {
     protected ArrayList<E> labels;      //liste de tous les Label_Dijkstras
     protected BinaryHeap<E> tas;        //Le tas
     protected HashMap<Node, E> mapLabel;//fait correspondre un noeud a un Label_Dijkstra
-
     protected int choixCout;            //en temps (choixCout=1),  en distance (choixCout=0)
     protected int maxTas;               //Nombre maximum d'elemnt dans le tas
     protected int nb_elements_tas;      //Nombre d'element explores
     protected boolean TOUS;             //contient le resultat a enregister dans un fichier
     protected boolean pieton;           // Pour le pieton permet de changer sa vitesse etc
-    public Pcc_Generique(Graphe gr, int origine, int dest, boolean affichageDeroulementAlgo, int choixCout, boolean TOUS, boolean pieton) {
+    protected boolean afficherChemin;
+
+    public Pcc_Generique(Graphe gr, int origine, int dest, boolean affichageDeroulementAlgo, int choixCout, boolean TOUS, boolean pieton, boolean afficherChemin) {
         super(gr);
         this.choixCout = choixCout;
         this.affichageDeroulementAlgo = affichageDeroulementAlgo;
         this.TOUS = TOUS;
         this.pieton = pieton;
+        this.afficherChemin = afficherChemin;
 
         this.zoneOrigine = gr.getZone();
         this.origine = origine;
         this.zoneDestination = gr.getZone();
         this.destination = dest;
+    }
+
+    public HashMap<Node, E> getMapLabel() {
+        return mapLabel;
+    }
+
+    public void setMapLabel(HashMap<Node, E> mapLabel) {
+        this.mapLabel = mapLabel;
     }
 
     public int getNb_elements_tas() {
@@ -163,7 +173,8 @@ public class Pcc_Generique<E extends Comparable<E>> extends Algo {
 
             // Tracer le chemin si les 2 points sont connexes
             if (connexes)
-                chemin();
+                if (afficherChemin)
+                    chemin();
 
             // On enregistre le temps d'execution de l'algorithme
             duree = (System.currentTimeMillis() - duree);
@@ -200,4 +211,5 @@ public class Pcc_Generique<E extends Comparable<E>> extends Algo {
         Collections.reverse(chemin.getListNode());
         chemin.tracerChemin(this.graphe.getDessin());
     }
+
 }

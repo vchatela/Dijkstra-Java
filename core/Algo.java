@@ -1,6 +1,7 @@
 package core;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 
 /**
  * Classe abstraite representant un algorithme (connexite, plus court chemin, etc.)
@@ -49,6 +50,7 @@ public abstract class Algo<E extends Comparable<E>> {
         return (min + "min ");
     }
 
+    public abstract HashMap<Node, E> getMapLabel();
     public String AffichageTempsCalcul(double ms) {
         int sec = 0;
         double milli;
