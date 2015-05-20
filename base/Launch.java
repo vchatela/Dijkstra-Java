@@ -388,6 +388,10 @@ public class Launch extends JFrame {
                         Node node = null;
                         long duree; // Durée d'execution
                         ArrayList<Boolean> seul = new ArrayList<>();
+                        boolean affichage = true;
+                        // ICI ON A DEUX CHOIX : Soit on lance normalement (3disjktras) sans affichages
+                        // Soit on en lance 6 pour les tracer
+
 
                         // Initialisation des algorithmes : cout en TEMPS !
                         initialiserCovoit();
@@ -401,78 +405,82 @@ public class Launch extends JFrame {
                         algo = new Pcc_Dijkstra(graphe, origine, dest, affichageDeroulementAlgo, choixCout, true, false, false);
                         perfVoitureTous = algo.run();
                         ArrayList<Label> covoitVoiture = algo.getLabels();
-                        HashMap<Node, Label_Generique> mapVoit = algo.getMapLabel();
 
                         // PCC du PIETON vers TOUS : màj de l'arraylist s'il est plus grand
                         algo = new Pcc_Dijkstra(graphe, pieton, dest, affichageDeroulementAlgo, choixCout, true, true, false);
                         perfPietonTous = algo.run();
                         ArrayList<Label> covoitPieton = algo.getLabels();
-                        HashMap<Node, Label_Generique> mapPiet = algo.getMapLabel();
-                        System.out.println("Pieton : " + covoitPieton.get(pieton));
 
                         // PCC de la DESTINATION vers TOUS : màj de l'arraylist si max (x,y) < Pcc(dest, noeud) + Pcc( (x ou y) vers noeuds )
                         algo = new Pcc_Dijkstra(graphe, dest, pieton, affichageDeroulementAlgo, choixCout, true, false, false);
                         perfDestTous = algo.run();
                         ArrayList<Label> covoitDestination = algo.getLabels();
-                        HashMap<Node, Label_Generique> mapDest = algo.getMapLabel();
 
-                        for (int i=0; i<covoitPieton.size()||i<covoitVoiture.size(); i++) {
-                            // Mise à jour de l'ArrayList covoitSomme :
-                            // Choisir le cout (temps) le plus élevé entre :
-                            // - celui de la VOITURE vers TOUS
-                            // - celui du PIETONS vers TOUS
-                            // -> determine le temps minimum pour se rejoindre
-                            // Il y aura un cout INFINY s'il n'y a pas de noeud en commun entre les deux
+                        // Ici on a récupérer les temps de origine vers tous - dest vers tous - et pieton vers tous
+                        // Mise à jour de l'ArrayList covoitSomme :
+                        // Choisir le cout (temps) le plus élevé entre :
+                        // - celui de la VOITURE vers TOUS
+                        // - celui du PIETONS vers TOUS
+                        // -> determine le temps minimum pour se rejoindre
+                        // Il y aura un cout INFINY s'il n'y a pas de noeud en commun entre les deux
+
+                        for (int i = 0; i < covoitVoiture.size(); i++) {
                             // TODO : noter le temps d'attente final via la différence des 2 (mettre ca ds un arrayList)
+                            // On prend le max des deux pour avoir le temps minimum qu'il faut pour se rejoindre
                             if (covoitVoiture.get(i).getCout() < covoitPieton.get(i).getCout())
                                 covoitSomme.add(i, covoitPieton.get(i));
                             else
                                 covoitSomme.add(i, covoitVoiture.get(i));
 
-                            // Mise à jour entre : le max des 2 couts entre PIETON et VOITURE plus celui de la DESTINATION :
+                            // On ajoute le temps qu'il faut depuis ce point de ralliement vers la dest
                             covoitSomme.get(i).setCout(covoitSomme.get(i).getCout() + covoitDestination.get(i).getCout());
-                            // si ce temps est > au temps qu'aurait mis les deux alors ils y vont directs
 
-                            /*if (covoitSomme.get(i).getCout() > Math.max(covoitVoiture.get(i).getCout(), covoitPieton.get(i).getCout())) {
+                            // si ce temps est > au temps qu'aurait mis les deux alors ils y vont directs
+                            if (covoitSomme.get(i).getCout() > Math.max(covoitVoiture.get(i).getCout(), covoitPieton.get(i).getCout())) {
                                 // Ici ca veut dire qu'ils y vont chacun pour soit !
                                 if (covoitVoiture.get(i).getCout() > covoitPieton.get(i).getCout())
                                     covoitSomme.set(i, covoitVoiture.get(i));
                                 else
                                     covoitSomme.set(i, covoitPieton.get(i));
                                 seul.add(i, true);
-                            } else*/
-
+                            } else
                                 seul.add(i, false);
-                        }
-                        System.out.println("Origine : " + covoitSomme.get(origine));
-                        System.out.println("Pieton : " + covoitSomme.get(pieton));
-                        System.out.println("Dest : " + covoitSomme.get(dest));
-
-                        for (int i = 0; i < covoitPieton.size() || i < covoitVoiture.size(); i++) {
-                            if (!seul.get(i))
-                                // Ici covoitSomme nous donne le coup du début vers noeud i (PIETON inter VOITURE) vers DESTINATION
-                                // On garde le minimum (si ils n'y vont pas seuls !)
-                                if (covoitSomme.get(i).getCout() < min) {
-                                    min = covoitSomme.get(i).getCout();
-                                    noeud_rejoint = i;
-                                }
-                        }
-
-                        System.out.println(noeud_rejoint);
-                        // TODO : pb -> C'est toujours sur le lieu de la voiture qu'est le noeud rejoins
-
-
-                        // TODO : ce serait cool de tracer le chemin jusqu'à la rencontre pour chacun, et aussi le chemin jusqu'à l'arrivée
-                        if (noeud_rejoint != -1) {
-                            // On regarde si ca veut dire que chacun y va tout seul. A ce moment la on affiche les deux chemins seuls sans lieu de rencontre
-                            if (seul.get(noeud_rejoint)) {
-
-                            } else {
-                                /*chemin(origine, noeud_rejoint, mapVoit);
-                                chemin(pieton, noeud_rejoint, mapPiet);
-                                chemin(noeud_rejoint, dest, mapDest);*/
+                            if (covoitSomme.get(i).getCout() < min) {
+                                min = covoitSomme.get(i).getCout();
+                                noeud_rejoint = i;
                             }
                         }
+
+
+                        if (noeud_rejoint != -1) {
+                            System.out.println("On se rejoins au noeud : " + covoitSomme.get(noeud_rejoint));
+                            if (affichage) {
+                                // Ca signifie qu'on veut tracer les 3 chemins
+                                if (seul.get(noeud_rejoint)) {
+                                    // Cela signifie que chacun y va tout seul
+                                    algo = new Pcc_Dijkstra(graphe, origine, dest, affichageDeroulementAlgo, choixCout, false, false, true);
+                                    algo.run();
+                                    algo = new Pcc_Dijkstra(graphe, pieton, dest, affichageDeroulementAlgo, choixCout, false, false, true);
+                                    algo.run();
+                                    // TODO : afficher les résultats des 2 dans la même fenêtre
+                                } else {
+                                    // Ici on doit faire rejoindre les deux puis jusqu'à la fin
+                                    algo = new Pcc_Dijkstra(graphe, origine, noeud_rejoint, affichageDeroulementAlgo, choixCout, false, false, true);
+                                    algo.run();
+                                    algo = new Pcc_Dijkstra(graphe, pieton, noeud_rejoint, affichageDeroulementAlgo, choixCout, false, false, true);
+                                    algo.run();
+                                    algo = new Pcc_Dijkstra(graphe, noeud_rejoint, dest, affichageDeroulementAlgo, choixCout, false, false, true);
+                                    algo.run();
+                                }
+                            } else {
+                                // pas d'affichage : donc rien a faire je crois
+                            }
+
+
+                        } else {
+                            System.out.println("Impossible de se rejoindre.");
+                        }
+
 
                         // Determine le temps d'execution de lalgorithme
                         duree = (System.currentTimeMillis() - duree);
@@ -484,6 +492,7 @@ public class Launch extends JFrame {
                             graphe.getDessin().setColor(Color.magenta);
                             graphe.getDessin().drawPoint(node.getLongitude(), node.getLatitude(), 12);
                         }
+
                         // TODO : erreur dans l'affichage des résulats : cf (temps d'éxécution = 12h .......)
                         afficherEtEcrireResultats(perfVoitureTous, perfPietonTous, perfDestTous, node, min, duree);
 
