@@ -13,7 +13,6 @@ public class Pcc_Dijkstra extends Pcc_Generique<Label> {
 
         this.graphe.getDessin().setColor(Color.magenta);
     }
-
     public void initialisation() {
 
         // Associe des Labels correspondant aux noeuds et le stocke dans la map !

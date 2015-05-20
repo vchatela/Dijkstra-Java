@@ -50,7 +50,9 @@ public abstract class Algo<E extends Comparable<E>> {
         return (min + "min ");
     }
 
-    public abstract HashMap<Node, E> getMapLabel();
+    public abstract HashMap<Node, Label_Generique> getMapLabel();
+
+    public abstract void setMapLabel(HashMap<Node, E> mapLabel);
     public String AffichageTempsCalcul(double ms) {
         int sec = 0;
         double milli;

@@ -35,7 +35,7 @@ public class Pcc_Generique<E extends Comparable<E>> extends Algo {
         return mapLabel;
     }
 
-    public void setMapLabel(HashMap<Node, E> mapLabel) {
+    public void setMapLabel(HashMap mapLabel) {
         this.mapLabel = mapLabel;
     }
 

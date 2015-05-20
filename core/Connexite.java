@@ -142,4 +142,9 @@ public class Connexite extends Algo {
         return null;
     }
 
+    @Override
+    public void setMapLabel(HashMap mapLabel) {
+
+    }
+
 }

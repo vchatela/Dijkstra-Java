@@ -402,18 +402,22 @@ public class Launch extends JFrame {
                         perfVoitureTous = algo.run();
                         ArrayList<Label> covoitVoiture = algo.getLabels();
                         HashMap<Node, Label_Generique> mapVoit = algo.getMapLabel();
+                        System.out.println("Origine : " + covoitVoiture.get(origine));
 
                         // PCC du PIETON vers TOUS : màj de l'arraylist s'il est plus grand
                         algo = new Pcc_Dijkstra(graphe, origine, dest, affichageDeroulementAlgo, choixCout, true, true, false);
                         perfPietonTous = algo.run();
                         ArrayList<Label> covoitPieton = algo.getLabels();
                         HashMap<Node, Label_Generique> mapPiet = algo.getMapLabel();
+                        System.out.println("Pieton : " + covoitPieton.get(pieton));
+                        System.out.println("Pieton pour origine : " + covoitPieton.get(origine));
 
                         // PCC de la DESTINATION vers TOUS : màj de l'arraylist si max (x,y) < Pcc(dest, noeud) + Pcc( (x ou y) vers noeuds )
                         algo = new Pcc_Dijkstra(graphe, origine, dest, affichageDeroulementAlgo, choixCout, true, false, false);
                         perfDestTous = algo.run();
                         ArrayList<Label> covoitDestination = algo.getLabels();
                         HashMap<Node, Label_Generique> mapDest = algo.getMapLabel();
+                        System.out.println("Dest : " + covoitDestination.get(dest));
 
                         for (int i=0; i<covoitPieton.size()||i<covoitVoiture.size(); i++) {
                             // Mise à jour de l'ArrayList covoitSomme :
@@ -431,16 +435,22 @@ public class Launch extends JFrame {
                             // Mise à jour entre : le max des 2 couts entre PIETON et VOITURE plus celui de la DESTINATION :
                             covoitSomme.get(i).setCout(covoitSomme.get(i).getCout() + covoitDestination.get(i).getCout());
                             // si ce temps est > au temps qu'aurait mis les deux alors ils y vont directs
-                            if (covoitSomme.get(i).getCout() > Math.max(covoitVoiture.get(i).getCout(), covoitPieton.get(i).getCout())) {
+
+                            /*if (covoitSomme.get(i).getCout() > Math.max(covoitVoiture.get(i).getCout(), covoitPieton.get(i).getCout())) {
                                 // Ici ca veut dire qu'ils y vont chacun pour soit !
                                 if (covoitVoiture.get(i).getCout() > covoitPieton.get(i).getCout())
-                                    covoitDestination.set(i, covoitVoiture.get(i));
+                                    covoitSomme.set(i, covoitVoiture.get(i));
                                 else
-                                    covoitDestination.set(i, covoitPieton.get(i));
+                                    covoitSomme.set(i, covoitPieton.get(i));
                                 seul.add(i, true);
-                            } else
+                            } else*/
+
                                 seul.add(i, false);
                         }
+                        System.out.println("Origine : " + covoitSomme.get(origine));
+                        System.out.println("Pieton : " + covoitSomme.get(pieton));
+                        System.out.println("Dest : " + covoitSomme.get(dest));
+
                         for (int i = 0; i < covoitPieton.size() || i < covoitVoiture.size(); i++) {
                             if (!seul.get(i))
                                 // Ici covoitSomme nous donne le coup du début vers noeud i (PIETON inter VOITURE) vers DESTINATION
@@ -451,6 +461,7 @@ public class Launch extends JFrame {
                                 }
                         }
 
+                        System.out.println(noeud_rejoint);
                         // TODO : pb -> C'est toujours sur le lieu de la voiture qu'est le noeud rejoins
 
 
