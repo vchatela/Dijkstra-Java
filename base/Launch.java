@@ -466,7 +466,6 @@ public class Launch extends JFrame {
                                 System.out.println("On se rejoins au noeud : " + covoitSomme.get(noeud_rejoint));
                                 if (affichageChemin) {
                                     // Ca signifie qu'on veut tracer les 3 chemins
-                                    // TODO : on récupère et on trace les chemins sans relancer Pcc !
                                     if (seul.get(noeud_rejoint)) {
                                         // Cela signifie que chacun y va tout seul
                                         algo = new Pcc_Dijkstra(graphe, origine, dest, affichageDeroulementAlgo, choixCout, false, false, true);
@@ -479,7 +478,7 @@ public class Launch extends JFrame {
                                         // TODO : afficher les résultats des 2 dans la même fenêtre
                                     } else {
                                         // Ici on doit faire rejoindre les deux puis jusqu'à la fin
-                                       /* algo = new Pcc_Star(graphe, origine, noeud_rejoint, affichageDeroulementAlgo, choixCout, false, false, true);
+                                        algo = new Pcc_Star(graphe, origine, noeud_rejoint, affichageDeroulementAlgo, choixCout, false, false, true);
                                         perf = algo.run();
                                         durees.add(perf.get(2));
                                         minVoiture = algo.getCoutMinTemps();
@@ -497,10 +496,10 @@ public class Launch extends JFrame {
                                         }
                                         algo = new Pcc_Star(graphe, noeud_rejoint, dest, affichageDeroulementAlgo, choixCout, false, false, true);
                                         perf = algo.run();
-                                        durees.add(perf.get(2));*/
+                                        durees.add(perf.get(2));
                                         ((Pcc_Dijkstra) algo).chemin(origine, noeud_rejoint);
                                         ((Pcc_Dijkstra) algo1).chemin(pieton, noeud_rejoint);
-                                        ((Pcc_Dijkstra) algo2).chemin(noeud_rejoint, dest);
+                                        ((Pcc_Dijkstra) algo2).chemin(dest, noeud_rejoint);
                                     }
                                 }
                             } else {

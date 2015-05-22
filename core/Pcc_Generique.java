@@ -76,7 +76,7 @@ public class Pcc_Generique<E extends Comparable<E>> extends Algo {
 
             //System.out.println();
            // System.out.println("Lancement de l'algorithme " + this.getClass().getName() + " de (zone,noeud) : (" + zoneOrigine + "," + origine + ") vers (" + zoneDestination + "," + destination + ")");
-
+// TODO : soit construire le graphe inverse, soit on dit qu'on peux pas passer par les routes en sens unique
             // Initialisation de nos champs
             labels = new ArrayList<>();
             tas = new BinaryHeap<>();
