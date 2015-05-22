@@ -153,8 +153,8 @@ public class Pcc_Generique<E extends Comparable<E>> extends Algo {
                         // ie. on effectue un covoiturage, on part de la destination vers TOUS
                         // ainsi, les routes à sens unique seront comptabilisés et il ne faut pas les prendre en compte
                         // car à l'inverse, ces routes ne peuvent être empruntées
-                        if(sensUniqueInterdit) {
-                            if(arc.getDescripteur().isSensUnique())
+                        if (sensUniqueInterdit) {
+                            if (arc.getDescripteur().isSensUnique())
                                 continue;
                         }
 
@@ -194,7 +194,7 @@ public class Pcc_Generique<E extends Comparable<E>> extends Algo {
 
             // Tracer le chemin si les 2 points sont connexes
             if (connexes)
-                 chemin();
+                chemin();
 
             // On enregistre le temps d'execution de l'algorithme
             duree = (System.currentTimeMillis() - duree);
