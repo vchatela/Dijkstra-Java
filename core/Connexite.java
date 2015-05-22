@@ -56,11 +56,6 @@ public class Connexite extends Algo {
         return 0;
     }
 
-    @Override
-    public double getCoutMinTemps() {
-        return 0;
-    }
-
     public ArrayList run() {
 
         if ((origine <= 0) || (origine > graphe.getArrayList().size())) {

@@ -90,8 +90,8 @@ public class Launch extends JFrame {
      */
 
     public Launch() {
-        Dimension halfDimension = new Dimension(180, 25);
-        Dimension fullDimension = new Dimension(360, 25);
+        Dimension halfDimension = new Dimension(200, 25);
+        Dimension fullDimension = new Dimension(400, 25);
 
         // Paramétrage des textes à afficher
         jLabelTitle         = new JLabel("<html><br>PROGRAMME DE TESTS DES ALGORITHMES DE GRAPHE<br><br></html>");
@@ -123,8 +123,8 @@ public class Launch extends JFrame {
         jLabelFichier.setPreferredSize(halfDimension);
         jLabelMenu.setPreferredSize(halfDimension);
         jLabelDeroulement.setPreferredSize(halfDimension);
-        jLabelAffChemin.setPreferredSize(new Dimension(180, 40));
-        jLabelTempsMax.setPreferredSize(new Dimension(180, 40));
+        jLabelAffChemin.setPreferredSize(new Dimension(200, 40));
+        jLabelTempsMax.setPreferredSize(new Dimension(200, 40));
         jLabelChoixCout.setPreferredSize(halfDimension);
         jLabelDepart.setPreferredSize(halfDimension);
         jLabelDepartVoiture.setPreferredSize(halfDimension);
@@ -135,7 +135,7 @@ public class Launch extends JFrame {
         jLabelCoordsClick.setPreferredSize(fullDimension);
         jLabelCoordSitues.setPreferredSize(halfDimension);
         jLabelNoeudsProches.setPreferredSize(halfDimension);
-        jLabelNames.setPreferredSize(new Dimension(275, 83));
+        jLabelNames.setPreferredSize(new Dimension(295, 83));
         jLabelNames.setOpaque(true);
         jLabelNames.setBackground(Color.white);
         jLabelChemin.setPreferredSize(halfDimension);
@@ -349,7 +349,7 @@ public class Launch extends JFrame {
                     case 2:
                         // Initialisation et lancement de l'algorithme
                         initialiserAlgo();
-                        algo = new Pcc_Dijkstra(graphe, origine, dest, choixCout, false, false, false, Double.POSITIVE_INFINITY, affichageDeroulementAlgo);
+                        algo = new Pcc_Dijkstra(graphe, origine, dest, choixCout, false, false, false, Double.POSITIVE_INFINITY, affichageDeroulementAlgo, true);
                         ArrayList perfStandard = algo.run();
                         afficherEtEcrireResultats(1, perfStandard);
                         break;
@@ -359,7 +359,7 @@ public class Launch extends JFrame {
 
                         //Initialisation et lancement de l'algorithme
                         initialiserAlgo();
-                        algo = new Pcc_Star(graphe, origine, dest, choixCout, false, false, false, Double.POSITIVE_INFINITY, affichageDeroulementAlgo);
+                        algo = new Pcc_Star(graphe, origine, dest, choixCout, false, false, false, Double.POSITIVE_INFINITY, affichageDeroulementAlgo, true);
                         ArrayList perfAStar = algo.run();
                         afficherEtEcrireResultats(2, perfAStar);
                         break;
@@ -376,13 +376,13 @@ public class Launch extends JFrame {
                         ArrayList perf3 = algo.run();
 
                         // 2i algo -> PCC Standard : Dijkstra
-                        algo = new Pcc_Dijkstra(graphe, origine, dest, choixCout, false, false, false, Double.POSITIVE_INFINITY, affichageDeroulementAlgo);
+                        algo = new Pcc_Dijkstra(graphe, origine, dest, choixCout, false, false, false, Double.POSITIVE_INFINITY, affichageDeroulementAlgo, true);
                         // Lancement des algorithmes et récupération des résultats
                         graphe.getDessin().setColor(Color.magenta);
                         ArrayList perf1 = algo.run();
 
                         // 3i algo -> PCC A-Star : Dijkstra guidé
-                        algo = new Pcc_Star(graphe, origine, dest, choixCout, false, false, false, Double.POSITIVE_INFINITY, affichageDeroulementAlgo);
+                        algo = new Pcc_Star(graphe, origine, dest, choixCout, false, false, false, Double.POSITIVE_INFINITY, affichageDeroulementAlgo, true);
                         graphe.getDessin().setColor(Color.red);
                         ArrayList perf2 = algo.run();
 
@@ -417,17 +417,17 @@ public class Launch extends JFrame {
                         // Lancement des algorithmes
 
                         // PCC de la VOITURE vers TOUS
-                        algo = new Pcc_Dijkstra(graphe, origine, dest, choixCout, true, false, false, Double.POSITIVE_INFINITY, affichageDeroulementAlgo);
+                        algo = new Pcc_Dijkstra(graphe, origine, dest, choixCout, true, false, false, Double.POSITIVE_INFINITY, affichageDeroulementAlgo, false);
                         perfVoitureTous = algo.run();
                         ArrayList<Label> covoitVoiture = algo.getLabels();
 
                         // PCC du PIETON vers TOUS
-                        algo1 = new Pcc_Dijkstra(graphe, pieton, dest, choixCout, true, false, true, tempsAttenteMaxPieton, affichageDeroulementAlgo);
+                        algo1 = new Pcc_Dijkstra(graphe, pieton, dest, choixCout, true, false, true, tempsAttenteMaxPieton, affichageDeroulementAlgo, false);
                         perfPietonTous = algo1.run();
                         ArrayList<Label> covoitPieton = algo1.getLabels();
 
                         // PCC de la DESTINATION vers TOUS
-                        algo2 = new Pcc_Dijkstra(graphe, dest, pieton, choixCout, true, true, false, Double.POSITIVE_INFINITY, affichageDeroulementAlgo);
+                        algo2 = new Pcc_Dijkstra(graphe, dest, pieton, choixCout, true, true, false, Double.POSITIVE_INFINITY, affichageDeroulementAlgo, false);
                         perfDestTous = algo2.run();
                         ArrayList<Label> covoitDestination = algo2.getLabels();
 

@@ -12,7 +12,6 @@ public class Pcc_Generique<E extends Comparable<E>> extends Algo {
     protected BinaryHeap<E> tas;         //Le tas
     protected HashMap<Node, E> mapLabel; //fait correspondre un noeud a un Label_Dijkstra
 
-
     protected int choixCout;             //en temps (choixCout=1),  en distance (choixCout=0)
     protected int maxTas;                //Nombre maximum d'elemnt dans le tas
     protected int nb_elements_tas;       //Nombre d'element explores
@@ -20,9 +19,10 @@ public class Pcc_Generique<E extends Comparable<E>> extends Algo {
     protected boolean sensUniqueInterdit;        //Indique, pour le COVOITURAGE, si on part de la destination, qu'il ne faut pas prendre en compte les route à sens unique (car dans l'autre sens on ne pourra les emprunter)
     protected boolean pieton;            // Pour le pieton permet de changer sa vitesse etc
     protected double tempsAttenteMaxPieton; // Temps maximum d'attente du piéton pour covoiturage
+    protected boolean tracerChemin;         // Tracer le chemin à la fin du déroulement de l'algorithme
 
 
-    public Pcc_Generique(Graphe gr, int origine, int dest, int choixCout, boolean TOUS, boolean sensUniqueInterdit, boolean pieton, double tempsAttenteMaxPieton, boolean affichageDeroulementAlgo) {
+    public Pcc_Generique(Graphe gr, int origine, int dest, int choixCout, boolean TOUS, boolean sensUniqueInterdit, boolean pieton, double tempsAttenteMaxPieton, boolean affichageDeroulementAlgo, boolean tracerChemin) {
         super(gr);
 
         //Liés aux points origine et destination
@@ -42,6 +42,7 @@ public class Pcc_Generique<E extends Comparable<E>> extends Algo {
 
         //Liés à l'affichage
         this.affichageDeroulementAlgo = affichageDeroulementAlgo;
+        this.tracerChemin = tracerChemin;
     }
 
     public HashMap<Node, E> getMapLabel() {
@@ -193,7 +194,7 @@ public class Pcc_Generique<E extends Comparable<E>> extends Algo {
             connexes = dest.isMarque();
 
             // Tracer le chemin si les 2 points sont connexes
-            if (connexes)
+            if (connexes && tracerChemin)
                 chemin();
 
             // On enregistre le temps d'execution de l'algorithme
