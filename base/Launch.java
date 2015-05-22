@@ -485,12 +485,13 @@ public class Launch extends JFrame {
                                     } else {
                                         // Ici on doit faire rejoindre les deux puis jusqu'à la fin
                                         // on ajoute le cout de l'algo origine vers noeud rejoins
-                                        durees.add(algo.AffichageTempsHeureMin(((Pcc_Dijkstra) algo).chemin(origine, noeud_rejoint)));
                                         minVoiture = ((Pcc_Dijkstra) algo).chemin(origine, noeud_rejoint);
+                                        durees.add(algo.AffichageTempsHeureMin(minVoiture));
 
-                                        // on ajoute le cout de l'algo pieton vers noeud rejoins
-                                        durees.add(algo1.AffichageTempsHeureMin(((Pcc_Dijkstra) algo1).chemin(pieton, noeud_rejoint)));
                                         minPieton = ((Pcc_Dijkstra) algo1).chemin(pieton, noeud_rejoint);
+                                        // on ajoute le cout de l'algo pieton vers noeud rejoins
+                                        durees.add(algo1.AffichageTempsHeureMin(minPieton));
+
                                         if(minVoiture > minPieton) {
                                             durees.add("Pas d'attente");
                                             durees.add(algo.AffichageTempsHeureMin(minVoiture - minPieton));
