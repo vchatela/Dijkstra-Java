@@ -393,11 +393,10 @@ public class Launch extends JFrame {
                         ArrayList<Boolean> seul = new ArrayList<>();
                         boolean seul1;
                         boolean pasRencontre = false;
+                        Algo algo1, algo2;
 
                         // ICI ON A DEUX CHOIX : Soit on lance normalement (3disjktras) sans affichages
                         // Soit on en lance 6 pour les tracer
-
-//TODO : si pieton et dest =, ca marche pas
 
                         // Initialisation des algorithmes : cout en TEMPS !
                         initialiserCovoit();
@@ -411,15 +410,16 @@ public class Launch extends JFrame {
                         algo = new Pcc_Dijkstra(graphe, origine, dest, affichageDeroulementAlgo, choixCout, true, false, false);
                         perfVoitureTous = algo.run();
                         ArrayList<Label> covoitVoiture = algo.getLabels();
+
                         // PCC du PIETON vers TOUS : màj de l'arraylist s'il est plus grand
-                        algo = new Pcc_Dijkstra(graphe, pieton, dest, affichageDeroulementAlgo, choixCout, true, true, false);
-                        perfPietonTous = algo.run();
-                        ArrayList<Label> covoitPieton = algo.getLabels();
+                        algo1 = new Pcc_Dijkstra(graphe, pieton, dest, affichageDeroulementAlgo, choixCout, true, true, false);
+                        perfPietonTous = algo1.run();
+                        ArrayList<Label> covoitPieton = algo1.getLabels();
 
                         // PCC de la DESTINATION vers TOUS : màj de l'arraylist si max (x,y) > Pcc(dest, noeud) + Pcc( (x ou y) vers noeuds )
-                        algo = new Pcc_Dijkstra(graphe, dest, pieton, affichageDeroulementAlgo, choixCout, true, false, false);
-                        perfDestTous = algo.run();
-                        ArrayList<Label> covoitDestination = algo.getLabels();
+                        algo2 = new Pcc_Dijkstra(graphe, dest, pieton, affichageDeroulementAlgo, choixCout, true, false, false);
+                        perfDestTous = algo2.run();
+                        ArrayList<Label> covoitDestination = algo2.getLabels();
 
                         // On continue si les points saisis existent
                         if (perfVoitureTous != null && perfPietonTous != null && perfDestTous != null) {
@@ -433,7 +433,6 @@ public class Launch extends JFrame {
                             // Il y aura un cout INFINY s'il n'y a pas de noeud en commun entre les deux
 
                             for (int i = 0; i < covoitVoiture.size(); i++) {
-                                // TODO : noter le temps d'attente final via la différence des 2 (mettre ca ds un arrayList)
                                 // On prend le max des deux pour avoir le temps minimum qu'il faut pour se rejoindre
                                 if (covoitVoiture.get(i).getCout() < covoitPieton.get(i).getCout())
                                     covoitSomme.add(i, covoitPieton.get(i));
@@ -476,10 +475,11 @@ public class Launch extends JFrame {
                                         algo = new Pcc_Dijkstra(graphe, pieton, dest, affichageDeroulementAlgo, choixCout, false, true, true);
                                         perf = algo.run();
                                         durees.add(perf.get(2));
+
                                         // TODO : afficher les résultats des 2 dans la même fenêtre
                                     } else {
                                         // Ici on doit faire rejoindre les deux puis jusqu'à la fin
-                                        algo = new Pcc_Star(graphe, origine, noeud_rejoint, affichageDeroulementAlgo, choixCout, false, false, true);
+                                       /* algo = new Pcc_Star(graphe, origine, noeud_rejoint, affichageDeroulementAlgo, choixCout, false, false, true);
                                         perf = algo.run();
                                         durees.add(perf.get(2));
                                         minVoiture = algo.getCoutMinTemps();
@@ -497,7 +497,10 @@ public class Launch extends JFrame {
                                         }
                                         algo = new Pcc_Star(graphe, noeud_rejoint, dest, affichageDeroulementAlgo, choixCout, false, false, true);
                                         perf = algo.run();
-                                        durees.add(perf.get(2));
+                                        durees.add(perf.get(2));*/
+                                        ((Pcc_Dijkstra) algo).chemin(origine, noeud_rejoint);
+                                        ((Pcc_Dijkstra) algo1).chemin(pieton, noeud_rejoint);
+                                        ((Pcc_Dijkstra) algo2).chemin(noeud_rejoint, dest);
                                     }
                                 }
                             } else {
@@ -524,7 +527,7 @@ public class Launch extends JFrame {
                             pasRencontre = true;
                         }
 
-                        afficherEtEcrireResultats(perfVoitureTous, perfPietonTous, perfDestTous, node, min, dureeExe, durees, seul1, pasRencontre);
+                        //afficherEtEcrireResultats(perfVoitureTous, perfPietonTous, perfDestTous, node, min, dureeExe, durees, seul1, pasRencontre);
 
                         break;
 

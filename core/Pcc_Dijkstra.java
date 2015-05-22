@@ -1,6 +1,7 @@
 package core;
 
 import java.awt.*;
+import java.util.Collections;
 
 /**
  * Created by valentin on 4/29/15.
@@ -31,6 +32,28 @@ public class Pcc_Dijkstra extends Pcc_Generique<Label> {
                 dest = l;
             }
         }
+    }
+
+    public void chemin(int origine, int dest) {
+        // on construit le chemin du dest->origine
+        Chemin chemin = new Chemin(origine, dest);
+        chemin.addNode(this.graphe.getArrayList().get(dest));
+        Label_Generique labeldest = mapLabel.get(this.graphe.getArrayList().get(dest));
+        //dest doit être label_generique
+
+        Label E_en_cours = (Label) labeldest;
+
+        Node node;
+        // On remonte avec l'aide du pere !
+        // Tant qu'on n'atteint pas le sommet d'origine qui a pour pere -1
+        while (E_en_cours.getPere() != -1) {
+            node = this.graphe.getArrayList().get(E_en_cours.getPere());
+            chemin.addNode(node);
+            E_en_cours = mapLabel.get(node);
+        }
+        // cout et affichage du chemin
+        Collections.reverse(chemin.getListNode());
+        chemin.tracerChemin(this.graphe.getDessin());
     }
 
 }

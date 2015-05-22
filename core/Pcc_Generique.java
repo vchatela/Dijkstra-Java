@@ -131,7 +131,6 @@ public class Pcc_Generique<E extends Comparable<E>> extends Algo {
                             new_cout = (choixCout == 0) ? arc.getLg_arete() + ((Label_Generique) min).getCout() : 60.0f * ((float) arc.getLg_arete()) / (1000.0f * (float) arc.getDescripteur().getVitMax()) + ((Label_Generique) min).getCout();
                         }
                         else {
-                            // TODO : verifier si 4f (4 en float) c'est bien en km/h etc ..
                             // On vérifie que la route n'est pas une autoroute : dans le descripteur on a char type == a
                             if (arc.getDescripteur().getType() != 'a') {
                                 new_cout = (choixCout == 0) ? arc.getLg_arete() + ((Label_Generique) min).getCout() : 60.0f * ((float) arc.getLg_arete()) / (1000.0f * 4f) + ((Label_Generique) min).getCout();
