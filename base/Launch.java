@@ -17,7 +17,6 @@ import javax.swing.event.DocumentListener;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.awt.geom.Arc2D;
 import java.io.DataInputStream;
 import java.io.PrintStream;
 import java.util.ArrayList;
@@ -479,23 +478,20 @@ public class Launch extends JFrame {
                                     // Ca signifie qu'on veut tracer les 3 chemins
                                     if (seul.get(noeud_rejoint)) {
                                         // Cela signifie que chacun y va tout seul
-                                        algo = new Pcc_Dijkstra(graphe, origine, dest, choixCout, false, false, Double.POSITIVE_INFINITY, affichageDeroulementAlgo, false);
-                                        perf = algo.run();
-                                        durees.add(perf.get(2));
-                                        algo = new Pcc_Dijkstra(graphe, pieton, dest, choixCout, false, true, Double.POSITIVE_INFINITY, affichageDeroulementAlgo, false);
-                                        perf = algo.run();
-                                        durees.add(perf.get(2));
+                                        // on ajoute le cout de origine vers dest
+                                        //  durees.add(perf.get(2));
+                                        // on ajoute le cout de pieton vers dest
+                                        //  durees.add(perf.get(2));
 
                                         // TODO : afficher les résultats des 2 dans la même fenêtre
                                     } else {
                                         // Ici on doit faire rejoindre les deux puis jusqu'à la fin
-                                        algo = new Pcc_Star(graphe, origine, noeud_rejoint, affichageDeroulementAlgo, choixCout, false, false, true);
-                                        perf = algo.run();
-                                        durees.add(perf.get(2));
-                                        minVoiture = algo.getCoutMinTemps();
-                                        algo = new Pcc_Star(graphe, pieton, noeud_rejoint, affichageDeroulementAlgo, choixCout, false, true, true);
-                                        perf = algo.run();
-                                        durees.add(perf.get(2));
+                                        // on ajoute le cout de l'algo origine vers noeud rejoins
+                                        //durees.add(perf.get(2));
+                                        //minVoiture = algo.getCoutMinTemps();
+
+                                        // on ajoute le cout de l'algo pieton vers noeud rejoins
+                                        /*durees.add(perf.get(2));
                                         minPieton = algo.getCoutMinTemps();
                                         if(minVoiture > minPieton) {
                                             durees.add("Pas d'attente");
@@ -504,10 +500,10 @@ public class Launch extends JFrame {
                                         else {
                                             durees.add(algo.AffichageTempsHeureMin(minPieton - minVoiture));
                                             durees.add("Pas d'attente");
-                                        }
-                                        algo = new Pcc_Star(graphe, noeud_rejoint, dest, affichageDeroulementAlgo, choixCout, false, false, true);
-                                        perf = algo.run();
-                                        durees.add(perf.get(2));
+                                        }*/
+                                        // on ajoute le cout de noeud rejoins vers dest
+
+                                        // durees.add(perf.get(2));
                                         ((Pcc_Dijkstra) algo).chemin(origine, noeud_rejoint);
                                         ((Pcc_Dijkstra) algo1).chemin(pieton, noeud_rejoint);
                                         ((Pcc_Dijkstra) algo2).chemin(dest, noeud_rejoint);
