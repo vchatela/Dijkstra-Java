@@ -36,15 +36,18 @@ public class Pcc_Dijkstra extends Pcc_Generique<Label> {
         }
     }
 
-    public void chemin(int origine, int dest) {
+    public double chemin(int origine, int dest) {
         // on construit le chemin du dest->origine
+        double cout = -1;
         Chemin chemin = new Chemin(origine, dest);
         chemin.addNode(this.graphe.getArrayList().get(dest));
         Label_Generique labeldest = mapLabel.get(this.graphe.getArrayList().get(dest));
         //dest doit être label_generique
 
         Label E_en_cours = (Label) labeldest;
-
+        if (E_en_cours != null) {
+            cout = E_en_cours.getCout();
+        }
         Node node;
         // On remonte avec l'aide du pere !
         // Tant qu'on n'atteint pas le sommet d'origine qui a pour pere -1
@@ -56,6 +59,7 @@ public class Pcc_Dijkstra extends Pcc_Generique<Label> {
         // cout et affichage du chemin
         Collections.reverse(chemin.getListNode());
         chemin.tracerChemin(this.graphe.getDessin());
+        return cout;
     }
 
 }

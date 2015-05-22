@@ -422,7 +422,7 @@ public class Launch extends JFrame {
                         ArrayList<Label> covoitVoiture = algo.getLabels();
 
                         // PCC du PIETON vers TOUS : màj de l'arraylist s'il est plus grand
-                        algo1 = new Pcc_Dijkstra(graphe, pieton, dest, choixCout, true, false, tempsAttenteMaxPieton, affichageDeroulementAlgo, false);
+                        algo1 = new Pcc_Dijkstra(graphe, pieton, dest, choixCout, true, true, tempsAttenteMaxPieton, affichageDeroulementAlgo, false);
                         perfPietonTous = algo1.run();
                         ArrayList<Label> covoitPieton = algo1.getLabels();
 
@@ -448,7 +448,6 @@ public class Launch extends JFrame {
                                     covoitSomme.add(i, covoitPieton.get(i));
                                 else
                                     covoitSomme.add(i, covoitVoiture.get(i));
-// C'est ici qu'on peut récupérer le temps d'attente !
 
                                 // On ajoute le temps qu'il faut depuis ce point de ralliement vers la dest
                                 covoitSomme.get(i).setCout(covoitSomme.get(i).getCout() + covoitDestination.get(i).getCout());
@@ -479,20 +478,19 @@ public class Launch extends JFrame {
                                     if (seul.get(noeud_rejoint)) {
                                         // Cela signifie que chacun y va tout seul
                                         // on ajoute le cout de origine vers dest
-                                        //  durees.add(perf.get(2));
-                                        // on ajoute le cout de pieton vers dest
-                                        //  durees.add(perf.get(2));
+                                        durees.add(algo.AffichageTempsHeureMin(((Pcc_Dijkstra) algo).chemin(origine, dest)));
+                                        durees.add(algo1.AffichageTempsHeureMin(((Pcc_Dijkstra) algo1).chemin(pieton, dest)));
 
                                         // TODO : afficher les résultats des 2 dans la même fenêtre
                                     } else {
                                         // Ici on doit faire rejoindre les deux puis jusqu'à la fin
                                         // on ajoute le cout de l'algo origine vers noeud rejoins
-                                        //durees.add(perf.get(2));
-                                        //minVoiture = algo.getCoutMinTemps();
+                                        durees.add(algo.AffichageTempsHeureMin(((Pcc_Dijkstra) algo).chemin(origine, noeud_rejoint)));
+                                        minVoiture = ((Pcc_Dijkstra) algo).chemin(origine, noeud_rejoint);
 
                                         // on ajoute le cout de l'algo pieton vers noeud rejoins
-                                        /*durees.add(perf.get(2));
-                                        minPieton = algo.getCoutMinTemps();
+                                        durees.add(algo1.AffichageTempsHeureMin(((Pcc_Dijkstra) algo1).chemin(pieton, noeud_rejoint)));
+                                        minPieton = ((Pcc_Dijkstra) algo1).chemin(pieton, noeud_rejoint);
                                         if(minVoiture > minPieton) {
                                             durees.add("Pas d'attente");
                                             durees.add(algo.AffichageTempsHeureMin(minVoiture - minPieton));
@@ -500,13 +498,9 @@ public class Launch extends JFrame {
                                         else {
                                             durees.add(algo.AffichageTempsHeureMin(minPieton - minVoiture));
                                             durees.add("Pas d'attente");
-                                        }*/
+                                        }
                                         // on ajoute le cout de noeud rejoins vers dest
-
-                                        // durees.add(perf.get(2));
-                                        ((Pcc_Dijkstra) algo).chemin(origine, noeud_rejoint);
-                                        ((Pcc_Dijkstra) algo1).chemin(pieton, noeud_rejoint);
-                                        ((Pcc_Dijkstra) algo2).chemin(dest, noeud_rejoint);
+                                        durees.add(algo.AffichageTempsHeureMin(((Pcc_Dijkstra) algo2).chemin(dest, noeud_rejoint)));
                                     }
                                 }
                             } else {
@@ -533,7 +527,7 @@ public class Launch extends JFrame {
                             pasRencontre = true;
                         }
 
-                        //afficherEtEcrireResultats(perfVoitureTous, perfPietonTous, perfDestTous, node, min, dureeExe, durees, seul1, pasRencontre);
+                        afficherEtEcrireResultats(perfVoitureTous, perfPietonTous, perfDestTous, node, min, dureeExe, durees, seul1, pasRencontre);
 
                         break;
 
@@ -765,7 +759,7 @@ public class Launch extends JFrame {
         else affichageChemin = false;
 
         // Choix du temps d'attente max du piéton
-        tempsAttenteMaxPieton = (Double)jSpinnerTempsMax.getValue();
+        tempsAttenteMaxPieton = Double.POSITIVE_INFINITY;
     }
 
 
