@@ -17,6 +17,7 @@ import javax.swing.event.DocumentListener;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.geom.Arc2D;
 import java.io.DataInputStream;
 import java.io.PrintStream;
 import java.util.ArrayList;
@@ -44,7 +45,7 @@ public class Launch extends JFrame {
     private JLabel                                      // Texte à afficher
             jLabelNames, jLabelTitle, jLabelCarte, jLabelAfficher, jLabelFichier, jLabelMenu,
             jLabelDeroulement, jLabelChoixCout, jLabelDepart, jLabelDepartVoiture, jLabelAffChemin,
-            jLabelDepartPieton, jLabelArrivee, jLabelCoordsMan, jLabelCoordsClick,
+            jLabelDepartPieton, jLabelArrivee, jLabelCoordsMan, jLabelCoordsClick, jLabelTempsMax,
             jLabelCoordClick, jLabelCoordSitues, jLabelNoeudsProches, jLabelChemin;
     private JLabel          jLabelImageGraphe;          // Image de lancement (graphe) à afficher
     private JLabel          jLabelImageINSA;            // Logo de l'INSA à afficher
@@ -60,6 +61,8 @@ public class Launch extends JFrame {
     private JComboBox	    jComboBoxMenu;              // Contient les menus
     private JComboBox	    jComboBoxCartes;            // Contient les cartes
     private JComboBox       jComboBoxChemins;          // Contient les chemins
+    private SpinnerModel    spinnerModel;
+    private JSpinner        jSpinnerTempsMax;
     private JButton		    jButtonOk;                  // Button ok (lancement de l'appli, chagement de menu, attente de lecture des coord du clic)
     private JButton		    jButtonLoad;                // Button charger (lancement de l'appli)
     private Thread          thread;                     // Utilisé pour afficher la map en parallèle du menu de selection des choix
@@ -76,6 +79,7 @@ public class Launch extends JFrame {
     private ArrayList       clickCoord;                 // Pour avoir coordonnées d'un clic
     private int             sommetsConnus;              // L'utilisateur connait les sommets origine et dest ou non
     private int             choixCout;                  // Plus court en Distance:0 ou Temps:1
+    private double          tempsAttenteMaxPieton;      // Temps maximum d'attente du piéton pour covoiturage
     private boolean         affichageDeroulementAlgo;   // Affichage des algorithmes ou non
     private boolean         affichageChemin;            // Affichage des chemins ou non (covoit)
     private int             origine, pieton, dest;      // Numéro des sommets origine, pieton et dest
@@ -98,6 +102,7 @@ public class Launch extends JFrame {
         jLabelMenu          = new JLabel("Que voulez-vous faire : ");
         jLabelDeroulement   = new JLabel("Afficher le deroulement : ");
         jLabelAffChemin     = new JLabel("<html>Afficher les chemins<br>(Cela est plus long) :</html>");
+        jLabelTempsMax      = new JLabel("<html>Temps min d'attente<br>du piéton (max 1h) :</html>");
         jLabelChoixCout     = new JLabel("Choix du coup : ");
         jLabelDepart        = new JLabel("Départ : ");
         jLabelDepartVoiture = new JLabel("Départ du conducteur : ");
@@ -120,6 +125,7 @@ public class Launch extends JFrame {
         jLabelMenu.setPreferredSize(halfDimension);
         jLabelDeroulement.setPreferredSize(halfDimension);
         jLabelAffChemin.setPreferredSize(new Dimension(180, 40));
+        jLabelTempsMax.setPreferredSize(new Dimension(180, 40));
         jLabelChoixCout.setPreferredSize(halfDimension);
         jLabelDepart.setPreferredSize(halfDimension);
         jLabelDepartVoiture.setPreferredSize(halfDimension);
@@ -243,6 +249,11 @@ public class Launch extends JFrame {
         jButtonOk.setBackground(new Color(235, 235, 235));
         jButtonOk.addActionListener(new BoutonListener());
 
+        // Paramétrage de la selection du temps max d'attente du piéton
+        spinnerModel = new SpinnerNumberModel(10, 1, 60, 1);
+        jSpinnerTempsMax = new JSpinner(spinnerModel);
+        jSpinnerTempsMax.setPreferredSize(halfDimension);
+
         // Paramétrage du menu de selection des choix avec ajout des composants
         controlPanel = new JPanel();
         controlPanel.setPreferredSize(new Dimension(380, 600));
@@ -339,7 +350,7 @@ public class Launch extends JFrame {
                     case 2:
                         // Initialisation et lancement de l'algorithme
                         initialiserAlgo();
-                        algo = new Pcc_Dijkstra(graphe, origine, dest, affichageDeroulementAlgo, choixCout, false, false, true);
+                        algo = new Pcc_Dijkstra(graphe, origine, dest, choixCout, false, false, Double.POSITIVE_INFINITY, affichageDeroulementAlgo, true);
                         ArrayList perfStandard = algo.run();
                         afficherEtEcrireResultats(1, perfStandard);
                         break;
@@ -349,7 +360,7 @@ public class Launch extends JFrame {
 
                         //Initialisation et lancement de l'algorithme
                         initialiserAlgo();
-                        algo = new Pcc_Star(graphe, origine, dest, affichageDeroulementAlgo, choixCout, false, false, true);
+                        algo = new Pcc_Star(graphe, origine, dest, choixCout, false, false, Double.POSITIVE_INFINITY, affichageDeroulementAlgo, true);
                         ArrayList perfAStar = algo.run();
                         afficherEtEcrireResultats(2, perfAStar);
                         break;
@@ -366,13 +377,13 @@ public class Launch extends JFrame {
                         ArrayList perf3 = algo.run();
 
                         // 2i algo -> PCC Standard : Dijkstra
-                        algo = new Pcc_Dijkstra(graphe, origine, dest, affichageDeroulementAlgo, choixCout, false, false, true);
+                        algo = new Pcc_Dijkstra(graphe, origine, dest, choixCout, false, false, Double.POSITIVE_INFINITY, affichageDeroulementAlgo, true);
                         // Lancement des algorithmes et récupération des résultats
                         graphe.getDessin().setColor(Color.magenta);
                         ArrayList perf1 = algo.run();
 
                         // 3i algo -> PCC A-Star : Dijkstra guidé
-                        algo = new Pcc_Star(graphe, origine, dest, affichageDeroulementAlgo, choixCout, false, false, true);
+                        algo = new Pcc_Star(graphe, origine, dest, choixCout, false, false, Double.POSITIVE_INFINITY, affichageDeroulementAlgo, true);
                         graphe.getDessin().setColor(Color.red);
                         ArrayList perf2 = algo.run();
 
@@ -407,17 +418,17 @@ public class Launch extends JFrame {
                         // Lancement des algorithmes
 
                         // PCC de la VOITURE vers TOUS : récupération de l'arraylist des couts
-                        algo = new Pcc_Dijkstra(graphe, origine, dest, affichageDeroulementAlgo, choixCout, true, false, false);
+                        algo = new Pcc_Dijkstra(graphe, origine, dest, choixCout, true, false, Double.POSITIVE_INFINITY, affichageDeroulementAlgo, false);
                         perfVoitureTous = algo.run();
                         ArrayList<Label> covoitVoiture = algo.getLabels();
 
                         // PCC du PIETON vers TOUS : màj de l'arraylist s'il est plus grand
-                        algo1 = new Pcc_Dijkstra(graphe, pieton, dest, affichageDeroulementAlgo, choixCout, true, true, false);
+                        algo1 = new Pcc_Dijkstra(graphe, pieton, dest, choixCout, true, false, tempsAttenteMaxPieton, affichageDeroulementAlgo, false);
                         perfPietonTous = algo1.run();
                         ArrayList<Label> covoitPieton = algo1.getLabels();
 
                         // PCC de la DESTINATION vers TOUS : màj de l'arraylist si max (x,y) > Pcc(dest, noeud) + Pcc( (x ou y) vers noeuds )
-                        algo2 = new Pcc_Dijkstra(graphe, dest, pieton, affichageDeroulementAlgo, choixCout, true, false, false);
+                        algo2 = new Pcc_Dijkstra(graphe, dest, pieton, choixCout, true, false, Double.POSITIVE_INFINITY, affichageDeroulementAlgo, false);
                         perfDestTous = algo2.run();
                         ArrayList<Label> covoitDestination = algo2.getLabels();
 
@@ -469,10 +480,10 @@ public class Launch extends JFrame {
                                     // TODO : on récupère et on trace les chemins sans relancer Pcc !
                                     if (seul.get(noeud_rejoint)) {
                                         // Cela signifie que chacun y va tout seul
-                                        algo = new Pcc_Dijkstra(graphe, origine, dest, affichageDeroulementAlgo, choixCout, false, false, true);
+                                        algo = new Pcc_Dijkstra(graphe, origine, dest, choixCout, false, false, Double.POSITIVE_INFINITY, affichageDeroulementAlgo, false);
                                         perf = algo.run();
                                         durees.add(perf.get(2));
-                                        algo = new Pcc_Dijkstra(graphe, pieton, dest, affichageDeroulementAlgo, choixCout, false, true, true);
+                                        algo = new Pcc_Dijkstra(graphe, pieton, dest, choixCout, false, true, Double.POSITIVE_INFINITY, affichageDeroulementAlgo, false);
                                         perf = algo.run();
                                         durees.add(perf.get(2));
 
@@ -757,6 +768,9 @@ public class Launch extends JFrame {
         if (jCheckBox.isSelected())
             affichageChemin = true;
         else affichageChemin = false;
+
+        // Choix du temps d'attente max du piéton
+        tempsAttenteMaxPieton = (Double)jSpinnerTempsMax.getValue();
     }
 
 
@@ -872,6 +886,8 @@ public class Launch extends JFrame {
                 controlPanel.add(jLabelCoordsMan);
                 controlPanel.add(jLabelAffChemin);
                 controlPanel.add(jCheckBox);
+                controlPanel.add(jLabelTempsMax);
+                controlPanel.add(jSpinnerTempsMax);
                 controlPanel.add(jLabelDepartVoiture);
                 controlPanel.add(jTextFieldOrigine);
                 controlPanel.add(jLabelDepartPieton);
@@ -892,6 +908,8 @@ public class Launch extends JFrame {
                 controlPanel.add(jLabelCoordsClick);
                 controlPanel.add(jLabelAffChemin);
                 controlPanel.add(jCheckBox);
+                controlPanel.add(jLabelTempsMax);
+                controlPanel.add(jSpinnerTempsMax);
                 controlPanel.add(jLabelDepartVoiture);
                 controlPanel.add(jTextFieldOrigine);
                 controlPanel.add(jLabelDepartPieton);
