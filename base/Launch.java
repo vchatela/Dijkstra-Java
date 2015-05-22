@@ -411,12 +411,10 @@ public class Launch extends JFrame {
                         algo = new Pcc_Dijkstra(graphe, origine, dest, affichageDeroulementAlgo, choixCout, true, false, false);
                         perfVoitureTous = algo.run();
                         ArrayList<Label> covoitVoiture = algo.getLabels();
-                        System.out.println("PerfVoiture Tous jusqu'à dest seul : " + perfVoitureTous.get(2));
                         // PCC du PIETON vers TOUS : màj de l'arraylist s'il est plus grand
                         algo = new Pcc_Dijkstra(graphe, pieton, dest, affichageDeroulementAlgo, choixCout, true, true, false);
                         perfPietonTous = algo.run();
                         ArrayList<Label> covoitPieton = algo.getLabels();
-                        System.out.println("PerfPieton Tous jusqu'à dest seul : " + perfPietonTous.get(2));
 
                         // PCC de la DESTINATION vers TOUS : màj de l'arraylist si max (x,y) > Pcc(dest, noeud) + Pcc( (x ou y) vers noeuds )
                         algo = new Pcc_Dijkstra(graphe, dest, pieton, affichageDeroulementAlgo, choixCout, true, false, false);
@@ -469,6 +467,7 @@ public class Launch extends JFrame {
                                 System.out.println("On se rejoins au noeud : " + covoitSomme.get(noeud_rejoint));
                                 if (affichageChemin) {
                                     // Ca signifie qu'on veut tracer les 3 chemins
+                                    // TODO : on récupère et on trace les chemins sans relancer Pcc !
                                     if (seul.get(noeud_rejoint)) {
                                         // Cela signifie que chacun y va tout seul
                                         algo = new Pcc_Dijkstra(graphe, origine, dest, affichageDeroulementAlgo, choixCout, false, false, true);

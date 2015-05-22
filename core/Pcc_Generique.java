@@ -43,13 +43,13 @@ public class Pcc_Generique<E extends Comparable<E>> extends Algo {
         return nb_elements_tas;
     }
 
+    public void setNb_elements_tas(int nb_elements_tas) {
+        this.nb_elements_tas = nb_elements_tas;
+    }
+
     @Override
     public double getCoutMinTemps() {
         return dest.getCout();
-    }
-
-    public void setNb_elements_tas(int nb_elements_tas) {
-        this.nb_elements_tas = nb_elements_tas;
     }
 
     public ArrayList<E> getLabels() {
@@ -216,5 +216,4 @@ public class Pcc_Generique<E extends Comparable<E>> extends Algo {
         Collections.reverse(chemin.getListNode());
         chemin.tracerChemin(this.graphe.getDessin());
     }
-
 }
