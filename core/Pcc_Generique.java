@@ -7,28 +7,41 @@ import java.util.HashMap;
 
 public class Pcc_Generique<E extends Comparable<E>> extends Algo {
 
-    protected ArrayList<E> labels;      //liste de tous les Label_Dijkstras
-    protected BinaryHeap<E> tas;        //Le tas
-    protected HashMap<Node, E> mapLabel;//fait correspondre un noeud a un Label_Dijkstra
-    protected int choixCout;            //en temps (choixCout=1),  en distance (choixCout=0)
-    protected int maxTas;               //Nombre maximum d'elemnt dans le tas
-    protected int nb_elements_tas;      //Nombre d'element explores
-    protected boolean TOUS;             //contient le resultat a enregister dans un fichier
-    protected boolean pieton;           // Pour le pieton permet de changer sa vitesse etc
+    //Structures de données utilisées
+    protected ArrayList<E> labels;       //liste de tous les Label_Dijkstras
+    protected BinaryHeap<E> tas;         //Le tas
+    protected HashMap<Node, E> mapLabel; //fait correspondre un noeud a un Label_Dijkstra
+
+
+    protected int choixCout;             //en temps (choixCout=1),  en distance (choixCout=0)
+    protected int maxTas;                //Nombre maximum d'elemnt dans le tas
+    protected int nb_elements_tas;       //Nombre d'element explores
+    protected boolean TOUS;              //contient le resultat a enregister dans un fichier
+    protected boolean pieton;            // Pour le pieton permet de changer sa vitesse etc
     protected boolean afficherChemin;
+    protected double tempsAttenteMaxPieton; // Temps maximum d'attente du piéton pour covoiturage
 
-    public Pcc_Generique(Graphe gr, int origine, int dest, boolean affichageDeroulementAlgo, int choixCout, boolean TOUS, boolean pieton, boolean afficherChemin) {
+
+    public Pcc_Generique(Graphe gr, int origine, int dest, int choixCout, boolean TOUS, boolean pieton, double tempsAttenteMaxPieton, boolean affichageDeroulementAlgo, boolean afficherChemin) {
         super(gr);
-        this.choixCout = choixCout;
-        this.affichageDeroulementAlgo = affichageDeroulementAlgo;
-        this.TOUS = TOUS;
-        this.pieton = pieton;
-        this.afficherChemin = afficherChemin;
 
+        //Liés aux points origine et destination
         this.zoneOrigine = gr.getZone();
         this.origine = origine;
         this.zoneDestination = gr.getZone();
         this.destination = dest;
+
+        //Liés au type de cout choisi : temps ou distance
+        this.choixCout = choixCout;
+
+        //Liés au covoiturage
+        this.TOUS = TOUS;
+        this.pieton = pieton;
+        this.tempsAttenteMaxPieton = tempsAttenteMaxPieton;
+
+        //Liés à l'affichage
+        this.affichageDeroulementAlgo = affichageDeroulementAlgo;
+        this.afficherChemin = afficherChemin;
     }
 
     public HashMap<Node, E> getMapLabel() {

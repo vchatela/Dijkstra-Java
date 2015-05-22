@@ -9,11 +9,13 @@ import java.util.Collections;
 public class Pcc_Dijkstra extends Pcc_Generique<Label> {
 
 
-    public Pcc_Dijkstra(Graphe gr, int origine, int dest, boolean affichageDeroulementAlgo, int choixCout, boolean TOUS, boolean pieton, boolean afficherChemin) {
-        super(gr, origine, dest, affichageDeroulementAlgo, choixCout, TOUS, pieton, afficherChemin);
+    public Pcc_Dijkstra(Graphe gr, int origine, int dest, int choixCout, boolean TOUS, boolean pieton, double tempsAttenteMaxPieton, boolean affichageDeroulementAlgo, boolean afficherChemin) {
 
-        this.graphe.getDessin().setColor(Color.magenta);
+        super(gr, origine, dest, choixCout, TOUS, pieton, tempsAttenteMaxPieton, affichageDeroulementAlgo, afficherChemin);
+
+        this.graphe.getDessin().setColor(Color.red);
     }
+
     public void initialisation() {
 
         // Associe des Labels correspondant aux noeuds et le stocke dans la map !
