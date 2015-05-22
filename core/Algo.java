@@ -26,8 +26,6 @@ public abstract class Algo<E extends Comparable<E>> {
 
     public abstract int getNb_elements_tas();
 
-    public abstract double getCoutMinTemps();
-
     public abstract ArrayList run();
 
     public abstract ArrayList getLabels();

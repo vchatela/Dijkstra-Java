@@ -17,12 +17,12 @@ public class Pcc_Generique<E extends Comparable<E>> extends Algo {
     protected int maxTas;                //Nombre maximum d'elemnt dans le tas
     protected int nb_elements_tas;       //Nombre d'element explores
     protected boolean TOUS;              //contient le resultat a enregister dans un fichier
+    protected boolean sensUniqueInterdit;        //Indique, pour le COVOITURAGE, si on part de la destination, qu'il ne faut pas prendre en compte les route à sens unique (car dans l'autre sens on ne pourra les emprunter)
     protected boolean pieton;            // Pour le pieton permet de changer sa vitesse etc
-    protected boolean afficherChemin;
     protected double tempsAttenteMaxPieton; // Temps maximum d'attente du piéton pour covoiturage
 
 
-    public Pcc_Generique(Graphe gr, int origine, int dest, int choixCout, boolean TOUS, boolean pieton, double tempsAttenteMaxPieton, boolean affichageDeroulementAlgo, boolean afficherChemin) {
+    public Pcc_Generique(Graphe gr, int origine, int dest, int choixCout, boolean TOUS, boolean sensUniqueInterdit, boolean pieton, double tempsAttenteMaxPieton, boolean affichageDeroulementAlgo) {
         super(gr);
 
         //Liés aux points origine et destination
@@ -36,12 +36,12 @@ public class Pcc_Generique<E extends Comparable<E>> extends Algo {
 
         //Liés au covoiturage
         this.TOUS = TOUS;
+        this.sensUniqueInterdit = sensUniqueInterdit;
         this.pieton = pieton;
         this.tempsAttenteMaxPieton = tempsAttenteMaxPieton;
 
         //Liés à l'affichage
         this.affichageDeroulementAlgo = affichageDeroulementAlgo;
-        this.afficherChemin = afficherChemin;
     }
 
     public HashMap<Node, E> getMapLabel() {
@@ -58,11 +58,6 @@ public class Pcc_Generique<E extends Comparable<E>> extends Algo {
 
     public void setNb_elements_tas(int nb_elements_tas) {
         this.nb_elements_tas = nb_elements_tas;
-    }
-
-    @Override
-    public double getCoutMinTemps() {
-        return dest.getCout();
     }
 
     public ArrayList<E> getLabels() {
@@ -154,6 +149,15 @@ public class Pcc_Generique<E extends Comparable<E>> extends Algo {
                             }
                         }
 
+                        // On vérifie si on effectue un chemin inverse
+                        // ie. on effectue un covoiturage, on part de la destination vers TOUS
+                        // ainsi, les routes à sens unique seront comptabilisés et il ne faut pas les prendre en compte
+                        // car à l'inverse, ces routes ne peuvent être empruntées
+                        if(sensUniqueInterdit) {
+                            if(arc.getDescripteur().isSensUnique())
+                                continue;
+                        }
+
                         // On verifie si ce cout est inferieur au precedent
                         if (new_cout < ((Label_Generique) succ).getCout()) {
                             // Si oui, on met à jour les valeurs des couts
@@ -190,8 +194,7 @@ public class Pcc_Generique<E extends Comparable<E>> extends Algo {
 
             // Tracer le chemin si les 2 points sont connexes
             if (connexes)
-                if (afficherChemin)
-                    chemin();
+                 chemin();
 
             // On enregistre le temps d'execution de l'algorithme
             duree = (System.currentTimeMillis() - duree);
