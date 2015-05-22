@@ -53,7 +53,7 @@ public class LaunchPerf {
             dest = (int) (Math.random() * graphe.max);
 
             // algo -> PCC Standard : Dijkstra
-            algo = new Pcc_Dijkstra(graphe, origine, dest, false, 0, false, false, true);
+            //algo = new Pcc_Dijkstra(graphe, origine, dest, false, 0, false, false, true);
             test = algo.run();
             dureeP = algo.getNb_elements_tas();
             System.out.println(test.get(4));
@@ -63,7 +63,7 @@ public class LaunchPerf {
             }
 
             // algo -> PCC A-Star : Dijkstra guid�
-            algo = new Pcc_Star(graphe, origine, dest, false, 0, false, false, true);
+            //algo = new Pcc_Star(graphe, origine, dest, false, 0, false, false, true);
             test = algo.run();
             System.out.println(test.get(4));
 

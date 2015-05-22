@@ -249,7 +249,7 @@ public class Launch extends JFrame {
         jButtonOk.addActionListener(new BoutonListener());
 
         // Paramétrage de la selection du temps max d'attente du piéton
-        spinnerModel = new SpinnerNumberModel(10, 1, 60, 1);
+        spinnerModel = new SpinnerNumberModel(10, 1, 60, 1.0);
         jSpinnerTempsMax = new JSpinner(spinnerModel);
         jSpinnerTempsMax.setPreferredSize(halfDimension);
 
@@ -349,7 +349,7 @@ public class Launch extends JFrame {
                     case 2:
                         // Initialisation et lancement de l'algorithme
                         initialiserAlgo();
-                        algo = new Pcc_Dijkstra(graphe, origine, dest, choixCout, false, false, Double.POSITIVE_INFINITY, affichageDeroulementAlgo, true);
+                        algo = new Pcc_Dijkstra(graphe, origine, dest, choixCout, false, false, false, Double.POSITIVE_INFINITY, affichageDeroulementAlgo);
                         ArrayList perfStandard = algo.run();
                         afficherEtEcrireResultats(1, perfStandard);
                         break;
@@ -359,7 +359,7 @@ public class Launch extends JFrame {
 
                         //Initialisation et lancement de l'algorithme
                         initialiserAlgo();
-                        algo = new Pcc_Star(graphe, origine, dest, choixCout, false, false, Double.POSITIVE_INFINITY, affichageDeroulementAlgo, true);
+                        algo = new Pcc_Star(graphe, origine, dest, choixCout, false, false, false, Double.POSITIVE_INFINITY, affichageDeroulementAlgo);
                         ArrayList perfAStar = algo.run();
                         afficherEtEcrireResultats(2, perfAStar);
                         break;
@@ -376,13 +376,13 @@ public class Launch extends JFrame {
                         ArrayList perf3 = algo.run();
 
                         // 2i algo -> PCC Standard : Dijkstra
-                        algo = new Pcc_Dijkstra(graphe, origine, dest, choixCout, false, false, Double.POSITIVE_INFINITY, affichageDeroulementAlgo, true);
+                        algo = new Pcc_Dijkstra(graphe, origine, dest, choixCout, false, false, false, Double.POSITIVE_INFINITY, affichageDeroulementAlgo);
                         // Lancement des algorithmes et récupération des résultats
                         graphe.getDessin().setColor(Color.magenta);
                         ArrayList perf1 = algo.run();
 
                         // 3i algo -> PCC A-Star : Dijkstra guidé
-                        algo = new Pcc_Star(graphe, origine, dest, choixCout, false, false, Double.POSITIVE_INFINITY, affichageDeroulementAlgo, true);
+                        algo = new Pcc_Star(graphe, origine, dest, choixCout, false, false, false, Double.POSITIVE_INFINITY, affichageDeroulementAlgo);
                         graphe.getDessin().setColor(Color.red);
                         ArrayList perf2 = algo.run();
 
@@ -416,18 +416,18 @@ public class Launch extends JFrame {
 
                         // Lancement des algorithmes
 
-                        // PCC de la VOITURE vers TOUS : récupération de l'arraylist des couts
-                        algo = new Pcc_Dijkstra(graphe, origine, dest, choixCout, true, false, Double.POSITIVE_INFINITY, affichageDeroulementAlgo, false);
+                        // PCC de la VOITURE vers TOUS
+                        algo = new Pcc_Dijkstra(graphe, origine, dest, choixCout, true, false, false, Double.POSITIVE_INFINITY, affichageDeroulementAlgo);
                         perfVoitureTous = algo.run();
                         ArrayList<Label> covoitVoiture = algo.getLabels();
 
-                        // PCC du PIETON vers TOUS : màj de l'arraylist s'il est plus grand
-                        algo1 = new Pcc_Dijkstra(graphe, pieton, dest, choixCout, true, false, tempsAttenteMaxPieton, affichageDeroulementAlgo, false);
+                        // PCC du PIETON vers TOUS
+                        algo1 = new Pcc_Dijkstra(graphe, pieton, dest, choixCout, true, false, true, tempsAttenteMaxPieton, affichageDeroulementAlgo);
                         perfPietonTous = algo1.run();
                         ArrayList<Label> covoitPieton = algo1.getLabels();
 
-                        // PCC de la DESTINATION vers TOUS : màj de l'arraylist si max (x,y) > Pcc(dest, noeud) + Pcc( (x ou y) vers noeuds )
-                        algo2 = new Pcc_Dijkstra(graphe, dest, pieton, choixCout, true, false, Double.POSITIVE_INFINITY, affichageDeroulementAlgo, false);
+                        // PCC de la DESTINATION vers TOUS
+                        algo2 = new Pcc_Dijkstra(graphe, dest, pieton, choixCout, true, true, false, Double.POSITIVE_INFINITY, affichageDeroulementAlgo);
                         perfDestTous = algo2.run();
                         ArrayList<Label> covoitDestination = algo2.getLabels();
 
@@ -765,7 +765,7 @@ public class Launch extends JFrame {
         else affichageChemin = false;
 
         // Choix du temps d'attente max du piéton
-        tempsAttenteMaxPieton = (Double)jSpinnerTempsMax.getValue();
+        tempsAttenteMaxPieton = (Double)jSpinnerTempsMax.getModel().getValue();
     }
 
 
