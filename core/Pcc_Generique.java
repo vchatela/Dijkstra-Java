@@ -135,6 +135,11 @@ public class Pcc_Generique<E extends Comparable<E>> extends Algo {
                     // Si le sommet n'est pas marque
                     if (!(((Label_Generique) succ).isMarque())) {
 
+                        if (sensUniqueInterdit) {
+                            if (arc.getDescripteur().isSensUnique())
+                                continue;
+                        }
+
                         // On met alors le cout a jour : si pieton -> vérifier type de route
                         if (!pieton) {
                             new_cout = (choixCout == 0) ? arc.getLg_arete() + ((Label_Generique) min).getCout() : 60.0f * ((float) arc.getLg_arete()) / (1000.0f * (float) arc.getDescripteur().getVitMax()) + ((Label_Generique) min).getCout();
@@ -149,15 +154,20 @@ public class Pcc_Generique<E extends Comparable<E>> extends Algo {
                                 continue;
                             }
                         }
+// TODO : on doit vérifier que le temps new_cout s'il est mis à jour ne dépasse pas la valeur tempsAttentePietonMax sinon continue du for
+
+                        if (new_cout > tempsAttenteMaxPieton) {
+                            // TODO : on met le cout a infini alors ?
+                            new_cout = Double.POSITIVE_INFINITY;
+                            ((Label_Generique) succ).setCout(new_cout);
+                            continue;
+                        }
 
                         // On vérifie si on effectue un chemin inverse
                         // ie. on effectue un covoiturage, on part de la destination vers TOUS
                         // ainsi, les routes à sens unique seront comptabilisés et il ne faut pas les prendre en compte
                         // car à l'inverse, ces routes ne peuvent être empruntées
-                        if (sensUniqueInterdit) {
-                            if (arc.getDescripteur().isSensUnique())
-                                continue;
-                        }
+
 
                         // On verifie si ce cout est inferieur au precedent
                         if (new_cout < ((Label_Generique) succ).getCout()) {

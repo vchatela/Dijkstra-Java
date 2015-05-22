@@ -5,6 +5,7 @@ package base;
  * a partir d'un menu graphique
  */
 
+//TODO : thread qui plante en fin de prog : AWT - EvenQueue-0
 
 import core.*;
 import core.Label;
@@ -393,7 +394,7 @@ public class Launch extends JFrame {
                     case 5:
                         // ArrayList contenant les couts màj
                         ArrayList<Label> covoitSomme = new ArrayList<>();
-                        ArrayList<String> perfVoitureTous, perfPietonTous, perfDestTous, perf;
+                        ArrayList<String> perfVoitureTous, perfPietonTous, perfDestTous;
                         int noeud_rejoint = -1;
                         double min = Double.POSITIVE_INFINITY;
                         Node node = null;
@@ -421,6 +422,8 @@ public class Launch extends JFrame {
                         perfVoitureTous = algo.run();
                         ArrayList<Label> covoitVoiture = algo.getLabels();
 
+                        System.out.println(tempsAttenteMaxPieton);
+
                         // PCC du PIETON vers TOUS
                         algo1 = new Pcc_Dijkstra(graphe, pieton, dest, choixCout, true, false, true, tempsAttenteMaxPieton, affichageDeroulementAlgo, false);
                         perfPietonTous = algo1.run();
@@ -444,12 +447,14 @@ public class Launch extends JFrame {
 
                             for (int i = 0; i < covoitVoiture.size(); i++) {
                                 // On prend le max des deux pour avoir le temps minimum qu'il faut pour se rejoindre
-                                if (covoitVoiture.get(i).getCout() < covoitPieton.get(i).getCout())
+                                if (covoitVoiture.get(i).getCout() < covoitPieton.get(i).getCout()) {
                                     covoitSomme.add(i, covoitPieton.get(i));
-                                else
+                                } else {
                                     covoitSomme.add(i, covoitVoiture.get(i));
+                                }
 
                                 // On ajoute le temps qu'il faut depuis ce point de ralliement vers la dest
+                                // c'est cette valeur qu'on veut minimiser temps complet du trajet
                                 covoitSomme.get(i).setCout(covoitSomme.get(i).getCout() + covoitDestination.get(i).getCout());
 
                                 // si ce temps est > au temps qu'aurait mis les deux alors ils y vont directs
@@ -470,8 +475,10 @@ public class Launch extends JFrame {
                                     noeud_rejoint = i;
                                 }
                             }
+                            //TODO : autre chose ! Si le pieton doit obligatoirement marcher plus de x minutes, il prend sa voiture !
 
                             if (noeud_rejoint != -1) {
+                                // TODO : ici problème ! covoitSomme.get(noeud_rejoint) nous donne le sommet qui est bon, mais le cout est par contre celui jusqu'à la dest !!
                                 System.out.println("On se rejoins au noeud : " + covoitSomme.get(noeud_rejoint));
                                 if (affichageChemin) {
                                     // Ca signifie qu'on veut tracer les 3 chemins
@@ -481,16 +488,31 @@ public class Launch extends JFrame {
                                         durees.add(algo.AffichageTempsHeureMin(((Pcc_Dijkstra) algo).chemin(origine, dest)));
                                         durees.add(algo1.AffichageTempsHeureMin(((Pcc_Dijkstra) algo1).chemin(pieton, dest)));
 
-                                        // TODO : afficher les résultats des 2 dans la même fenêtre
+                                        // TODO : c'est sur que c'est ici le souci du temps
                                     } else {
                                         // Ici on doit faire rejoindre les deux puis jusqu'à la fin
                                         // on ajoute le cout de l'algo origine vers noeud rejoins
-                                        durees.add(algo.AffichageTempsHeureMin(((Pcc_Dijkstra) algo).chemin(origine, noeud_rejoint)));
-                                        minVoiture = ((Pcc_Dijkstra) algo).chemin(origine, noeud_rejoint);
+                                        // TODO : le pb viens uniquement du calcul par rapport à la voiture
+                                        // Et oui! covoitSomme contient la valeur de max(voit, piet) + dest !   car a chaque tour de boucle on ajoute le dest, donc même au noeud rejoins !
+                                        // faut stocker la valeur avant !
 
-                                        // on ajoute le cout de l'algo pieton vers noeud rejoins
-                                        durees.add(algo1.AffichageTempsHeureMin(((Pcc_Dijkstra) algo1).chemin(pieton, noeud_rejoint)));
+                                        // Cette valeur c'est le temps qu'il faut pour se rejoindre
+                                        // TODO : probablement une erreur de pointeur, dans chemin on doit être relié à covoitSomme et donc nos labels sont faux !
+                                        /*
+                                        minVoiture = ((Pcc_Dijkstra) algo).chemin(origine, noeud_rejoint);
+                                        */
+                                        // TODO : pas performant mais marche !! C'est donc ca, on a un pointeur sur les labels qui marche pas !
+                                        algo = new Pcc_Dijkstra(graphe, origine, dest, choixCout, true, false, false, Double.POSITIVE_INFINITY, affichageDeroulementAlgo, false);
+                                        perfVoitureTous = algo.run();
+                                        covoitVoiture = algo.getLabels();
+                                        minVoiture = covoitVoiture.get(noeud_rejoint).getCout();
+
+                                        durees.add(algo.AffichageTempsHeureMin(minVoiture));
+
                                         minPieton = ((Pcc_Dijkstra) algo1).chemin(pieton, noeud_rejoint);
+                                        // on ajoute le cout de l'algo pieton vers noeud rejoins
+                                        durees.add(algo1.AffichageTempsHeureMin(minPieton));
+
                                         if(minVoiture > minPieton) {
                                             durees.add("Pas d'attente");
                                             durees.add(algo.AffichageTempsHeureMin(minVoiture - minPieton));
@@ -504,6 +526,8 @@ public class Launch extends JFrame {
                                     }
                                 }
                             } else {
+                                //TODO : c'est bizarre qu'on arrive à passer ici des fois ...
+                                // tester si les noeuds sont connexes ?
                                 System.out.println("Impossible de se rejoindre.");
                             }
 
@@ -759,6 +783,7 @@ public class Launch extends JFrame {
         else affichageChemin = false;
 
         // Choix du temps d'attente max du piéton
+        // TODO : pb -> la valeur c'est toujours 10 peut importe si on change
         tempsAttenteMaxPieton = (Double)jSpinnerTempsMax.getModel().getValue();
     }
 

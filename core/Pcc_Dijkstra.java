@@ -41,8 +41,7 @@ public class Pcc_Dijkstra extends Pcc_Generique<Label> {
         double cout = -1;
         Chemin chemin = new Chemin(origine, dest);
         chemin.addNode(this.graphe.getArrayList().get(dest));
-        Label_Generique labeldest = mapLabel.get(this.graphe.getArrayList().get(dest));
-        //dest doit être label_generique
+        Label_Generique labeldest = this.mapLabel.get(this.graphe.getArrayList().get(dest));
 
         Label E_en_cours = (Label) labeldest;
         if (E_en_cours != null) {
@@ -54,7 +53,7 @@ public class Pcc_Dijkstra extends Pcc_Generique<Label> {
         while (E_en_cours.getPere() != -1) {
             node = this.graphe.getArrayList().get(E_en_cours.getPere());
             chemin.addNode(node);
-            E_en_cours = mapLabel.get(node);
+            E_en_cours = this.mapLabel.get(node);
         }
         // cout et affichage du chemin
         Collections.reverse(chemin.getListNode());
