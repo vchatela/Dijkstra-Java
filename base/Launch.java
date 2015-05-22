@@ -90,8 +90,8 @@ public class Launch extends JFrame {
      */
 
     public Launch() {
-        Dimension halfDimension = new Dimension(200, 25);
-        Dimension fullDimension = new Dimension(400, 25);
+        Dimension halfDimension = new Dimension(180, 25);
+        Dimension fullDimension = new Dimension(360, 25);
 
         // Paramétrage des textes à afficher
         jLabelTitle         = new JLabel("<html><br>PROGRAMME DE TESTS DES ALGORITHMES DE GRAPHE<br><br></html>");
@@ -123,8 +123,8 @@ public class Launch extends JFrame {
         jLabelFichier.setPreferredSize(halfDimension);
         jLabelMenu.setPreferredSize(halfDimension);
         jLabelDeroulement.setPreferredSize(halfDimension);
-        jLabelAffChemin.setPreferredSize(new Dimension(200, 40));
-        jLabelTempsMax.setPreferredSize(new Dimension(200, 40));
+        jLabelAffChemin.setPreferredSize(new Dimension(180, 40));
+        jLabelTempsMax.setPreferredSize(new Dimension(180, 40));
         jLabelChoixCout.setPreferredSize(halfDimension);
         jLabelDepart.setPreferredSize(halfDimension);
         jLabelDepartVoiture.setPreferredSize(halfDimension);
@@ -135,7 +135,7 @@ public class Launch extends JFrame {
         jLabelCoordsClick.setPreferredSize(fullDimension);
         jLabelCoordSitues.setPreferredSize(halfDimension);
         jLabelNoeudsProches.setPreferredSize(halfDimension);
-        jLabelNames.setPreferredSize(new Dimension(295, 83));
+        jLabelNames.setPreferredSize(new Dimension(275, 83));
         jLabelNames.setOpaque(true);
         jLabelNames.setBackground(Color.white);
         jLabelChemin.setPreferredSize(halfDimension);
