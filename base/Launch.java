@@ -528,6 +528,8 @@ public class Launch extends JFrame {
                             } else {
                                 //TODO : c'est bizarre qu'on arrive à passer ici des fois ...
                                 // tester si les noeuds sont connexes ?
+                                // ou alors la voiture ne peut pas y aller
+                                // ou alors ca veut dire que chacun prend sa voiture !
                                 System.out.println("Impossible de se rejoindre.");
                             }
 
