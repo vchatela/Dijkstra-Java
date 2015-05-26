@@ -502,7 +502,7 @@ public class Launch extends JFrame {
                                         minVoiture = ((Pcc_Dijkstra) algo).chemin(origine, noeud_rejoint);
                                         */
                                         // TODO : pas performant mais marche !! C'est donc ca, on a un pointeur sur les labels qui marche pas !
-                                        algo = new Pcc_Dijkstra(graphe, origine, dest, choixCout, true, false, false, Double.POSITIVE_INFINITY, affichageDeroulementAlgo, false);
+                                        algo = new Pcc_Dijkstra(graphe, origine, noeud_rejoint, choixCout, false, false, false, Double.POSITIVE_INFINITY, affichageDeroulementAlgo, false);
                                         perfVoitureTous = algo.run();
                                         covoitVoiture = algo.getLabels();
                                         minVoiture = covoitVoiture.get(noeud_rejoint).getCout();
