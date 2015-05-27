@@ -48,7 +48,6 @@ public class TestUnitaires {
             System.out.println("Error : testCovoit");
 
 
-
     }
 
 
@@ -70,6 +69,7 @@ public class TestUnitaires {
 
 
     }
+
     public boolean testCarte(String s) {
         nomCarte = s;
         mapdata = Openfile.open(nomCarte);

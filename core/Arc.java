@@ -18,7 +18,7 @@ public class Arc {
     private Node node_source;        //Noeud source de l'arc
     private Descripteur descripteur;        //Descripteur de l'arc
     private ArrayList<Segment> listSegment;    //Liste des segments representant l'arc (affichage)
-	
+
 	/*
 	 * Constructeurs
 	*/

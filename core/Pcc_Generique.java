@@ -90,8 +90,7 @@ public class Pcc_Generique<E extends Comparable<E>> extends Algo {
 
         if ((origine <= 0) || (origine > graphe.getArrayList().size())) {
             JOptionPane.showMessageDialog(null, "Le numero de sommet d'origine saisi : " + origine + " n'appartient pas au graphe");
-        }
-        else if ((destination <= 0) || (destination > graphe.getArrayList().size())) {
+        } else if ((destination <= 0) || (destination > graphe.getArrayList().size())) {
             JOptionPane.showMessageDialog(null, "Le numero de sommet de destination saisi : " + origine + " n'appartient pas au graphe");
         }
         // a noter que : si booleen TOUS alors message de confirmation de vers tout le monde
@@ -152,8 +151,7 @@ public class Pcc_Generique<E extends Comparable<E>> extends Algo {
                         // On met alors le cout a jour : si pieton -> vérifier type de route
                         if (!pieton) {
                             new_cout = (choixCout == 0) ? arc.getLg_arete() + ((Label_Generique) min).getCout() : 60.0f * ((float) arc.getLg_arete()) / (1000.0f * (float) arc.getDescripteur().getVitMax()) + ((Label_Generique) min).getCout();
-                        }
-                        else {
+                        } else {
                             // On vérifie que la route n'est pas une autoroute : dans le descripteur on a char type == a
                             if (arc.getDescripteur().getType() != 'a') {
                                 new_cout = (choixCout == 0) ? arc.getLg_arete() + ((Label_Generique) min).getCout() : 60.0f * ((float) arc.getLg_arete()) / (1000.0f * 4f) + ((Label_Generique) min).getCout();
@@ -220,10 +218,10 @@ public class Pcc_Generique<E extends Comparable<E>> extends Algo {
 
             // Mise à jour du résultat pour affichage et fichier de sortie
             ArrayList<String> resultat = new ArrayList<>();
-            resultat.add(""+origine);
-            resultat.add(""+destination);
-            if(connexes)    resultat.add("connexes");
-            else            resultat.add("non connexes");
+            resultat.add("" + origine);
+            resultat.add("" + destination);
+            if (connexes) resultat.add("connexes");
+            else resultat.add("non connexes");
             resultat.add(AffichageTempsCalcul(duree));
             if (choixCout == 0) {
                 resultat.add(String.valueOf(dest.getCout() / 1000) + "km");

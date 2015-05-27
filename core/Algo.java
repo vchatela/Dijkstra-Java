@@ -36,7 +36,7 @@ public abstract class Algo<E extends Comparable<E>> {
 
     public String AffichageTempsHeureMin(double min) {
         int heures, minutes;
-        int totalSecondes = (int)Math.round(min) * 60;
+        int totalSecondes = (int) Math.round(min) * 60;
 
         minutes = (totalSecondes / 60) % 60;
         heures = (totalSecondes / (60 * 60));

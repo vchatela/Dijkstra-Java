@@ -7,25 +7,25 @@ import java.util.HashMap;
 
 public class Connexite extends Algo {
 
-        protected BinaryHeap<Label> tas;           // Le tas
-        protected ArrayList<Label> labels;         // Liste de tous les Labels
-        protected HashMap<Node, Label> mapLabel;   // Correspondre un noeud à un Label
+    protected BinaryHeap<Label> tas;           // Le tas
+    protected ArrayList<Label> labels;         // Liste de tous les Labels
+    protected HashMap<Node, Label> mapLabel;   // Correspondre un noeud à un Label
 
-        public Connexite(Graphe gr, int origine, int destination, boolean affichageDeroulementAlgo) {
-            super(gr);
-            this.affichageDeroulementAlgo = affichageDeroulementAlgo;
+    public Connexite(Graphe gr, int origine, int destination, boolean affichageDeroulementAlgo) {
+        super(gr);
+        this.affichageDeroulementAlgo = affichageDeroulementAlgo;
 
-            this.zoneOrigine = gr.getZone();
-            this.origine = origine;
-            this.zoneDestination = gr.getZone();
-            this.destination = destination;
+        this.zoneOrigine = gr.getZone();
+        this.origine = origine;
+        this.zoneDestination = gr.getZone();
+        this.destination = destination;
 
-            this.graphe.getDessin().setColor(Color.cyan);
-        }
+        this.graphe.getDessin().setColor(Color.cyan);
+    }
 
-        /**
-         * Initialisation de l'algo de Connexite
-         */
+    /**
+     * Initialisation de l'algo de Connexite
+     */
     public void initialisation() {
         labels = new ArrayList<>();
         tas = new BinaryHeap<>();
@@ -60,12 +60,9 @@ public class Connexite extends Algo {
 
         if ((origine <= 0) || (origine > graphe.getArrayList().size())) {
             JOptionPane.showMessageDialog(null, "Le numero de sommet d'origine saisi : " + origine + " n'appartient pas au graphe");
-        }
-        else if ((destination <= 0) || (destination > graphe.getArrayList().size())) {
+        } else if ((destination <= 0) || (destination > graphe.getArrayList().size())) {
             JOptionPane.showMessageDialog(null, "Le numero de sommet de destination saisi : " + origine + " n'appartient pas au graphe");
-        }
-
-        else {
+        } else {
             System.out.println("Lancement de l'algorithme Connexité de (zone,noeud) : (" + zoneOrigine + "," + origine + ") vers (" + zoneDestination + "," + destination + ")");
 
             // Mesurer le temps d'execution de l'algorithme
@@ -123,10 +120,10 @@ public class Connexite extends Algo {
 
             // Mise à jour du résultat pour affichage et fichier de sortie
             ArrayList<String> resultat = new ArrayList<>();
-            resultat.add(""+origine);
-            resultat.add(""+destination);
-            if(connexes)    resultat.add("connexes");
-            else            resultat.add("non connexes");
+            resultat.add("" + origine);
+            resultat.add("" + destination);
+            if (connexes) resultat.add("connexes");
+            else resultat.add("non connexes");
             resultat.add(AffichageTempsCalcul(duree));
 
             return resultat;

@@ -13,7 +13,6 @@ import core.Label;
 import javax.swing.*;
 import javax.swing.border.BevelBorder;
 import javax.swing.border.EmptyBorder;
-import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
@@ -60,13 +59,12 @@ public class Launch extends JFrame {
     private JCheckBox jCheckBox;                  // Un checkbox (affichage graphique ou du déroulement d'execution d'algo)
     private JRadioButton jRadioButtonChoixTemps;     // CHoix du cout en temps
     private JRadioButton jRadioButtonChoixDistance;  // CHoix du cout en distance
-    private JComboBox jComboBoxMenu;              // Contient les menus
-    private JComboBox jComboBoxCartes;            // Contient les cartes
-    private JComboBox jComboBoxChemins;          // Contient les chemins
+    private JComboBox<String> jComboBoxMenu;              // Contient les menus
+    private JComboBox<String> jComboBoxCartes;            // Contient les cartes
+    private JComboBox<String> jComboBoxChemins;          // Contient les chemins
     private JSpinner jSpinnerTempsMax;
     private JButton jButtonOk;                  // Button ok (lancement de l'appli, chagement de menu, attente de lecture des coord du clic)
     private JButton jButtonLoad;                // Button charger (lancement de l'appli)
-    private Thread thread;                     // Utilisé pour afficher la map en parallèle du menu de selection des choix
 
     // Declaration de Variables lié à l'execution du programme
     private String nomCarte;                   // Nom de la carte à charger
@@ -83,8 +81,6 @@ public class Launch extends JFrame {
     private boolean affichageDeroulementAlgo;   // Affichage des algorithmes ou non
     private boolean affichageChemin;            // Affichage des chemins ou non (covoit)
     private int origine, pieton, dest;      // Numéro des sommets origine, pieton et dest
-    private Algo algo;                       // Algorithme a executer
-
 
     /**
      * Default constructor
@@ -216,16 +212,18 @@ public class Launch extends JFrame {
         buttonGroup.add(jRadioButtonChoixDistance);
 
         // Paramétrage des menus de selection (cartes et menus)
-        jComboBoxMenu = new JComboBox();
-        jComboBoxCartes = new JComboBox();
-        jComboBoxChemins = new JComboBox();
+        jComboBoxMenu = new JComboBox<>();
+        jComboBoxCartes = new JComboBox<>();
+        jComboBoxChemins = new JComboBox<>();
         jComboBoxMenu.setPreferredSize(halfDimension);
         jComboBoxCartes.setPreferredSize(halfDimension);
-        for (String carte : cartes)
+        for (String carte : cartes) {
             jComboBoxCartes.addItem(carte);
+        }
         jComboBoxChemins.setPreferredSize(halfDimension);
-        for (String chemin : chemins)
+        for (String chemin : chemins) {
             jComboBoxChemins.addItem(chemin);
+        }
 
         // Paramétrage des images : graphe et logo INSA
         ImageIcon imageGraphe = new ImageIcon("arbre.jpg");
@@ -250,12 +248,7 @@ public class Launch extends JFrame {
         SpinnerModel spinnerModel = new SpinnerNumberModel(10, 0, 120, 1.0);
         jSpinnerTempsMax = new JSpinner(spinnerModel);
         jSpinnerTempsMax.setPreferredSize(halfDimension);
-        ChangeListener listener = new ChangeListener() {
-            // Choix du temps d'attente max du piéton
-            public void stateChanged(ChangeEvent e) {
-                tempsAttenteMaxPieton = (Double) jSpinnerTempsMax.getModel().getValue();
-            }
-        };
+        ChangeListener listener = e -> tempsAttenteMaxPieton = (Double) jSpinnerTempsMax.getModel().getValue();
         jSpinnerTempsMax.addChangeListener(listener);
         ((JSpinner.DefaultEditor) jSpinnerTempsMax.getEditor()).getTextField().setEditable(false);
 
@@ -321,6 +314,9 @@ public class Launch extends JFrame {
 
             // Création du graphe en fonction de la map selectionnée
             graphe = new Graphe(nomCarte, mapdata, dessinPanel, false);
+
+            // Variable pour les algorithmes
+            Algo algo;
 
             // Ouverture et initialisation du fichier de sortie contenant des resultats
             sortie = fichierSortie();
@@ -1092,7 +1088,7 @@ public class Launch extends JFrame {
             resultat += "Nb elements explorés : " + perf1.get(6) + " - " + perf2.get(6) + "\n";
         }
         JOptionPane.showMessageDialog(null, resultat); // On affiche le resultats en popup
-        sortie.append(resultat + "\n\n\n"); // On ecrit dans le fichier
+        sortie.append(resultat).append("\n\n\n"); // On ecrit dans le fichier
     }
 
     void afficherEtEcrireResultats(boolean pointsExistent, boolean pasRencontres, boolean connexes, boolean separement, int noeud_rejoint, ArrayList<String> durees, double tempsTotal, double dureeExe) {
@@ -1133,7 +1129,7 @@ public class Launch extends JFrame {
             resultat += "\nDurée exécution : " + AffichageTempsCalcul(dureeExe) + "\n\n";
         }
         JOptionPane.showMessageDialog(null, resultat); // On affiche le resultats en popup
-        sortie.append(resultat + "\n\n\n"); // On ecrit dans le fichier
+        sortie.append(resultat).append("\n\n\n"); // On ecrit dans le fichier
     }
 
 
@@ -1179,7 +1175,7 @@ public class Launch extends JFrame {
     }
 
     public String AffichageTempsCalcul(double ms) {
-        int sec = 0;
+        int sec;
         double milli;
 
         if (ms >= 1000) {
@@ -1200,7 +1196,7 @@ public class Launch extends JFrame {
         public void actionPerformed(ActionEvent evt) {
             //Click sur le boutton Load
             if (evt.getSource() == jButtonLoad) {
-                thread = new Thread(new Play());
+                Thread thread = new Thread(new Play());
                 thread.start();
             } else if (evt.getSource() == jButtonOk) {
                 buttonClicked = true;

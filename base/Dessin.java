@@ -24,7 +24,8 @@ public abstract class Dessin  extends JPanel implements MouseListener {
 
     protected Dessin() {
         super();
-        this.addMouseListener(this);}
+        this.addMouseListener(this);
+    }
 
     public void setImage(Image image) {
         this.image = image;
@@ -55,14 +56,22 @@ public abstract class Dessin  extends JPanel implements MouseListener {
     public void mouseEntered(MouseEvent e) {
     }
 
+    ;
+
     public void mouseExited(MouseEvent e) {
     }
+
+    ;
 
     public void mousePressed(MouseEvent e) {
     }
 
+    ;
+
     public void mouseReleased(MouseEvent e) {
     }
+
+    ;
 
     public void mouseClicked(MouseEvent e) {
         this.ClickIsHere = true;

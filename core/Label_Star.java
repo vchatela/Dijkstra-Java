@@ -12,6 +12,15 @@ public class Label_Star extends Label_Generique implements Comparable<Label_Star
         this.cout_oiseau = distance(node, node_dest); // calcul du cout a vol d'oiseau
     }
 
+    //Fonctions calcul de distance vol d'oiseau
+    public static double distance(Node node, Node node_dest) {
+        double rayon_terre = 6378137.0;
+        double sinLat = Math.sin(Math.toRadians(node.getLatitude())) * Math.sin(Math.toRadians(node_dest.getLatitude()));
+        double cosLat = Math.cos(Math.toRadians(node.getLatitude())) * Math.cos(Math.toRadians(node_dest.getLatitude()));
+        double cosLong = Math.cos(Math.toRadians(node.getLongitude() - node_dest.getLongitude()));
+        return rayon_terre * Math.acos(sinLat + cosLat * cosLong);
+    }
+
     public String toString() {
         return "Sommet N" + this.getNum_node() + " Cout: " + this.getCout() + " Cout oiseau : " + this.cout_oiseau;
     }
@@ -22,15 +31,6 @@ public class Label_Star extends Label_Generique implements Comparable<Label_Star
 
     public void setCout_oiseau(double cout_oiseau) {
         this.cout_oiseau = cout_oiseau;
-    }
-
-    //Fonctions calcul de distance vol d'oiseau
-    public static double distance(Node node, Node node_dest) {
-        double rayon_terre = 6378137.0;
-        double sinLat = Math.sin(Math.toRadians(node.getLatitude())) * Math.sin(Math.toRadians(node_dest.getLatitude()));
-        double cosLat = Math.cos(Math.toRadians(node.getLatitude())) * Math.cos(Math.toRadians(node_dest.getLatitude()));
-        double cosLong = Math.cos(Math.toRadians(node.getLongitude() - node_dest.getLongitude()));
-        return rayon_terre * Math.acos(sinLat + cosLat * cosLong);
     }
 
     @Override

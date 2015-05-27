@@ -209,8 +209,7 @@ public class Graphe {
             //JOptionPane.showMessageDialog(null, "Fichier lu : " + nb_Nodes + " sommets\n" + edges + " aretes\n"
             //      + nb_descripteurs + " descripteurs");
 
-        }
-        catch (IOException e) {
+        } catch (IOException e) {
             e.printStackTrace();
             System.exit(1);
         }
@@ -350,8 +349,7 @@ public class Graphe {
                 System.exit(1);
             }
 
-        }
-        catch (IOException e) {
+        } catch (IOException e) {
             e.printStackTrace();
             System.exit(1);
         }
