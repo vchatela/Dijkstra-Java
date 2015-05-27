@@ -4,9 +4,9 @@ import java.awt.*;
 
 public class Pcc_Star extends Pcc_Generique<Label_Star> {
 
-    public Pcc_Star(Graphe gr, int origine, int dest, int choixCout, boolean TOUS, boolean sensUniqueInterdit, boolean pieton, double tempsAttenteMaxPieton, boolean affichageDeroulementAlgo, boolean tracerChemin) {
+    public Pcc_Star(Graphe gr, int origine, int dest, int choixCout, boolean TOUS, boolean pieton, double tempsAttenteMaxPieton, boolean affichageDeroulementAlgo, boolean tracerChemin) {
 
-        super(gr, origine, dest, choixCout, TOUS, sensUniqueInterdit, pieton, tempsAttenteMaxPieton, affichageDeroulementAlgo, tracerChemin);
+        super(gr, origine, dest, choixCout, TOUS, pieton, tempsAttenteMaxPieton, affichageDeroulementAlgo, tracerChemin);
 
         this.graphe.getDessin().setColor(Color.red);
     }

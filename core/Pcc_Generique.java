@@ -22,7 +22,7 @@ public class Pcc_Generique<E extends Comparable<E>> extends Algo {
     protected boolean tracerChemin;         // Tracer le chemin à la fin du déroulement de l'algorithme
 
 
-    public Pcc_Generique(Graphe gr, int origine, int dest, int choixCout, boolean TOUS, boolean sensUniqueInterdit, boolean pieton, double tempsAttenteMaxPieton, boolean affichageDeroulementAlgo, boolean tracerChemin) {
+    public Pcc_Generique(Graphe gr, int origine, int dest, int choixCout, boolean TOUS, boolean pieton, double tempsAttenteMaxPieton, boolean affichageDeroulementAlgo, boolean tracerChemin) {
         super(gr);
 
         //Liés aux points origine et destination
@@ -134,11 +134,6 @@ public class Pcc_Generique<E extends Comparable<E>> extends Algo {
 
                     // Si le sommet n'est pas marque
                     if (!(((Label_Generique) succ).isMarque())) {
-
-                        if (sensUniqueInterdit) {
-                            if (arc.getDescripteur().isSensUnique())
-                                continue;
-                        }
 
                         // On met alors le cout a jour : si pieton -> vérifier type de route
                         if (!pieton) {

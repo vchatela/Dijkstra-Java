@@ -39,7 +39,7 @@ public class LaunchPerf {
         nomCarte = "reunion";
         DataInputStream mapdata = Openfile.open(nomCarte);
         Dessin dessinPanel = new DessinInvisible();
-        graphe = new Graphe(nomCarte, mapdata, dessinPanel);
+        graphe = new Graphe(nomCarte, mapdata, dessinPanel, false);
         int tabPcc[] = {0, 0, 0, 0};
         int tabStar[] = {0, 0, 0, 0};
         int Perf[] = {0, 0};

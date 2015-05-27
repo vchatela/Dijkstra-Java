@@ -30,6 +30,7 @@ public class Graphe {
     private final String nomCarte;
     // Fenetre graphique
     private final Dessin dessin;
+    private final boolean inverse;
     public int max;
 
 
@@ -45,8 +46,8 @@ public class Graphe {
     private Chemin chemin; // afin de charger le fichier path du chemin
 
     // Le constructeur cree le graphe en lisant les donnees depuis le DataInputStream
-    public Graphe(String nomCarte, DataInputStream dis, Dessin dessin) {
-
+    public Graphe(String nomCarte, DataInputStream dis, Dessin dessin, boolean inverse) {
+        this.inverse = inverse;
         this.listNode = new ArrayList<>();
         this.nomCarte = nomCarte;
         this.dessin = dessin;
@@ -134,16 +135,30 @@ public class Graphe {
                     int nb_segm = dis.readUnsignedShort();  // Nombre de segments constituant l'arete
 
                     // Creation d'un arc initialise avec toutes les lectures precedentes et ajout dans la liste des arcs du noeud num_node
-                    Arc arc = new Arc(succ_zone, dest_Node, descr_num, longueur, nb_segm, descripteurs[descr_num], this.listNode.get(num_Node));
-                    this.listNode.get(num_Node).getArrayListArc().add(arc);
+                    Arc arc;
+                    if (!inverse) {
+                        arc = new Arc(succ_zone, dest_Node, descr_num, longueur, nb_segm, descripteurs[descr_num], this.listNode.get(num_Node));
+                        this.listNode.get(num_Node).getArrayListArc().add(arc);
+                    } else {
+                        // ici on doit construire le graphe inverse, donc inverser tous les arcs
+                        arc = new Arc(succ_zone, num_Node, descr_num, longueur, nb_segm, descripteurs[descr_num], this.listNode.get(dest_Node));
+                        // on doit maintenant l'ajouter au bon endroit (ds les arcs de celui qui aurait du être le successeur)
+                        this.listNode.get(dest_Node).getArrayListArc().add(arc);
+                    }
+
 
                     //Incrementation du nombre d'arretes
                     edges++;
 
                     // Si le sens n'est pas unique on doit ajouter une arete dans l'autre sens (noeud destinataire ->noeud actuel)
                     if (!descripteurs[descr_num].isSensUnique() && (succ_zone == numzone)) {
-                        Arc arc_dest = new Arc(succ_zone, num_Node, descr_num, longueur, nb_segm, descripteurs[descr_num], this.listNode.get(dest_Node));
-                        this.listNode.get(dest_Node).getArrayListArc().add(arc_dest);
+                        if (!inverse) {
+                            Arc arc_dest = new Arc(succ_zone, num_Node, descr_num, longueur, nb_segm, descripteurs[descr_num], this.listNode.get(dest_Node));
+                            this.listNode.get(dest_Node).getArrayListArc().add(arc_dest);
+                        } else {
+                            arc = new Arc(succ_zone, dest_Node, descr_num, longueur, nb_segm, descripteurs[descr_num], this.listNode.get(num_Node));
+                            this.listNode.get(num_Node).getArrayListArc().add(arc);
+                        }
                     }
                     Couleur.set(dessin, descripteurs[descr_num].getType());
 
@@ -156,8 +171,8 @@ public class Graphe {
                         float delta_lat = (dis.readShort()) / 2.0E5f;
 
                         //Ajout du segment i au successeur actuel
-                        this.listNode.get(num_Node).getArrayListArc().get(num_succ).addSegment(new Segment(delta_lon, delta_lat));
-
+                        if (!inverse)
+                            this.listNode.get(num_Node).getArrayListArc().get(num_succ).addSegment(new Segment(delta_lon, delta_lat));
                         //Dessin des segments
                         dessin.drawLine(current_long, current_lat, (current_long + delta_lon), (current_lat + delta_lat));
 

@@ -328,7 +328,7 @@ public class Launch extends JFrame {
             this.setLocationRelativeTo(null);
 
             // Création du graphe en fonction de la map selectionnée
-            graphe = new Graphe(nomCarte, mapdata, dessinPanel);
+            graphe = new Graphe(nomCarte, mapdata, dessinPanel, false);
 
             // Ouverture et initialisation du fichier de sortie contenant des resultats
             sortie = fichierSortie();
@@ -360,7 +360,7 @@ public class Launch extends JFrame {
                     case 2:
                         // Initialisation et lancement de l'algorithme
                         initialiserAlgo();
-                        algo = new Pcc_Dijkstra(graphe, origine, dest, choixCout, false, false, false, Double.POSITIVE_INFINITY, affichageDeroulementAlgo, true);
+                        algo = new Pcc_Dijkstra(graphe, origine, dest, choixCout, false, false, Double.POSITIVE_INFINITY, affichageDeroulementAlgo, true);
                         ArrayList perfStandard = algo.run();
                         afficherEtEcrireResultats(1, perfStandard);
                         break;
@@ -370,7 +370,7 @@ public class Launch extends JFrame {
 
                         //Initialisation et lancement de l'algorithme
                         initialiserAlgo();
-                        algo = new Pcc_Star(graphe, origine, dest, choixCout, false, false, false, Double.POSITIVE_INFINITY, affichageDeroulementAlgo, true);
+                        algo = new Pcc_Star(graphe, origine, dest, choixCout, false, false, Double.POSITIVE_INFINITY, affichageDeroulementAlgo, true);
                         ArrayList perfAStar = algo.run();
                         afficherEtEcrireResultats(2, perfAStar);
                         break;
@@ -387,13 +387,13 @@ public class Launch extends JFrame {
                         ArrayList perf3 = algo.run();
 
                         // 2i algo -> PCC Standard : Dijkstra
-                        algo = new Pcc_Dijkstra(graphe, origine, dest, choixCout, false, false, false, Double.POSITIVE_INFINITY, affichageDeroulementAlgo, true);
+                        algo = new Pcc_Dijkstra(graphe, origine, dest, choixCout, false, false, Double.POSITIVE_INFINITY, affichageDeroulementAlgo, true);
                         // Lancement des algorithmes et récupération des résultats
                         graphe.getDessin().setColor(Color.magenta);
                         ArrayList perf1 = algo.run();
 
                         // 3i algo -> PCC A-Star : Dijkstra guidé
-                        algo = new Pcc_Star(graphe, origine, dest, choixCout, false, false, false, Double.POSITIVE_INFINITY, affichageDeroulementAlgo, true);
+                        algo = new Pcc_Star(graphe, origine, dest, choixCout, false, false, Double.POSITIVE_INFINITY, affichageDeroulementAlgo, true);
                         graphe.getDessin().setColor(Color.red);
                         ArrayList perf2 = algo.run();
 
@@ -428,7 +428,7 @@ public class Launch extends JFrame {
                         // Lancement des algorithmes
 
                         // PCC de la VOITURE vers TOUS
-                        algo = new Pcc_Dijkstra(graphe, origine, dest, choixCout, true, false, false, Double.POSITIVE_INFINITY, affichageDeroulementAlgo, false);
+                        algo = new Pcc_Dijkstra(graphe, origine, dest, choixCout, true, false, Double.POSITIVE_INFINITY, affichageDeroulementAlgo, false);
                         perfVoitureTous = algo.run();
                         ArrayList<Label> covoitVoiture = algo.getLabels();
 
@@ -441,12 +441,18 @@ public class Launch extends JFrame {
                         System.out.println("Temps attente pieton : " + tempsAttenteMaxPieton);
 
                         // PCC du PIETON vers TOUS
-                        algo1 = new Pcc_Dijkstra(graphe, pieton, dest, choixCout, true, false, true, tempsAttenteMaxPieton, affichageDeroulementAlgo, false);
+                        algo1 = new Pcc_Dijkstra(graphe, pieton, dest, choixCout, true, true, tempsAttenteMaxPieton, affichageDeroulementAlgo, false);
                         perfPietonTous = algo1.run();
                         ArrayList<Label> covoitPieton = algo1.getLabels();
 
                         // PCC de la DESTINATION vers TOUS
-                        algo2 = new Pcc_Dijkstra(graphe, dest, pieton, choixCout, true, true, false, Double.POSITIVE_INFINITY, affichageDeroulementAlgo, false);
+                        // TODO : ici on a besoin du graphe inverse !
+                        nomCarte = jComboBoxCartes.getSelectedItem().toString();
+                        mapdata = Openfile.open(nomCarte);
+                        Graphe grapheInverse = new Graphe(nomCarte, mapdata, new DessinInvisible(), true);
+
+                        // attention true true false
+                        algo2 = new Pcc_Dijkstra(grapheInverse, dest, pieton, choixCout, true, false, Double.POSITIVE_INFINITY, affichageDeroulementAlgo, false);
                         perfDestTous = algo2.run();
                         ArrayList<Label> covoitDestination = algo2.getLabels();
 
@@ -615,7 +621,7 @@ public class Launch extends JFrame {
                         this.setLocationRelativeTo(null);
 
                         // Création du graphe en fonction de la map selectionnée
-                        graphe = new Graphe(nomCarte, mapdata, dessinPanel);
+                        graphe = new Graphe(nomCarte, mapdata, dessinPanel, false);
 
                         break;
 
