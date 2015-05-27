@@ -13,6 +13,8 @@ import core.Label;
 import javax.swing.*;
 import javax.swing.border.BevelBorder;
 import javax.swing.border.EmptyBorder;
+import javax.swing.event.ChangeEvent;
+import javax.swing.event.ChangeListener;
 import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
 import java.awt.*;
@@ -91,8 +93,8 @@ public class Launch extends JFrame {
      */
 
     public Launch() {
-        Dimension halfDimension = new Dimension(180, 25);
-        Dimension fullDimension = new Dimension(360, 25);
+        Dimension halfDimension = new Dimension(190, 25);
+        Dimension fullDimension = new Dimension(380, 25);
 
         // Paramétrage des textes à afficher
         jLabelTitle         = new JLabel("<html><br>PROGRAMME DE TESTS DES ALGORITHMES DE GRAPHE<br><br></html>");
@@ -124,8 +126,8 @@ public class Launch extends JFrame {
         jLabelFichier.setPreferredSize(halfDimension);
         jLabelMenu.setPreferredSize(halfDimension);
         jLabelDeroulement.setPreferredSize(halfDimension);
-        jLabelAffChemin.setPreferredSize(new Dimension(180, 40));
-        jLabelTempsMax.setPreferredSize(new Dimension(180, 40));
+        jLabelAffChemin.setPreferredSize(new Dimension(190, 40));
+        jLabelTempsMax.setPreferredSize(new Dimension(190, 40));
         jLabelChoixCout.setPreferredSize(halfDimension);
         jLabelDepart.setPreferredSize(halfDimension);
         jLabelDepartVoiture.setPreferredSize(halfDimension);
@@ -136,7 +138,7 @@ public class Launch extends JFrame {
         jLabelCoordsClick.setPreferredSize(fullDimension);
         jLabelCoordSitues.setPreferredSize(halfDimension);
         jLabelNoeudsProches.setPreferredSize(halfDimension);
-        jLabelNames.setPreferredSize(new Dimension(275, 83));
+        jLabelNames.setPreferredSize(new Dimension(290, 83));
         jLabelNames.setOpaque(true);
         jLabelNames.setBackground(Color.white);
         jLabelChemin.setPreferredSize(halfDimension);
@@ -253,10 +255,18 @@ public class Launch extends JFrame {
         spinnerModel = new SpinnerNumberModel(10, 1, 60, 1.0);
         jSpinnerTempsMax = new JSpinner(spinnerModel);
         jSpinnerTempsMax.setPreferredSize(halfDimension);
+        ChangeListener listener = new ChangeListener() {
+            // Choix du temps d'attente max du piéton
+            @Override
+            public void stateChanged(ChangeEvent e) {
+                tempsAttenteMaxPieton = (Double)jSpinnerTempsMax.getModel().getValue();
+            }
+        };
+        jSpinnerTempsMax.addChangeListener(listener);
 
         // Paramétrage du menu de selection des choix avec ajout des composants
         controlPanel = new JPanel();
-        controlPanel.setPreferredSize(new Dimension(380, 600));
+        controlPanel.setPreferredSize(new Dimension(400, 600));
         controlPanel.setBorder(new javax.swing.border.BevelBorder(BevelBorder.RAISED));
         controlPanel.add(jLabelNames);
         controlPanel.add(jLabelImageINSA);
@@ -783,10 +793,6 @@ public class Launch extends JFrame {
         if (jCheckBox.isSelected())
             affichageChemin = true;
         else affichageChemin = false;
-
-        // Choix du temps d'attente max du piéton
-        // TODO : pb -> la valeur c'est toujours 10 peut importe si on change
-        tempsAttenteMaxPieton = (Double)jSpinnerTempsMax.getModel().getValue();
     }
 
 
