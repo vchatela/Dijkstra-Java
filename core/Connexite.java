@@ -73,7 +73,6 @@ public class Connexite extends Algo {
 
             Label current, succ;
             Node node_succ;
-            double new_cout;
 
             while (!((tas.isEmpty() || dest.isMarque()))) {
 
@@ -136,14 +135,5 @@ public class Connexite extends Algo {
         return labels;
     }
 
-    @Override
-    public HashMap getMapLabel() {
-        return null;
-    }
-
-    @Override
-    public void setMapLabel(HashMap mapLabel) {
-
-    }
 
 }

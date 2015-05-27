@@ -7,6 +7,7 @@ import java.util.ArrayList;
 
 /**
  * Created by valentin on 27/05/15.
+ *
  */
 public class TestUnitaires {
     private String nomCarte;                   // Nom de la carte � charger
@@ -221,7 +222,6 @@ public class TestUnitaires {
         ArrayList<String> perfVoitureTous, perfPietonTous, perfDestTous;
         int noeud_rejoint = -1;
         double min = Double.POSITIVE_INFINITY;
-        ArrayList<Boolean> seul = new ArrayList<>();
 
 
         int origine = (int) (Math.random() * graphe.max);

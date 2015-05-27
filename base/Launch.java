@@ -44,11 +44,24 @@ public class Launch extends JFrame {
     private JPanel controlPanel;               // Contient le menu de selection des choix
     private Container cp;                         // Conteneur de la fenetre, on y ajoute les deux précédents éléments
     private JLabel                                      // Texte à afficher
-            jLabelNames, jLabelTitle, jLabelCarte, jLabelAfficher, jLabelFichier, jLabelMenu,
-            jLabelDeroulement, jLabelChoixCout, jLabelDepart, jLabelDepartVoiture,
-            jLabelDepartPieton, jLabelArrivee, jLabelCoordsMan, jLabelCoordsClick, jLabelTempsMax,
-            jLabelCoordClick, jLabelCoordSitues, jLabelNoeudsProches, jLabelChemin;
-    private JLabel jLabelImageGraphe;          // Image de lancement (graphe) à afficher
+            jLabelNames;
+    private JLabel jLabelTitle;
+    private JLabel jLabelCarte;
+    private JLabel jLabelAfficher;
+    private JLabel jLabelMenu;
+    private JLabel jLabelDeroulement;
+    private JLabel jLabelChoixCout;
+    private JLabel jLabelDepart;
+    private JLabel jLabelDepartVoiture;
+    private JLabel jLabelDepartPieton;
+    private JLabel jLabelArrivee;
+    private JLabel jLabelCoordsMan;
+    private JLabel jLabelCoordsClick;
+    private JLabel jLabelTempsMax;
+    private JLabel jLabelCoordClick;
+    private JLabel jLabelCoordSitues;
+    private JLabel jLabelNoeudsProches;
+    private JLabel jLabelChemin;
     private JLabel jLabelImageINSA;            // Logo de l'INSA à afficher
     private JTextField jTextFieldFichier;          // Zone de saisie du fichier
     private JTextField jTextField1;                // Zone de saisie n°1
@@ -93,7 +106,7 @@ public class Launch extends JFrame {
         jLabelTitle = new JLabel("<html><br>PROGRAMME DE TESTS DES ALGORITHMES DE GRAPHE<br><br></html>");
         jLabelCarte = new JLabel("Fichier .map à utiliser : ");
         jLabelAfficher = new JLabel("Afficher la carte : ");
-        jLabelFichier = new JLabel("Fichier de sortie : ");
+        JLabel jLabelFichier = new JLabel("Fichier de sortie : ");
         jLabelMenu = new JLabel("Que voulez-vous faire : ");
         jLabelDeroulement = new JLabel("Afficher le deroulement : ");
         jLabelTempsMax = new JLabel("<html>Temps min d'attente<br>du piéton (max 2h) :</html>");
@@ -228,7 +241,7 @@ public class Launch extends JFrame {
         // Paramétrage des images : graphe et logo INSA
         ImageIcon imageGraphe = new ImageIcon("arbre.jpg");
         ImageIcon imageINSA = new ImageIcon("logoINSA.png");
-        jLabelImageGraphe = new JLabel();
+        JLabel jLabelImageGraphe = new JLabel();
         jLabelImageINSA = new JLabel();
         jLabelImageGraphe.setIcon(imageGraphe);
         jLabelImageINSA.setIcon(imageINSA);
@@ -1066,7 +1079,7 @@ public class Launch extends JFrame {
             }
         }
         JOptionPane.showMessageDialog(null, resultat); // On affiche le resultats en popup
-        sortie.append(resultat + "\n\n\n"); // On ecrit dans le fichier
+        sortie.append(resultat).append("\n\n\n"); // On ecrit dans le fichier
     }
 
     void afficherEtEcrireResultats(ArrayList perf1, ArrayList perf2, ArrayList perf3) {
