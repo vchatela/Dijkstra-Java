@@ -23,6 +23,7 @@ public class TestUnitaires {
     }
 
     public void go() {
+        // TODO : tableau de boolean pour montrer quels sont les tests qui n'ont pas marché !
         if (!testCarte("midip"))
             System.out.println("Error : testCarte");
         if (!testDessin())
@@ -308,8 +309,8 @@ public class TestUnitaires {
         test = new Pcc_Dijkstra(graphe, noeud_rejoins, dest, 1, false, false, Double.POSITIVE_INFINITY, false, false);
         test.run();
         double res2 = ((Pcc_Generique) test).getCout();
-        if (Math.abs(res - res1 + res2) < 0.01 * res) {
-            System.out.println("Res : " + res + " - Res 1 : " + res1 + " + " + res2);
+        if (!(Math.abs(res - (res1 + res2)) < 0.01 * res)) {
+            System.out.println("Res : " + res + " - Res 1 : " + res1 + " + " + res2 + " = " + (res1 + res2));
             return false;
         }
         return true;

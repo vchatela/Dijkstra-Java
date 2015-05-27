@@ -340,7 +340,7 @@ public class Graphe {
 
                 chemin1.addNode(this.listNode.get(current_Node));
                 this.setChemin(chemin1);
-                System.out.println(" --> " + current_zone + ":" + current_Node);
+                //System.out.println(" --> " + current_zone + ":" + current_Node);
             }
 
             if ((current_zone != last_zone) || (current_Node != last_Node)) {
