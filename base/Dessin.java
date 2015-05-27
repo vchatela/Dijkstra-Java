@@ -15,7 +15,6 @@ public abstract class Dessin  extends JPanel implements MouseListener {
 
     static final long serialVersionUID = 0xdad1c001;
     // We use a dummy object for synchronization, to avoid interferences with the GUI system.
-    private final String lock = "";
     private Image image;
     private int XClick;
     private int YClick;

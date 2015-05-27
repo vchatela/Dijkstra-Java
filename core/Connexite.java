@@ -134,15 +134,4 @@ public class Connexite extends Algo {
     public ArrayList getLabels() {
         return labels;
     }
-
-    @Override
-    public HashMap getMapLabel() {
-        return null;
-    }
-
-    @Override
-    public void setMapLabel(HashMap mapLabel) {
-
-    }
-
 }
