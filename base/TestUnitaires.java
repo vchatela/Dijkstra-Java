@@ -42,13 +42,36 @@ public class TestUnitaires {
             System.out.println("Error : testDecoupeCheminTemps");
         if (!testDecoupeCheminPieton())
             System.out.println("Error : testDecoupeCheminPieton");
+        if (!testConnexite())
+            System.out.println("Error : testConnexite");
         if (!testCovoit())
             System.out.println("Error : testCovoit");
+
 
 
     }
 
 
+    public boolean testConnexite() {
+        int origine;
+        int dest;
+        if (nomCarte.equals("midip")) {
+            origine = 127072;
+            dest = 588;
+            Algo al = new Connexite(graphe, origine, dest, false);
+            if (al.run().equals("non connexes"))
+                return false;
+            al = new Connexite(graphe, dest, origine, false);
+            if (al.run().equals("connexes"))
+                return false;
+            return true;
+        } else {
+            // pour le moment on ne test que sur midip
+            return true;
+        }
+
+
+    }
     public boolean testCarte(String s) {
         nomCarte = s;
         mapdata = Openfile.open(nomCarte);
