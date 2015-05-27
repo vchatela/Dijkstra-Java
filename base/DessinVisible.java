@@ -106,13 +106,9 @@ public class DessinVisible extends Dessin {
         this.repaint();
     }
 
-    public void putText(float lon, float lat, String txt) {
-        this.checkBB();
-        int x = this.projx(lon);
-        int y = this.projy(lat);
-        gr.drawString(txt, x, y);
-        this.repaint();
-    }
+//    public boolean waitClick() {
+//        return this.panel.waitClick();
+//    }
 
     public float getClickLon() {
         float x = this.getXClick();

@@ -24,6 +24,9 @@ public class Graphe {
     // Version du format PATH.
     private static final int version_path = 1;
     private static final int magic_number_path = 0xdecafe;
+    protected final boolean inverse;
+    // Nom de la carte utilisee pour construire ce graphe
+    private final String nomCarte;
     // Fenetre graphique
     private final Dessin dessin;
     public int max;
@@ -42,7 +45,9 @@ public class Graphe {
 
     // Le constructeur cree le graphe en lisant les donnees depuis le DataInputStream
     public Graphe(String nomCarte, DataInputStream dis, Dessin dessin, boolean inverse) {
+        this.inverse = inverse;
         this.listNode = new ArrayList<>();
+        this.nomCarte = nomCarte;
         this.dessin = dessin;
         Utils.calibrer(nomCarte, dessin);
 

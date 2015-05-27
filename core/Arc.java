@@ -20,7 +20,7 @@ public class Arc {
     private ArrayList<Segment> listSegment;    //Liste des segments representant l'arc (affichage)
 
 	/*
-	 * Constructeurs
+     * Constructeurs
 	*/
 
     public Arc() {

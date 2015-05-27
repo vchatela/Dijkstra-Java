@@ -6,7 +6,7 @@ import java.io.DataInputStream;
 import java.util.ArrayList;
 
 public class TestUnitaires {
-    private String nomCarte;                   // Nom de la carte � charger
+    private String nomCarte;                   // Nom de la carte à charger
     private DataInputStream mapdata;
     private Dessin dessinPanel;
     private Graphe graphe;                     // La map
@@ -197,12 +197,11 @@ public class TestUnitaires {
 
     public boolean testChemin(String s) {
         // On récupère le nom de la carte
-        String nomChemin = s;
 
-        if (graphe.verifierChemin(Openfile.open(nomChemin), nomChemin) == -1)
+        if (graphe.verifierChemin(Openfile.open(s), s) == -1)
             return false;
 
-        graphe.verifierChemin(Openfile.open(nomChemin), nomChemin);
+        graphe.verifierChemin(Openfile.open(s), s);
         graphe.getChemin().tracerChemin(graphe.getDessin());
         graphe.getChemin().Calculer_cout_chemin_distance();
         graphe.getChemin().Calculer_cout_chemin_temps();
@@ -218,7 +217,6 @@ public class TestUnitaires {
         ArrayList<String> perfVoitureTous, perfPietonTous, perfDestTous;
         int noeud_rejoint = -1;
         double min = Double.POSITIVE_INFINITY;
-        ArrayList<Boolean> seul = new ArrayList<>();
 
 
         int origine = (int) (Math.random() * graphe.max);

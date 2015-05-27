@@ -34,7 +34,7 @@ public class Node {
     }
 
 	/*
-	 * Methodes
+     * Methodes
 	*/
 
     //Returne la liste des arcs successeurs du noeud
