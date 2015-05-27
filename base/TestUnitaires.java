@@ -62,9 +62,7 @@ public class TestUnitaires {
             if (al.run().equals("non connexes"))
                 return false;
             al = new Connexite(graphe, dest, origine, false);
-            if (al.run().equals("connexes"))
-                return false;
-            return true;
+            return !al.run().equals("connexes");
         } else {
             // pour le moment on ne test que sur midip
             return true;
@@ -75,24 +73,18 @@ public class TestUnitaires {
     public boolean testCarte(String s) {
         nomCarte = s;
         mapdata = Openfile.open(nomCarte);
-        if (mapdata == null)
-            return false;
-        return true;
+        return mapdata != null;
     }
 
     public boolean testDessin() {
         Dessin dessinInvisible = new DessinInvisible();
         dessinPanel = new DessinVisible(800, 600);
-        if (dessinPanel == null || dessinInvisible == null)
-            return false;
-        return true;
+        return !(dessinPanel == null || dessinInvisible == null);
     }
 
     public boolean testGraphe() {
         graphe = new Graphe(nomCarte, mapdata, dessinPanel, false);
-        if (graphe == null)
-            return false;
-        return true;
+        return graphe != null;
     }
 
     public boolean testDijkstra() {
