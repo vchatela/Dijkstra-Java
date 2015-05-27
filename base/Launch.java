@@ -438,7 +438,7 @@ public class Launch extends JFrame {
                             covoitSave.add(new Label(covoitVoiture.get(i)));
                         }
 
-                        System.out.println(tempsAttenteMaxPieton);
+                        System.out.println("Temps attente pieton : " + tempsAttenteMaxPieton);
 
                         // PCC du PIETON vers TOUS
                         algo1 = new Pcc_Dijkstra(graphe, pieton, dest, choixCout, true, false, true, tempsAttenteMaxPieton, affichageDeroulementAlgo, false);
@@ -504,6 +504,7 @@ public class Launch extends JFrame {
 
                                     } else {
                                         minVoiture = covoitSave.get(noeud_rejoint).getCout();
+                                        ((Pcc_Dijkstra) algo).chemin(origine, noeud_rejoint);
 
                                         durees.add(algo.AffichageTempsHeureMin(minVoiture));
 
