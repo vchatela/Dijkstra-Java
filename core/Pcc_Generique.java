@@ -83,8 +83,8 @@ public class Pcc_Generique<E extends Comparable<E>> extends Algo {
         // a noter que : si booleen TOUS alors message de confirmation de vers tout le monde
         else {
 
-            //System.out.println();
-           // System.out.println("Lancement de l'algorithme " + this.getClass().getName() + " de (zone,noeud) : (" + zoneOrigine + "," + origine + ") vers (" + zoneDestination + "," + destination + ")");
+            System.out.println("Lancement de l'algorithme " + this.getClass().getName() + " de (zone,noeud) : (" + zoneOrigine + "," + origine + ") vers (" + zoneDestination + "," + destination + ")");
+
 // TODO : soit construire le graphe inverse, soit on dit qu'on peux pas passer par les routes en sens unique
             // Initialisation de nos champs
             labels = new ArrayList<>();
@@ -150,6 +150,7 @@ public class Pcc_Generique<E extends Comparable<E>> extends Algo {
                             }
                         }
 
+                        //Test temps max attente piéton
                         if (new_cout > tempsAttenteMaxPieton) {
                             new_cout = Double.POSITIVE_INFINITY;
                             ((Label_Generique) succ).setCout(new_cout);

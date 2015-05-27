@@ -63,7 +63,6 @@ public class Launch extends JFrame {
     private JComboBox	    jComboBoxMenu;              // Contient les menus
     private JComboBox	    jComboBoxCartes;            // Contient les cartes
     private JComboBox       jComboBoxChemins;          // Contient les chemins
-    private SpinnerModel    spinnerModel;
     private JSpinner        jSpinnerTempsMax;
     private JButton		    jButtonOk;                  // Button ok (lancement de l'appli, chagement de menu, attente de lecture des coord du clic)
     private JButton		    jButtonLoad;                // Button charger (lancement de l'appli)
@@ -71,7 +70,6 @@ public class Launch extends JFrame {
 
     // Declaration de Variables lié à l'execution du programme
     private String          nomCarte;                   // Nom de la carte à charger
-    private String          nomChemin;                  // Nom du chemin à charger
     private String          resultat;                   // Contient les resultats des algos
     private PrintStream     sortie;                     // Fichier de sortie
     private Graphe          graphe;                     // La map
@@ -91,7 +89,6 @@ public class Launch extends JFrame {
     /**
      * Default constructor
      */
-
     public Launch() {
         Dimension halfDimension = new Dimension(190, 25);
         Dimension fullDimension = new Dimension(380, 25);
@@ -104,7 +101,7 @@ public class Launch extends JFrame {
         jLabelMenu          = new JLabel("Que voulez-vous faire : ");
         jLabelDeroulement   = new JLabel("Afficher le deroulement : ");
         jLabelAffChemin     = new JLabel("<html>Afficher les chemins<br>(Cela est plus long) :</html>");
-        jLabelTempsMax      = new JLabel("<html>Temps min d'attente<br>du piéton (max 1h) :</html>");
+        jLabelTempsMax      = new JLabel("<html>Temps min d'attente<br>du piéton (max 2h) :</html>");
         jLabelChoixCout     = new JLabel("Choix du coup : ");
         jLabelDepart        = new JLabel("Départ : ");
         jLabelDepartVoiture = new JLabel("Départ du conducteur : ");
@@ -252,17 +249,17 @@ public class Launch extends JFrame {
         jButtonOk.addActionListener(new BoutonListener());
 
         // Paramétrage de la selection du temps max d'attente du piéton
-        spinnerModel = new SpinnerNumberModel(10, 1, 60, 1.0);
+        SpinnerModel spinnerModel = new SpinnerNumberModel(10, 1, 120, 1.0);
         jSpinnerTempsMax = new JSpinner(spinnerModel);
         jSpinnerTempsMax.setPreferredSize(halfDimension);
         ChangeListener listener = new ChangeListener() {
             // Choix du temps d'attente max du piéton
-            @Override
             public void stateChanged(ChangeEvent e) {
                 tempsAttenteMaxPieton = (Double)jSpinnerTempsMax.getModel().getValue();
             }
         };
         jSpinnerTempsMax.addChangeListener(listener);
+        ((JSpinner.DefaultEditor) jSpinnerTempsMax.getEditor()).getTextField().setEditable(false);
 
         // Paramétrage du menu de selection des choix avec ajout des composants
         controlPanel = new JPanel();
@@ -299,16 +296,13 @@ public class Launch extends JFrame {
     /**
      * Main function
      */
-
     public static void main(String[] args) {
         new Launch();
     }
 
-
     /**
      * Lancement de l'application générale (dans un thread)
      */
-
     public void go() {
 
         try {
@@ -432,13 +426,11 @@ public class Launch extends JFrame {
                         perfVoitureTous = algo.run();
                         ArrayList<Label> covoitVoiture = algo.getLabels();
 
-
+                        // Permet de copier l'arraylist précédent sans référencer le même
                         ArrayList<Label> covoitSave = new ArrayList<>();
                         for (int i = 0; i < covoitVoiture.size(); i++) {
                             covoitSave.add(new Label(covoitVoiture.get(i)));
                         }
-
-                        System.out.println("Temps attente pieton : " + tempsAttenteMaxPieton);
 
                         // PCC du PIETON vers TOUS
                         algo1 = new Pcc_Dijkstra(graphe, pieton, dest, choixCout, true, true, tempsAttenteMaxPieton, affichageDeroulementAlgo, false);
@@ -446,7 +438,6 @@ public class Launch extends JFrame {
                         ArrayList<Label> covoitPieton = algo1.getLabels();
 
                         // PCC de la DESTINATION vers TOUS
-                        // TODO : ici on a besoin du graphe inverse !
                         nomCarte = jComboBoxCartes.getSelectedItem().toString();
                         mapdata = Openfile.open(nomCarte);
                         Graphe grapheInverse = new Graphe(nomCarte, mapdata, new DessinInvisible(), true);
@@ -471,7 +462,8 @@ public class Launch extends JFrame {
                                 // On prend le max des deux pour avoir le temps minimum qu'il faut pour se rejoindre
                                 if (covoitVoiture.get(i).getCout() < covoitPieton.get(i).getCout()) {
                                     covoitSomme.add(i, covoitPieton.get(i));
-                                } else {
+                                }
+                                else {
                                     covoitSomme.add(i, covoitVoiture.get(i));
                                 }
 
@@ -482,14 +474,17 @@ public class Launch extends JFrame {
                                 // si ce temps est > au temps qu'aurait mis les deux alors ils y vont directs
                                 if (covoitSomme.get(i).getCout() > Math.max(covoitVoiture.get(dest).getCout(), covoitPieton.get(dest).getCout())) {
                                     // Ici ca veut dire qu'ils y vont chacun pour soit !
-                                    if (covoitVoiture.get(dest).getCout() > covoitPieton.get(dest).getCout())
+                                    if (covoitVoiture.get(dest).getCout() > covoitPieton.get(dest).getCout()) {
                                         covoitSomme.set(i, covoitVoiture.get(dest));
-                                    else
+                                    }
+                                    else {
                                         covoitSomme.set(i, covoitPieton.get(dest));
+                                    }
                                     seul.add(i, true);
                                 }
-                                else
+                                else {
                                     seul.add(i, false);
+                                }
 
                                 //mise à jour du cout minimum
                                 if (covoitSomme.get(i).getCout() < min) {
@@ -508,7 +503,8 @@ public class Launch extends JFrame {
                                         durees.add(algo.AffichageTempsHeureMin(((Pcc_Dijkstra) algo).chemin(origine, dest)));
                                         durees.add(algo1.AffichageTempsHeureMin(((Pcc_Dijkstra) algo1).chemin(pieton, dest)));
 
-                                    } else {
+                                    }
+                                    else {
                                         minVoiture = covoitSave.get(noeud_rejoint).getCout();
                                         ((Pcc_Dijkstra) algo).chemin(origine, noeud_rejoint);
 
@@ -538,7 +534,8 @@ public class Launch extends JFrame {
                                     System.out.println("le pieton et la voiture ne sont pas connexes.");
                                     // pas connexe
                                     // TODO : affichage message pas connexe
-                                } else {
+                                }
+                                else {
                                     System.out.print("le pieton doit marcher plus de " + tempsAttenteMaxPieton + " minutes.");
                                     // ca veut dire que le pieton doit obligatoirement marcher plus de x minutes
                                     // il prend donc sa voiture : TODO proposer un dijsktra a-star pour lui donner son temps ?
@@ -567,6 +564,8 @@ public class Launch extends JFrame {
 
                         afficherEtEcrireResultats(perfVoitureTous, perfPietonTous, perfDestTous, node, min, dureeExe, durees, seul1, pasRencontre);
 
+                        //
+
                         break;
 
                     // Charger un fichier de chemin
@@ -578,7 +577,7 @@ public class Launch extends JFrame {
                         waitButtonOk();
 
                         // On récupère le nom de la carte
-                        nomChemin = jComboBoxChemins.getSelectedItem().toString();
+                        String nomChemin = jComboBoxChemins.getSelectedItem().toString();
 
                         // Paramétrer le menu de selection
                         makeControlPanel(52);
@@ -687,7 +686,6 @@ public class Launch extends JFrame {
      * - Choix du cout : temps ou distance
      * - Choix de l'affichage du déroulement des algorithmes
      */
-
     public void initialiserAlgo() {
 
         // On demande à l'utilisateur s'il connait les numéros ou veut cliquer
@@ -736,7 +734,6 @@ public class Launch extends JFrame {
         else affichageDeroulementAlgo = false;
     }
 
-
     /**
      * Initialisation du covoiturage :
      * Pcc Standard, Pcc A-Star et le Programme de test des 2 algos Disjkstra
@@ -744,7 +741,6 @@ public class Launch extends JFrame {
      *  - Oui : on les saisit
      *  - Non : on clique pour les obtenir
      */
-
     public void initialiserCovoit() {
 
         // On demande à l'utilisateur s'il connait les numéros ou veut cliquer
@@ -795,15 +791,16 @@ public class Launch extends JFrame {
         if (jCheckBox.isSelected())
             affichageChemin = true;
         else affichageChemin = false;
-    }
 
+        // Récupération du temps max d'attente du pieton
+        tempsAttenteMaxPieton = (Double)jSpinnerTempsMax.getModel().getValue();
+    }
 
     /**
      * Affichage du menu de choix :
      * L'utilisateur choisit parmis un menu de selection
      * et clique sur ok pour effectuer l'action associée
      */
-
     public int afficherMenu() {
         // Paramétrer le menu de selection
         makeControlPanel(0);
@@ -817,11 +814,9 @@ public class Launch extends JFrame {
         return jComboBoxMenu.getSelectedIndex();
     }
 
-
     /**
      * re-Paramétrage du menu de selection des choix
      */
-
     public void makeControlPanel(int choice) {
         // On supprimme tous les éléments précédemment placé et mise en place des éléments graphiques
         cp.remove(controlPanel);
@@ -965,7 +960,7 @@ public class Launch extends JFrame {
             // Reinitialiser la carte
             case 6:
                 jButtonOk.setEnabled(true);
-                controlPanel.add(jLabelFichier);
+                controlPanel.add(jLabelCarte);
                 controlPanel.add(jComboBoxCartes);
                 controlPanel.add(jLabelAfficher);
                 controlPanel.add(jCheckBox);
@@ -994,7 +989,6 @@ public class Launch extends JFrame {
     /**
      * Ouvre un fichier de sortie pour ecrire les résultats des algorithmes
      */
-
     public PrintStream fichierSortie() {
         PrintStream result = System.out;
 
@@ -1120,7 +1114,6 @@ public class Launch extends JFrame {
      * Methods that is called when one of the following textfields is modified
      * We won't be able to clic on the OK button if one of them if empty
      */
-
     private void textFieldCoordChanged() {
         if(jTextFieldOrigine.getText().equals("") || jTextFieldPieton.getText().equals("") || jTextFieldDest.getText().equals("")) {
             jButtonOk.setEnabled(false);
@@ -1130,13 +1123,11 @@ public class Launch extends JFrame {
         }
     }
 
-
     /**
      * Oblige l'utilisateur de cliquer sur le button OK pour continuer
      * Le thread est mis en pause est vérifit périodiquement si on a cliqué
      * (permet de ne pas utiliser le processeur continuellement)
      */
-
     public void waitButtonOk() {
         while (!buttonClicked) {
             try {
@@ -1149,14 +1140,12 @@ public class Launch extends JFrame {
         buttonClicked = false;
     }
 
-
     /**
      * Gestion des évenement des bouttons
      * Si on clique sur :
      * - CHARGER (au lancement) : création d'un thread permettant d'afficher la carte et lancement de l'application
      * - OK : on signal simplement que le boutton a été cliqué (voir fonction waitButtonOk())
      */
-
     public class BoutonListener implements ActionListener {
         public void actionPerformed(ActionEvent evt) {
             //Click sur le boutton Load
@@ -1171,12 +1160,10 @@ public class Launch extends JFrame {
         }
     }
 
-
     /**
      * Au lancement de l'application, après avoir cliqué sur CHARGER :
      * On lance le thread qui gèrera l'affichage de la carte
      */
-
     class Play implements Runnable {
         public void run() {
             go();
