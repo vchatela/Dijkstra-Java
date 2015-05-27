@@ -13,7 +13,7 @@ public class Pcc_Dijkstra extends Pcc_Generique<Label> {
 
         super(gr, origine, dest, choixCout, TOUS, pieton, tempsAttenteMaxPieton, affichageDeroulementAlgo, tracerChemin);
 
-        this.graphe.getDessin().setColor(Color.red);
+        this.graphe.getDessin().setColor(Color.magenta);
     }
 
     public void initialisation() {

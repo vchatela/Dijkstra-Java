@@ -102,7 +102,6 @@ public class Openfile {
         }
 
         System.out.println("Fichier utilisee : " + fullpath);
-        System.out.println();
 
         if (fname.endsWith(".gz")) {
             // The file is gzipped.

@@ -123,6 +123,8 @@ public class Connexite extends Algo {
 
             // Mise à jour du résultat pour affichage et fichier de sortie
             ArrayList<String> resultat = new ArrayList<>();
+            resultat.add(""+origine);
+            resultat.add(""+destination);
             if(connexes)    resultat.add("connexes");
             else            resultat.add("non connexes");
             resultat.add(AffichageTempsCalcul(duree));

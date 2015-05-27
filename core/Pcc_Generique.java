@@ -81,6 +81,11 @@ public class Pcc_Generique<E extends Comparable<E>> extends Algo {
         // implementees dans les sous classes
     }
 
+    /**
+     * Execution l'algo de Dijikstra
+     * - retourne null si un des point saisis n'appartient pas au graphe
+     * - retourne un ArrayList contenant les résultats de l'execution sinon
+     */
     public ArrayList run() {
 
         if ((origine <= 0) || (origine > graphe.getArrayList().size())) {
@@ -92,7 +97,7 @@ public class Pcc_Generique<E extends Comparable<E>> extends Algo {
         // a noter que : si booleen TOUS alors message de confirmation de vers tout le monde
         else {
 
-            System.out.println("Lancement de l'algorithme " + this.getClass().getName() + " de (zone,noeud) : (" + zoneOrigine + "," + origine + ") vers (" + zoneDestination + "," + destination + ")");
+            System.out.println("Lancement de l'algorithme " + this.getClass().getName() + " de (zone,noeud) : (" + zoneOrigine + "," + origine + ") vers (" + zoneDestination + "," + destination + ")\n");
 
 // TODO : soit construire le graphe inverse, soit on dit qu'on peux pas passer par les routes en sens unique
             // Initialisation de nos champs
@@ -215,6 +220,8 @@ public class Pcc_Generique<E extends Comparable<E>> extends Algo {
 
             // Mise à jour du résultat pour affichage et fichier de sortie
             ArrayList<String> resultat = new ArrayList<>();
+            resultat.add(""+origine);
+            resultat.add(""+destination);
             if(connexes)    resultat.add("connexes");
             else            resultat.add("non connexes");
             resultat.add(AffichageTempsCalcul(duree));

@@ -179,6 +179,8 @@ public class Graphe {
                         //Ajout du segment i au successeur actuel
                         if (!inverse)
                             this.listNode.get(num_Node).getArrayListArc().get(num_succ).addSegment(new Segment(delta_lon, delta_lat));
+                        // Sinon on s'en fout car on ne tracera jamais le graphe inverse
+
                         //Dessin des segments
                         dessin.drawLine(current_long, current_lat, (current_long + delta_lon), (current_lat + delta_lat));
 
