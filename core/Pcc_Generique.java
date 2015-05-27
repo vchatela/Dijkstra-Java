@@ -16,7 +16,6 @@ public class Pcc_Generique<E extends Comparable<E>> extends Algo {
     protected int maxTas;                //Nombre maximum d'elemnt dans le tas
     protected int nb_elements_tas;       //Nombre d'element explores
     protected boolean TOUS;              //contient le resultat a enregister dans un fichier
-    protected boolean sensUniqueInterdit;        //Indique, pour le COVOITURAGE, si on part de la destination, qu'il ne faut pas prendre en compte les route à sens unique (car dans l'autre sens on ne pourra les emprunter)
     protected boolean pieton;            // Pour le pieton permet de changer sa vitesse etc
     protected double tempsAttenteMaxPieton; // Temps maximum d'attente du piéton pour covoiturage
     protected boolean tracerChemin;         // Tracer le chemin à la fin du déroulement de l'algorithme
@@ -37,7 +36,6 @@ public class Pcc_Generique<E extends Comparable<E>> extends Algo {
 
         //Liés au covoiturage
         this.TOUS = TOUS;
-        this.sensUniqueInterdit = sensUniqueInterdit;
         this.pieton = pieton;
         this.tempsAttenteMaxPieton = tempsAttenteMaxPieton;
 
@@ -50,24 +48,8 @@ public class Pcc_Generique<E extends Comparable<E>> extends Algo {
         return cout;
     }
 
-    public void setCout(double cout) {
-        this.cout = cout;
-    }
-
-    public HashMap<Node, E> getMapLabel() {
-        return mapLabel;
-    }
-
-    public void setMapLabel(HashMap mapLabel) {
-        this.mapLabel = mapLabel;
-    }
-
     public int getNb_elements_tas() {
         return nb_elements_tas;
-    }
-
-    public void setNb_elements_tas(int nb_elements_tas) {
-        this.nb_elements_tas = nb_elements_tas;
     }
 
     public ArrayList<E> getLabels() {
@@ -96,13 +78,12 @@ public class Pcc_Generique<E extends Comparable<E>> extends Algo {
         // a noter que : si booleen TOUS alors message de confirmation de vers tout le monde
         else {
 
-            System.out.println("Lancement de l'algorithme " + this.getClass().getName() + " de (zone,noeud) : (" + zoneOrigine + "," + origine + ") vers (" + zoneDestination + "," + destination + ")\n");
+            System.out.println("Lancement de l'algorithme " + this.getClass().getName() + " de (zone,noeud) : (" + zoneOrigine + "," + origine + ") vers (" + zoneDestination + "," + destination + ")");
 
-// TODO : soit construire le graphe inverse, soit on dit qu'on peux pas passer par les routes en sens unique
             // Initialisation de nos champs
             labels = new ArrayList<>();
             tas = new BinaryHeap<>();
-            mapLabel = new HashMap();
+            mapLabel = new HashMap<>();
             maxTas = tas.size();    // Nombre max des elements et ceux explores
             nb_elements_tas = 1;
             double new_cout;
@@ -240,7 +221,7 @@ public class Pcc_Generique<E extends Comparable<E>> extends Algo {
 
     public void chemin() {
         // on construit le chemin du dest->origine
-        Chemin chemin = new Chemin(origine, destination);
+        Chemin chemin = new Chemin();
         chemin.addNode(this.graphe.getArrayList().get(destination));
         E E_en_cours = (E) dest;
         Node node;
@@ -258,7 +239,7 @@ public class Pcc_Generique<E extends Comparable<E>> extends Algo {
 
     public int cheminTest() {
         // on construit le chemin du dest->origine
-        Chemin chemin = new Chemin(origine, destination);
+        Chemin chemin = new Chemin();
         chemin.addNode(this.graphe.getArrayList().get(destination));
         E E_en_cours = (E) dest;
         Node node;

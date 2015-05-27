@@ -3,9 +3,6 @@ package core;
 import java.awt.*;
 import java.util.Collections;
 
-/**
- * Created by valentin on 4/29/15.
- */
 public class Pcc_Dijkstra extends Pcc_Generique<Label> {
 
 
@@ -39,7 +36,7 @@ public class Pcc_Dijkstra extends Pcc_Generique<Label> {
     public double chemin(int origine, int dest, Graphe gr) {
         // on construit le chemin du dest->origine
         double cout = -1;
-        Chemin chemin = new Chemin(origine, dest);
+        Chemin chemin = new Chemin();
         chemin.addNode(this.graphe.getArrayList().get(dest));
         Label_Generique labeldest = this.mapLabel.get(this.graphe.getArrayList().get(dest));
 
@@ -50,6 +47,7 @@ public class Pcc_Dijkstra extends Pcc_Generique<Label> {
         Node node;
         // On remonte avec l'aide du pere !
         // Tant qu'on n'atteint pas le sommet d'origine qui a pour pere -1
+        assert E_en_cours != null;
         while (E_en_cours.getPere() != -1) {
             node = this.graphe.getArrayList().get(E_en_cours.getPere());
             chemin.addNode(node);

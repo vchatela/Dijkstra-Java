@@ -36,15 +36,15 @@ public class BinaryHeap<E extends Comparable<E>> {
      */
     public BinaryHeap() {
         this.currentSize = 0;
-        this.array = new ArrayList<E>();
-        this.map = new HashMap<E, Integer>();
+        this.array = new ArrayList<>();
+        this.map = new HashMap<>();
     }
 
     // Constructor used for debug.
     private BinaryHeap(BinaryHeap<E> heap) {
         this.currentSize = heap.currentSize;
-        this.array = new ArrayList<E>(heap.array);
-        this.map = new HashMap<E, Integer>();
+        this.array = new ArrayList<>(heap.array);
+        this.map = new HashMap<>();
         for (int i = 0; i < this.currentSize; i++) {
             this.map.put(this.array.get(i), i);
         }
@@ -158,7 +158,6 @@ public class BinaryHeap<E extends Comparable<E>> {
      * Find the smallest item in the heap.
      *
      * @return the smallest item.
-     * @throws Exception if empty.
      */
     public E findMin() {
         if (isEmpty())
@@ -170,7 +169,6 @@ public class BinaryHeap<E extends Comparable<E>> {
      * Remove the smallest item from the heap.
      *
      * @return the smallest item.
-     * @throws Exception if empty.
      */
     public E deleteMin() {
         E minItem = findMin();
@@ -202,7 +200,7 @@ public class BinaryHeap<E extends Comparable<E>> {
      */
     public void printSorted() {
 
-        BinaryHeap<E> copy = new BinaryHeap<E>(this);
+        BinaryHeap<E> copy = new BinaryHeap<>(this);
 
         System.out.println();
         System.out.println("========  Sorted HEAP  (size = " + this.currentSize + ")  ========");
@@ -227,9 +225,5 @@ public class BinaryHeap<E extends Comparable<E>> {
 
     public HashMap<E, Integer> getMap() {
         return map;
-    }
-
-    public void setMap(HashMap<E, Integer> map) {
-        this.map = map;
     }
 }

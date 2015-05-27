@@ -44,11 +44,24 @@ public class Launch extends JFrame {
     private JPanel controlPanel;               // Contient le menu de selection des choix
     private Container cp;                         // Conteneur de la fenetre, on y ajoute les deux précédents éléments
     private JLabel                                      // Texte à afficher
-            jLabelNames, jLabelTitle, jLabelCarte, jLabelAfficher, jLabelFichier, jLabelMenu,
-            jLabelDeroulement, jLabelChoixCout, jLabelDepart, jLabelDepartVoiture,
-            jLabelDepartPieton, jLabelArrivee, jLabelCoordsMan, jLabelCoordsClick, jLabelTempsMax,
-            jLabelCoordClick, jLabelCoordSitues, jLabelNoeudsProches, jLabelChemin;
-    private JLabel jLabelImageGraphe;          // Image de lancement (graphe) à afficher
+            jLabelNames;
+    private JLabel jLabelTitle;
+    private JLabel jLabelCarte;
+    private JLabel jLabelAfficher;
+    private JLabel jLabelMenu;
+    private JLabel jLabelDeroulement;
+    private JLabel jLabelChoixCout;
+    private JLabel jLabelDepart;
+    private JLabel jLabelDepartVoiture;
+    private JLabel jLabelDepartPieton;
+    private JLabel jLabelArrivee;
+    private JLabel jLabelCoordsMan;
+    private JLabel jLabelCoordsClick;
+    private JLabel jLabelTempsMax;
+    private JLabel jLabelCoordClick;
+    private JLabel jLabelCoordSitues;
+    private JLabel jLabelNoeudsProches;
+    private JLabel jLabelChemin;
     private JLabel jLabelImageINSA;            // Logo de l'INSA à afficher
     private JTextField jTextFieldFichier;          // Zone de saisie du fichier
     private JTextField jTextField1;                // Zone de saisie n°1
@@ -93,7 +106,7 @@ public class Launch extends JFrame {
         jLabelTitle = new JLabel("<html><br>PROGRAMME DE TESTS DES ALGORITHMES DE GRAPHE<br><br></html>");
         jLabelCarte = new JLabel("Fichier .map à utiliser : ");
         jLabelAfficher = new JLabel("Afficher la carte : ");
-        jLabelFichier = new JLabel("Fichier de sortie : ");
+        JLabel jLabelFichier = new JLabel("Fichier de sortie : ");
         jLabelMenu = new JLabel("Que voulez-vous faire : ");
         jLabelDeroulement = new JLabel("Afficher le deroulement : ");
         jLabelTempsMax = new JLabel("<html>Temps min d'attente<br>du piéton (max 2h) :</html>");
@@ -228,7 +241,7 @@ public class Launch extends JFrame {
         // Paramétrage des images : graphe et logo INSA
         ImageIcon imageGraphe = new ImageIcon("arbre.jpg");
         ImageIcon imageINSA = new ImageIcon("logoINSA.png");
-        jLabelImageGraphe = new JLabel();
+        JLabel jLabelImageGraphe = new JLabel();
         jLabelImageINSA = new JLabel();
         jLabelImageGraphe.setIcon(imageGraphe);
         jLabelImageINSA.setIcon(imageINSA);
@@ -390,7 +403,9 @@ public class Launch extends JFrame {
                         // ArrayList contenant les couts màj
                         Algo algoVoitureDest, algoPietonDest, algoDestInverse;
                         ArrayList<Label> covoitSomme = new ArrayList<>();
-                        ArrayList<String> perfVoitureTous, perfPietonTous, perfDestTous;
+                        ArrayList perfVoitureTous;
+                        ArrayList perfPietonTous;
+                        ArrayList perfDestTous;
                         ArrayList<String> durees = new ArrayList<>();
                         ArrayList<Boolean> seuls = new ArrayList<>();
                         int noeud_rejoint = -1;
@@ -417,8 +432,7 @@ public class Launch extends JFrame {
 
                         // Permet de copier l'arraylist précédent sans le déréférencer
                         ArrayList<Label> covoitSave = new ArrayList<>();
-                        for (int i = 0; i < covoitVoiture.size(); i++)
-                            covoitSave.add(new Label(covoitVoiture.get(i)));
+                        for (Label aCovoitVoiture : covoitVoiture) covoitSave.add(new Label(aCovoitVoiture));
 
                         // PCC du PIETON vers TOUS
                         algoPietonDest = new Pcc_Dijkstra(graphe, pieton, dest, choixCout, true, true, tempsAttenteMaxPieton, affichageDeroulementAlgo, false);
@@ -547,7 +561,7 @@ public class Launch extends JFrame {
                             algo = new Connexite(graphe, pieton, dest, false);
                             ArrayList res = algo.run();
                             if (res.get(2).equals("connexes")) {
-                                switch (JOptionPane.showConfirmDialog(null, "Souhaitez-vous simuler la durée prévue si le piéton se rend en voiture à la destination ?", "Le piéton devrait attendre plus de " + AffichageTempsHeureMin(tempsAttenteMaxPieton), JOptionPane.OK_OPTION)) {
+                                switch (JOptionPane.showConfirmDialog(null, "Souhaitez-vous simuler la durée prévue si le piéton se rend en voiture à la destination ?", "", JOptionPane.OK_OPTION)) {
                                     case JOptionPane.OK_OPTION:
                                         algo = new Pcc_Star(graphe, pieton, dest, choixCout, false, false, Double.POSITIVE_INFINITY, affichageDeroulementAlgo, true);
                                         ArrayList perfPietonDest = algo.run();
@@ -710,7 +724,6 @@ public class Launch extends JFrame {
             origine = Integer.parseInt(jTextFieldOrigine.getText());
             dest = Integer.parseInt(jTextFieldDest.getText());
         } catch (NumberFormatException n) {
-            System.out.println(n);
             origine = -1;
             dest = -1;
         }
@@ -765,7 +778,6 @@ public class Launch extends JFrame {
             pieton = Integer.parseInt(jTextFieldPieton.getText());
             dest = Integer.parseInt(jTextFieldDest.getText());
         } catch (NumberFormatException n) {
-            System.out.println(n);
             origine = -1;
             dest = -1;
         }
@@ -1050,11 +1062,11 @@ public class Launch extends JFrame {
                 break;
         }
         resultat += "Carte : " + nomCarte + "\n";
-        resultat += "Origine : " + performances.get(0) + "\n";
-        resultat += "Arrivée : " + performances.get(1) + "\n";
         if (performances == null)
             resultat += "Erreur - Un des sommets saisis n'appartient pas au graphe";
         else {
+            resultat += "Origine : " + performances.get(0) + "\n";
+            resultat += "Arrivée : " + performances.get(1) + "\n";
             resultat += "Connexité : " + performances.get(2) + "\n";
             resultat += "Temps de Calcul : " + performances.get(3) + "\n";
             if (choixAlgo != 3) {
@@ -1066,17 +1078,17 @@ public class Launch extends JFrame {
             }
         }
         JOptionPane.showMessageDialog(null, resultat); // On affiche le resultats en popup
-        sortie.append(resultat + "\n\n\n"); // On ecrit dans le fichier
+        sortie.append(resultat).append("\n\n\n"); // On ecrit dans le fichier
     }
 
     void afficherEtEcrireResultats(ArrayList perf1, ArrayList perf2, ArrayList perf3) {
         resultat = "           Programme de test des algorithmes Dijkstra :\n";
         resultat += "Carte : " + nomCarte + "\n";
-        resultat += "Origine : " + perf1.get(0) + "\n";
-        resultat += "Arrivée : " + perf2.get(1) + "\n\n";
         if (perf1 == null || perf2 == null)
             resultat += "Erreur - Un des sommets saisis n'appartient pas au graphe";
         else {
+            resultat += "Origine : " + perf1.get(0) + "\n";
+            resultat += "Arrivée : " + perf2.get(1) + "\n\n";
             resultat += " - PCC Standard vs. PCC A-Star vs. Connexité :\n";
             resultat += "Connexité : " + perf1.get(2) + " - " + perf2.get(2) + " - " + perf3.get(2) + "\n";
             resultat += "Temps de Calcul : " + perf1.get(3) + " - " + perf2.get(3) + " - " + perf3.get(3) + "\n\n";

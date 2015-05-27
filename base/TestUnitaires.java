@@ -5,9 +5,6 @@ import core.*;
 import java.io.DataInputStream;
 import java.util.ArrayList;
 
-/**
- * Created by valentin on 27/05/15.
- */
 public class TestUnitaires {
     private String nomCarte;                   // Nom de la carte � charger
     private DataInputStream mapdata;
@@ -235,8 +232,8 @@ public class TestUnitaires {
 
         // Permet de copier l'arraylist précédent sans référencer le même
         ArrayList<Label> covoitSave = new ArrayList<>();
-        for (int i = 0; i < covoitVoiture.size(); i++) {
-            covoitSave.add(new Label(covoitVoiture.get(i)));
+        for (Label aCovoitVoiture : covoitVoiture) {
+            covoitSave.add(new Label(aCovoitVoiture));
         }
 
         // PCC du PIETON vers TOUS

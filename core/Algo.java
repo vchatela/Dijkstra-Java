@@ -1,12 +1,11 @@
 package core;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 
 /**
  * Classe abstraite representant un algorithme (connexite, plus court chemin, etc.)
  */
-public abstract class Algo<E extends Comparable<E>> {
+public abstract class Algo {
 
     protected Graphe graphe;
 
@@ -30,10 +29,6 @@ public abstract class Algo<E extends Comparable<E>> {
 
     public abstract ArrayList getLabels();
 
-    public abstract HashMap<Node, Label_Generique> getMapLabel();
-
-    public abstract void setMapLabel(HashMap<Node, E> mapLabel);
-
     public String AffichageTempsHeureMin(double min) {
         int heures, minutes;
         int totalSecondes = (int) Math.round(min) * 60;
@@ -48,7 +43,7 @@ public abstract class Algo<E extends Comparable<E>> {
     }
 
     public String AffichageTempsCalcul(double ms) {
-        int sec = 0;
+        int sec;
         double milli;
 
         if (ms >= 1000) {

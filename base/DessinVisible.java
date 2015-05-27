@@ -114,10 +114,6 @@ public class DessinVisible extends Dessin {
         this.repaint();
     }
 
-//    public boolean waitClick() {
-//        return this.panel.waitClick();
-//    }
-
     public float getClickLon() {
         float x = this.getXClick();
 //        float x = this.panel.getXClick();

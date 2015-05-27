@@ -7,9 +7,6 @@ import java.io.DataInputStream;
 import java.io.PrintStream;
 import java.util.ArrayList;
 
-/**
- * Created by Valentin on 18/05/2015.
- */
 public class LaunchPerf {
     // Declaration de Variables li� � l'execution du programme
     private String nomCarte;                   // Nom de la carte � charger
@@ -44,7 +41,7 @@ public class LaunchPerf {
         int tabStar[] = {0, 0, 0, 0};
         int Perf[] = {0, 0};
         int dureeP, dureeA;
-        ArrayList test = null;
+        ArrayList test;
         // on veut lancer 100 algos sur la carte avec des sommets diff�rents al�atoires
         for (int i = 0; i < 100; i++) {
             origine = (int) (Math.random() * graphe.max);
@@ -58,6 +55,7 @@ public class LaunchPerf {
             try {
                 java.lang.Thread.sleep(500);
             } catch (Exception e) {
+                System.out.println("Error in thread");
             }
 
             // algo -> PCC A-Star : Dijkstra guid�

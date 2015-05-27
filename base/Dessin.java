@@ -20,11 +20,12 @@ public abstract class Dessin  extends JPanel implements MouseListener {
     private int YClick;
     private boolean ClickIsHere;
     // We use a dummy object for synchronization, to avoid interferences with the GUI system.
-    private String lock = new String("");
+    private final String lock;
 
     protected Dessin() {
         super();
         this.addMouseListener(this);
+        this.lock = "";
     }
 
     public void setImage(Image image) {
@@ -56,22 +57,14 @@ public abstract class Dessin  extends JPanel implements MouseListener {
     public void mouseEntered(MouseEvent e) {
     }
 
-    ;
-
     public void mouseExited(MouseEvent e) {
     }
-
-    ;
 
     public void mousePressed(MouseEvent e) {
     }
 
-    ;
-
     public void mouseReleased(MouseEvent e) {
     }
-
-    ;
 
     public void mouseClicked(MouseEvent e) {
         this.ClickIsHere = true;

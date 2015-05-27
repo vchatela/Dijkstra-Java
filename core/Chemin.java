@@ -12,19 +12,12 @@ import java.util.ArrayList;
  * @author valentin
  */
 public class Chemin {
-    private int magic_number;
-    private int version;
-    private int id;
-    private int nb_nodes;
-    private int num_noeud_origin;
-    private int num_noeud_dest;
     private ArrayList<Node> listNode;
 
     /**
      * Cree un chemin avec les infos passes en parametre ..
      * utile pour le chargement d'un fichier .path
      *
-     * @param magic_number
      * @param version
      * @param id           identifiant de la carte
      * @param nb_nodes     nombre de noeuds du chemin
@@ -32,27 +25,13 @@ public class Chemin {
      * @param node_end     fin du chemin
      */
 
-    public Chemin(int magic_number, int version, int id, int nb_nodes, int node_start, int node_end) {
-        this.magic_number = magic_number;
-        this.version = version;
-        this.id = id;
-        this.nb_nodes = nb_nodes;
-        this.num_noeud_origin = node_start;
-        this.num_noeud_dest = node_end;
-        this.listNode = new ArrayList<Node>();
-    }
-
     /**
      * Cree un chemin allant d'un sommet origine a un sommet destination.
      * Utile pour l'algorithme de Dijikstra
      *
-     * @param node_start noeud origine
-     * @param node_end   noeud destination
      */
-    public Chemin(int node_start, int node_end) {
-        this.num_noeud_origin = node_start;
-        this.num_noeud_dest = node_end;
-        this.listNode = new ArrayList<Node>();
+    public Chemin() {
+        this.listNode = new ArrayList<>();
     }
 
     /**
@@ -62,7 +41,6 @@ public class Chemin {
      */
     public void addNode(Node node) {
         this.listNode.add(node);
-        this.nb_nodes += 1;
     }
 
     /**

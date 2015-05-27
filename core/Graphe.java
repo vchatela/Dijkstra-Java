@@ -24,13 +24,8 @@ public class Graphe {
     // Version du format PATH.
     private static final int version_path = 1;
     private static final int magic_number_path = 0xdecafe;
-    // Rayon de la terre en metres
-    private static final double rayon_terre = 6378137.0;
-    // Nom de la carte utilisee pour construire ce graphe
-    private final String nomCarte;
     // Fenetre graphique
     private final Dessin dessin;
-    private final boolean inverse;
     public int max;
 
 
@@ -47,9 +42,7 @@ public class Graphe {
 
     // Le constructeur cree le graphe en lisant les donnees depuis le DataInputStream
     public Graphe(String nomCarte, DataInputStream dis, Dessin dessin, boolean inverse) {
-        this.inverse = inverse;
         this.listNode = new ArrayList<>();
-        this.nomCarte = nomCarte;
         this.dessin = dessin;
         Utils.calibrer(nomCarte, dessin);
 
@@ -203,34 +196,13 @@ public class Graphe {
 
             Utils.checkByte(253, dis);
 
-            System.out.println("Fichier lu : " + nb_Nodes + " Nodes, " + edges + " aretes, "
-                    + nb_descripteurs + " descripteurs.");
-            //Affichage graphique
-            //JOptionPane.showMessageDialog(null, "Fichier lu : " + nb_Nodes + " sommets\n" + edges + " aretes\n"
-            //      + nb_descripteurs + " descripteurs");
+            System.out.println("Fichier lu : " + nb_Nodes + " Nodes, " + edges + " aretes, " + nb_descripteurs + " descripteurs.");
 
         } catch (IOException e) {
             e.printStackTrace();
             System.exit(1);
         }
 
-    }
-
-    /**
-     * Calcule de la distance orthodromique - plus court chemin entre deux points a la surface d'une sphere
-     *
-     * @param long1 longitude du premier point.
-     * @param lat1  latitude du premier point.
-     * @param long2 longitude du second point.
-     * @param lat2  latitude du second point.
-     * @return la distance entre les deux points en metres.
-     * Methode ecrite par Thomas Thiebaud, mai 2013
-     */
-    public static double distance(double long1, double lat1, double long2, double lat2) {
-        double sinLat = Math.sin(Math.toRadians(lat1)) * Math.sin(Math.toRadians(lat2));
-        double cosLat = Math.cos(Math.toRadians(lat1)) * Math.cos(Math.toRadians(lat2));
-        double cosLong = Math.cos(Math.toRadians(long2 - long1));
-        return rayon_terre * Math.acos(sinLat + cosLat * cosLong);
     }
 
     public Dessin getDessin() {
@@ -250,14 +222,14 @@ public class Graphe {
      * A n'utiliser que pour faire du debug ou des tests ponctuels.
      * Ne pas utiliser automatiquement a chaque invocation des algorithmes.
      */
-    public ArrayList situerClick() {
+    public ArrayList<Number> situerClick() {
 
         if (dessin.waitClick()) {
 
             float lon = dessin.getClickLon();
             float lat = dessin.getClickLat();
-            ArrayList resultat;
-            resultat = new ArrayList();
+            ArrayList<Number> resultat;
+            resultat = new ArrayList<>();
 
             // On cherche le noeud le plus proche. O(n)
             float minDist = Float.MAX_VALUE;
@@ -332,7 +304,7 @@ public class Graphe {
 
             int current_zone = 0;
             int current_Node = 0;
-            Chemin chemin1 = new Chemin(magic, version, path_carte, nb_noeuds, first_Node, last_Node);
+            Chemin chemin1 = new Chemin();
 
             // Tous les noeuds du chemin
             for (int i = 0; i < nb_noeuds; i++) {
