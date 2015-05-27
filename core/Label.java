@@ -9,6 +9,10 @@ public class Label extends Label_Generique implements Comparable<Label> {
         super(node);
     }
 
+    public Label(Label l) {
+        super(l);
+    }
+
     public String toString() {
         return "Sommet n°" + this.getNum_node() + " - Cout=" + this.getCout();
     }

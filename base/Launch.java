@@ -432,6 +432,12 @@ public class Launch extends JFrame {
                         perfVoitureTous = algo.run();
                         ArrayList<Label> covoitVoiture = algo.getLabels();
 
+
+                        ArrayList<Label> covoitSave = new ArrayList<>();
+                        for (int i = 0; i < covoitVoiture.size(); i++) {
+                            covoitSave.add(new Label(covoitVoiture.get(i)));
+                        }
+
                         System.out.println(tempsAttenteMaxPieton);
 
                         // PCC du PIETON vers TOUS
@@ -485,10 +491,8 @@ public class Launch extends JFrame {
                                     noeud_rejoint = i;
                                 }
                             }
-                            //TODO : autre chose ! Si le pieton doit obligatoirement marcher plus de x minutes, il prend sa voiture !
 
                             if (noeud_rejoint != -1) {
-                                // TODO : ici problème ! covoitSomme.get(noeud_rejoint) nous donne le sommet qui est bon, mais le cout est par contre celui jusqu'à la dest !!
                                 System.out.println("On se rejoins au noeud : " + covoitSomme.get(noeud_rejoint));
                                 if (affichageChemin) {
                                     // Ca signifie qu'on veut tracer les 3 chemins
@@ -498,24 +502,8 @@ public class Launch extends JFrame {
                                         durees.add(algo.AffichageTempsHeureMin(((Pcc_Dijkstra) algo).chemin(origine, dest)));
                                         durees.add(algo1.AffichageTempsHeureMin(((Pcc_Dijkstra) algo1).chemin(pieton, dest)));
 
-                                        // TODO : c'est sur que c'est ici le souci du temps
                                     } else {
-                                        // Ici on doit faire rejoindre les deux puis jusqu'à la fin
-                                        // on ajoute le cout de l'algo origine vers noeud rejoins
-                                        // TODO : le pb viens uniquement du calcul par rapport à la voiture
-                                        // Et oui! covoitSomme contient la valeur de max(voit, piet) + dest !   car a chaque tour de boucle on ajoute le dest, donc même au noeud rejoins !
-                                        // faut stocker la valeur avant !
-
-                                        // Cette valeur c'est le temps qu'il faut pour se rejoindre
-                                        // TODO : probablement une erreur de pointeur, dans chemin on doit être relié à covoitSomme et donc nos labels sont faux !
-                                        /*
-                                        minVoiture = ((Pcc_Dijkstra) algo).chemin(origine, noeud_rejoint);
-                                        */
-                                        // TODO : pas performant mais marche !! C'est donc ca, on a un pointeur sur les labels qui marche pas !
-                                        algo = new Pcc_Dijkstra(graphe, origine, noeud_rejoint, choixCout, false, false, false, Double.POSITIVE_INFINITY, affichageDeroulementAlgo, false);
-                                        perfVoitureTous = algo.run();
-                                        covoitVoiture = algo.getLabels();
-                                        minVoiture = covoitVoiture.get(noeud_rejoint).getCout();
+                                        minVoiture = covoitSave.get(noeud_rejoint).getCout();
 
                                         durees.add(algo.AffichageTempsHeureMin(minVoiture));
 
@@ -536,11 +524,18 @@ public class Launch extends JFrame {
                                     }
                                 }
                             } else {
-                                //TODO : c'est bizarre qu'on arrive à passer ici des fois ...
-                                // tester si les noeuds sont connexes ?
-                                // ou alors la voiture ne peut pas y aller
-                                // ou alors ca veut dire que chacun prend sa voiture !
-                                System.out.println("Impossible de se rejoindre.");
+                                System.out.print("Pas de rencontre car ");
+                                Algo algo4 = new Connexite(graphe, origine, pieton, false);
+                                ArrayList res = algo4.run();
+                                if (res.get(0).equals("non connexes")) {
+                                    System.out.println("le pieton et la voiture ne sont pas connexes.");
+                                    // pas connexe
+                                    // TODO : affichage message pas connexe
+                                } else {
+                                    System.out.print("le pieton doit marcher plus de " + tempsAttenteMaxPieton + " minutes.");
+                                    // ca veut dire que le pieton doit obligatoirement marcher plus de x minutes
+                                    // il prend donc sa voiture : TODO proposer un dijsktra a-star pour lui donner son temps ?
+                                }
                             }
 
                             // Test si le point de rencontre est trouvé

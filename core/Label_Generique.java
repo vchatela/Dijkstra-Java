@@ -17,6 +17,13 @@ public class Label_Generique {
         this.pere = -1;//pas de pere
     }
 
+    public Label_Generique(Label_Generique l) {
+        this.num_node = l.getNum_node();
+        this.marque = l.isMarque();
+        this.cout = l.getCout();
+        this.pere = l.getPere();
+    }
+
     public int hashCode() {
         return getNum_node();
     }

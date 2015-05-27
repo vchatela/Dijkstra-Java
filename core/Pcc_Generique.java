@@ -154,10 +154,8 @@ public class Pcc_Generique<E extends Comparable<E>> extends Algo {
                                 continue;
                             }
                         }
-// TODO : on doit vérifier que le temps new_cout s'il est mis à jour ne dépasse pas la valeur tempsAttentePietonMax sinon continue du for
 
                         if (new_cout > tempsAttenteMaxPieton) {
-                            // TODO : on met le cout a infini alors ?
                             new_cout = Double.POSITIVE_INFINITY;
                             ((Label_Generique) succ).setCout(new_cout);
                             continue;
