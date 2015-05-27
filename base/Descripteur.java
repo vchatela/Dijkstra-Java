@@ -59,20 +59,6 @@ public class Descripteur {
         return sensUnique;
     }
 
-    /**
-     * @return Vitesse maximale sur cette voie, en km/h
-     */
-    public int vitesseMax() {
-        return vitMax;
-    }
-
-    /**
-     * @return Le nom de la voie (e.g. Rue Casimir, Avenue du Ptit Kawa)
-     */
-    public String getNom() {
-        return nom;
-    }
-
     public char getType() {
         return type;
     }

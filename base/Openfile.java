@@ -81,9 +81,9 @@ public class Openfile {
             System.out.println("Impossible de trouver le fichier " + filename);
             System.out.println("  pourtant j'ai cherche dans les dossiers : ");
             int existepas = 0;
-            for (int i = 0; i < datadirs.length; i++) {
-                System.out.println("     - " + datadirs[i]);
-                if (!new File(datadirs[i]).isDirectory()) {
+            for (String datadir : datadirs) {
+                System.out.println("     - " + datadir);
+                if (!new File(datadir).isDirectory()) {
                     switch (existepas) {
                         case 0:
                             System.out.println("       (Ce dossier n'existe pas d'ailleurs)");

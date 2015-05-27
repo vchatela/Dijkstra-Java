@@ -24,13 +24,11 @@ public class Graphe {
     // Version du format PATH.
     private static final int version_path = 1;
     private static final int magic_number_path = 0xdecafe;
-    // Rayon de la terre en metres
-    private static final double rayon_terre = 6378137.0;
+    protected final boolean inverse;
     // Nom de la carte utilisee pour construire ce graphe
     private final String nomCarte;
     // Fenetre graphique
     private final Dessin dessin;
-    private final boolean inverse;
     public int max;
 
 
@@ -214,23 +212,6 @@ public class Graphe {
             System.exit(1);
         }
 
-    }
-
-    /**
-     * Calcule de la distance orthodromique - plus court chemin entre deux points a la surface d'une sphere
-     *
-     * @param long1 longitude du premier point.
-     * @param lat1  latitude du premier point.
-     * @param long2 longitude du second point.
-     * @param lat2  latitude du second point.
-     * @return la distance entre les deux points en metres.
-     * Methode ecrite par Thomas Thiebaud, mai 2013
-     */
-    public static double distance(double long1, double lat1, double long2, double lat2) {
-        double sinLat = Math.sin(Math.toRadians(lat1)) * Math.sin(Math.toRadians(lat2));
-        double cosLat = Math.cos(Math.toRadians(lat1)) * Math.cos(Math.toRadians(lat2));
-        double cosLong = Math.cos(Math.toRadians(long2 - long1));
-        return rayon_terre * Math.acos(sinLat + cosLat * cosLong);
     }
 
     public Dessin getDessin() {

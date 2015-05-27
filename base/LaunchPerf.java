@@ -4,27 +4,17 @@ import core.Algo;
 import core.Graphe;
 
 import java.io.DataInputStream;
-import java.io.PrintStream;
 import java.util.ArrayList;
 
 /**
  * Created by Valentin on 18/05/2015.
+ *
  */
 public class LaunchPerf {
     // Declaration de Variables li� � l'execution du programme
     private String nomCarte;                   // Nom de la carte � charger
-    private String nomChemin;                  // Nom du chemin � charger
-    private String resultat;                   // Contient les resultats des algos
-    private PrintStream sortie;                     // Fichier de sortie
     private Graphe graphe;                     // La map
-    private boolean display;                    // Affichage graphique ou non
-    private boolean buttonClicked = false;      // Un bouton a �t� cliqu� ou non
-    private boolean continuer = true;           // Boucle principale : le menu est accessible jusqu'a ce que l'on quitte.
-    private ArrayList clickCoord;                 // Pour avoir coordonn�es d'un clic
-    private int sommetsConnus;              // L'utilisateur connait les sommets origine et dest ou non
-    private int choixCout;                  // Plus court en Distance:0 ou Temps:1
-    private boolean affichageDeroulementAlgo;   // Affichage des algorithmes ou non
-    private int origine, pieton, dest;      // Num�ro des sommets origine, pieton et dest
+    private int origine, dest;      // Num�ro des sommets origine, pieton et dest
     private Algo algo;                       // Algorithme a executer
 
     public LaunchPerf() {
@@ -44,7 +34,7 @@ public class LaunchPerf {
         int tabStar[] = {0, 0, 0, 0};
         int Perf[] = {0, 0};
         int dureeP, dureeA;
-        ArrayList test = null;
+        ArrayList test;
         // on veut lancer 100 algos sur la carte avec des sommets diff�rents al�atoires
         for (int i = 0; i < 100; i++) {
             origine = (int) (Math.random() * graphe.max);
@@ -57,7 +47,7 @@ public class LaunchPerf {
             System.out.println(test.get(4));
             try {
                 java.lang.Thread.sleep(500);
-            } catch (Exception e) {
+            } catch (Exception ignored) {
             }
 
             // algo -> PCC A-Star : Dijkstra guid�

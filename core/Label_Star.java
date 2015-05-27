@@ -2,6 +2,7 @@ package core;
 
 /**
  * Created by valentin on 4/29/15.
+ *
  */
 public class Label_Star extends Label_Generique implements Comparable<Label_Star> {
 

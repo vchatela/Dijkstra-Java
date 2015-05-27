@@ -43,7 +43,7 @@ public abstract class Algo<E extends Comparable<E>> {
     }
 
     public String AffichageTempsCalcul(double ms) {
-        int sec = 0;
+        int sec;
         double milli;
 
         if (ms >= 1000) {

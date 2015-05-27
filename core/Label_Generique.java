@@ -2,6 +2,7 @@ package core;
 
 /**
  * Created by Joris on 16/05/15.
+ *
  */
 public class Label_Generique {
 
