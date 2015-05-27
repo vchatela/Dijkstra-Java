@@ -89,6 +89,12 @@ public class Graphe {
             pb.setMinimum(0);
             pb.setMaximum(nb_Nodes);
 
+            if (inverse) {
+                // on ne veut pas afficher
+                frame.setVisible(false);
+                frame.dispose();
+            }
+
             // stocke la latitude et longitude d'un noeud
             float latitude, longitude;
             // nombre de successeurs d'un noeud

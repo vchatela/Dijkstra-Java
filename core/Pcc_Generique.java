@@ -20,7 +20,7 @@ public class Pcc_Generique<E extends Comparable<E>> extends Algo {
     protected boolean pieton;            // Pour le pieton permet de changer sa vitesse etc
     protected double tempsAttenteMaxPieton; // Temps maximum d'attente du piéton pour covoiturage
     protected boolean tracerChemin;         // Tracer le chemin à la fin du déroulement de l'algorithme
-
+    protected double cout;
 
     public Pcc_Generique(Graphe gr, int origine, int dest, int choixCout, boolean TOUS, boolean pieton, double tempsAttenteMaxPieton, boolean affichageDeroulementAlgo, boolean tracerChemin) {
         super(gr);
@@ -30,6 +30,7 @@ public class Pcc_Generique<E extends Comparable<E>> extends Algo {
         this.origine = origine;
         this.zoneDestination = gr.getZone();
         this.destination = dest;
+        this.cout = Double.POSITIVE_INFINITY;
 
         //Liés au type de cout choisi : temps ou distance
         this.choixCout = choixCout;
@@ -43,6 +44,14 @@ public class Pcc_Generique<E extends Comparable<E>> extends Algo {
         //Liés à l'affichage
         this.affichageDeroulementAlgo = affichageDeroulementAlgo;
         this.tracerChemin = tracerChemin;
+    }
+
+    public double getCout() {
+        return cout;
+    }
+
+    public void setCout(double cout) {
+        this.cout = cout;
     }
 
     public HashMap<Node, E> getMapLabel() {
@@ -209,8 +218,13 @@ public class Pcc_Generique<E extends Comparable<E>> extends Algo {
             if(connexes)    resultat.add("connexes");
             else            resultat.add("non connexes");
             resultat.add(AffichageTempsCalcul(duree));
-            if (choixCout == 0) resultat.add(String.valueOf(dest.getCout() / 1000) + "km");
-            else                resultat.add(AffichageTempsHeureMin(dest.getCout()));
+            if (choixCout == 0) {
+                resultat.add(String.valueOf(dest.getCout() / 1000) + "km");
+                cout = dest.getCout() / 1000;
+            } else {
+                resultat.add(AffichageTempsHeureMin(dest.getCout()));
+                cout = dest.getCout();
+            }
             resultat.add(String.valueOf(maxTas));
             resultat.add(String.valueOf(nb_elements_tas));
 
@@ -235,5 +249,25 @@ public class Pcc_Generique<E extends Comparable<E>> extends Algo {
         // cout et affichage du chemin
         Collections.reverse(chemin.getListNode());
         chemin.tracerChemin(this.graphe.getDessin());
+    }
+
+    public int cheminTest() {
+        // on construit le chemin du dest->origine
+        Chemin chemin = new Chemin(origine, destination);
+        chemin.addNode(this.graphe.getArrayList().get(destination));
+        E E_en_cours = (E) dest;
+        Node node;
+        // On remonte avec l'aide du pere !
+        // Tant qu'on n'atteint pas le sommet d'origine qui a pour pere -1
+        while (((Label_Generique) E_en_cours).getPere() != -1) {
+            node = this.graphe.getArrayList().get(((Label_Generique) E_en_cours).getPere());
+            chemin.addNode(node);
+            E_en_cours = mapLabel.get(node);
+        }
+        // cout et affichage du chemin
+        Collections.reverse(chemin.getListNode());
+        chemin.tracerChemin(this.graphe.getDessin());
+        int i = (int) (Math.random() * chemin.getListNode().size());
+        return chemin.getListNode().get(i).getNum();
     }
 }

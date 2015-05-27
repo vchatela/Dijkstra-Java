@@ -442,7 +442,6 @@ public class Launch extends JFrame {
                         mapdata = Openfile.open(nomCarte);
                         Graphe grapheInverse = new Graphe(nomCarte, mapdata, new DessinInvisible(), true);
 
-                        // attention true true false
                         algo2 = new Pcc_Dijkstra(grapheInverse, dest, pieton, choixCout, true, false, Double.POSITIVE_INFINITY, affichageDeroulementAlgo, false);
                         perfDestTous = algo2.run();
                         ArrayList<Label> covoitDestination = algo2.getLabels();
