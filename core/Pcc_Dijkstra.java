@@ -36,7 +36,7 @@ public class Pcc_Dijkstra extends Pcc_Generique<Label> {
         }
     }
 
-    public double chemin(int origine, int dest) {
+    public double chemin(int origine, int dest, Graphe gr) {
         // on construit le chemin du dest->origine
         double cout = -1;
         Chemin chemin = new Chemin(origine, dest);
@@ -57,7 +57,7 @@ public class Pcc_Dijkstra extends Pcc_Generique<Label> {
         }
         // cout et affichage du chemin
         Collections.reverse(chemin.getListNode());
-        chemin.tracerChemin(this.graphe.getDessin());
+        chemin.tracerChemin(gr.getDessin());
         return cout;
     }
 

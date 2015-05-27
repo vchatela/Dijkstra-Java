@@ -226,7 +226,6 @@ public class Graphe {
         return rayon_terre * Math.acos(sinLat + cosLat * cosLong);
     }
 
-    // Deux malheureux getters.
     public Dessin getDessin() {
         return dessin;
     }

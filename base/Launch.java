@@ -500,17 +500,17 @@ public class Launch extends JFrame {
                                     if (seul.get(noeud_rejoint)) {
                                         // Cela signifie que chacun y va tout seul
                                         // on ajoute le cout de origine vers dest
-                                        durees.add(algo.AffichageTempsHeureMin(((Pcc_Dijkstra) algo).chemin(origine, dest)));
-                                        durees.add(algo1.AffichageTempsHeureMin(((Pcc_Dijkstra) algo1).chemin(pieton, dest)));
+                                        durees.add(algo.AffichageTempsHeureMin(((Pcc_Dijkstra) algo).chemin(origine, dest, graphe)));
+                                        durees.add(algo1.AffichageTempsHeureMin(((Pcc_Dijkstra) algo1).chemin(pieton, dest, graphe)));
 
                                     }
                                     else {
                                         minVoiture = covoitSave.get(noeud_rejoint).getCout();
-                                        ((Pcc_Dijkstra) algo).chemin(origine, noeud_rejoint);
+                                        ((Pcc_Dijkstra) algo).chemin(origine, noeud_rejoint, graphe);
 
                                         durees.add(algo.AffichageTempsHeureMin(minVoiture));
 
-                                        minPieton = ((Pcc_Dijkstra) algo1).chemin(pieton, noeud_rejoint);
+                                        minPieton = ((Pcc_Dijkstra) algo1).chemin(pieton, noeud_rejoint, graphe);
                                         // on ajoute le cout de l'algo pieton vers noeud rejoins
                                         durees.add(algo1.AffichageTempsHeureMin(minPieton));
 
@@ -523,7 +523,8 @@ public class Launch extends JFrame {
                                             durees.add("Pas d'attente");
                                         }
                                         // on ajoute le cout de noeud rejoins vers dest
-                                        durees.add(algo.AffichageTempsHeureMin(((Pcc_Dijkstra) algo2).chemin(dest, noeud_rejoint)));
+                                        // TODO : gérer affichage fin du chemin
+                                        durees.add(algo.AffichageTempsHeureMin(((Pcc_Dijkstra) algo2).chemin(dest, noeud_rejoint, graphe)));
                                     }
                                 }
                             } else {
