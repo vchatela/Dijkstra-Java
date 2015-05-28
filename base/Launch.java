@@ -11,7 +11,6 @@ import core.*;
 import core.Label;
 
 import javax.swing.*;
-import javax.swing.border.BevelBorder;
 import javax.swing.border.EmptyBorder;
 import javax.swing.event.ChangeListener;
 import javax.swing.event.DocumentEvent;
@@ -43,8 +42,8 @@ public class Launch extends JFrame {
     // Declaration de Variables lié à l'affichage graphique
     private JPanel controlPanel;               // Contient le menu de selection des choix
     private Container cp;                         // Conteneur de la fenetre, on y ajoute les deux précédents éléments
-    private JLabel                                      // Texte à afficher
-            jLabelNames;
+    private JLabel space;
+    private JLabel jLabelNames;
     private JLabel jLabelTitle;
     private JLabel jLabelCarte;
     private JLabel jLabelAfficher;
@@ -64,6 +63,7 @@ public class Launch extends JFrame {
     private JLabel jLabelChemin;
     private JLabel jLabelImageINSA;            // Logo de l'INSA à afficher
     private JTextField jTextFieldFichier;          // Zone de saisie du fichier
+    private Log log;                // Pour le log
     private JTextField jTextField1;                // Zone de saisie n°1
     private JTextField jTextField2;                // Zone de saisie n°2
     private JTextField jTextFieldOrigine;          // Zone de saisie pour l'origine (voiture si covoiturage)
@@ -103,6 +103,7 @@ public class Launch extends JFrame {
         Dimension fullDimension = new Dimension(380, 25);
 
         // Paramétrage des textes à afficher
+        space = new JLabel();
         jLabelTitle = new JLabel("<html><br>PROGRAMME DE TESTS DES ALGORITHMES DE GRAPHE<br><br></html>");
         jLabelCarte = new JLabel("Fichier .map à utiliser : ");
         jLabelAfficher = new JLabel("Afficher la carte : ");
@@ -125,6 +126,7 @@ public class Launch extends JFrame {
                 "&nbsp;Enseignants : D. Le Botlan - M-J Huguet</html>");
         jLabelChemin = new JLabel("Chemin .path à utiliser : ");
 
+        space.setPreferredSize(fullDimension);
         jLabelTitle.setPreferredSize(fullDimension);
         jLabelCarte.setPreferredSize(halfDimension);
         jLabelAfficher.setPreferredSize(halfDimension);
@@ -142,7 +144,7 @@ public class Launch extends JFrame {
         jLabelCoordsClick.setPreferredSize(fullDimension);
         jLabelCoordSitues.setPreferredSize(halfDimension);
         jLabelNoeudsProches.setPreferredSize(halfDimension);
-        jLabelNames.setPreferredSize(new Dimension(290, 83));
+        jLabelNames.setPreferredSize(new Dimension(305, 83));
         jLabelNames.setOpaque(true);
         jLabelNames.setBackground(Color.white);
         jLabelChemin.setPreferredSize(halfDimension);
@@ -265,12 +267,21 @@ public class Launch extends JFrame {
         jSpinnerTempsMax.addChangeListener(listener);
         ((JSpinner.DefaultEditor) jSpinnerTempsMax.getEditor()).getTextField().setEditable(false);
 
+        //Paramétrage zone de log
+//        log = new JTextArea();
+//        log.setPreferredSize(new Dimension(380, 100));
+//        log.setEditable(false);
+//        log.append("Lancement de l'application");
+        log = new Log();
+        log.appendToLog("Lancement de l'application");
+
         // Paramétrage du menu de selection des choix avec ajout des composants
         controlPanel = new JPanel();
+        controlPanel.setLayout(new FlowLayout());
         controlPanel.setPreferredSize(new Dimension(400, 600));
-        controlPanel.setBorder(new javax.swing.border.BevelBorder(BevelBorder.RAISED));
         controlPanel.add(jLabelNames);
         controlPanel.add(jLabelImageINSA);
+        controlPanel.add(space);
         controlPanel.add(jLabelTitle);
         controlPanel.add(jLabelImageGraphe);
         controlPanel.add(jLabelCarte);
@@ -280,6 +291,8 @@ public class Launch extends JFrame {
         controlPanel.add(jLabelFichier);
         controlPanel.add(jTextFieldFichier);
         controlPanel.add(jButtonLoad);
+        controlPanel.add(space);
+        controlPanel.add(log);
 
         // Ajout du menu de selection des choix dans le conteneur de la fenêtre
         cp = getContentPane();
@@ -345,11 +358,13 @@ public class Launch extends JFrame {
 
                     // Quitter l'application
                     case 0:
+                        log.appendToLog("Quitter l'application");
                         continuer = false;
                         break;
 
                     // Connexité
                     case 1:
+                        log.appendToLog("Algorithme de CONNEXITE :");
                         // Initialisation et lancement de l'algorithme
                         initialiserAlgo(true);
                         algo = new Connexite(graphe, origine, dest, affichageDeroulementAlgo);
@@ -359,6 +374,7 @@ public class Launch extends JFrame {
 
                     // PCC Standard : Dijkstra
                     case 2:
+                        log.appendToLog("Algorithme PCC Standard : DIJKSTRA :");
                         // Initialisation et lancement de l'algorithme
                         initialiserAlgo(false);
                         algo = new Pcc_Dijkstra(graphe, origine, dest, choixCout, false, false, Double.POSITIVE_INFINITY, affichageDeroulementAlgo, true);
@@ -368,7 +384,7 @@ public class Launch extends JFrame {
 
                     // PCC A-Star : Dijkstra guidé
                     case 3:
-
+                        log.appendToLog("Algorithme PCC guidé : DIJKSTRA A-STAR :");
                         //Initialisation et lancement de l'algorithme
                         initialiserAlgo(false);
                         algo = new Pcc_Star(graphe, origine, dest, choixCout, false, false, Double.POSITIVE_INFINITY, affichageDeroulementAlgo, true);
@@ -378,6 +394,7 @@ public class Launch extends JFrame {
 
                     // Programme de test algo connexité et des 2 algos Dijkstra : PCC Standard + PCC A-Star
                     case 4:
+                        log.appendToLog("Programme de TEST des Algorithmes :");
                         // Initialisation des algorithmes
                         initialiserAlgo(false);
 
@@ -400,6 +417,7 @@ public class Launch extends JFrame {
 
                     // Covoiturage
                     case 5:
+                        log.appendToLog("COVOITURAGE :");
                         // ArrayList contenant les couts màj
                         Algo algoVoitureDest, algoPietonDest, algoDestInverse;
                         ArrayList<Label> covoitSomme = new ArrayList<>();
@@ -492,7 +510,7 @@ public class Launch extends JFrame {
 
                             // On test si un NOEUD REJOINT existe, ie. les
                             if (noeud_rejoint != -1) {
-                                System.out.println("On se rejoins au noeud : " + covoitSomme.get(noeud_rejoint));
+                                log.appendToLog("On se rejoins au noeud : " + covoitSomme.get(noeud_rejoint));
 
                                 // Tester pour savoir si le pieton et la voiture se rendent seuls à la destination
                                 if (separement = seuls.get(noeud_rejoint)) {
@@ -540,7 +558,7 @@ public class Launch extends JFrame {
                                 algo = new Connexite(graphe, origine, pieton, false);
                                 ArrayList res = algo.run();
                                 // ... le piéton attend trop et doit marcher plus de tempsAttenteMaxPieton minutes
-                                System.out.println("Connexité :" + res.get(2));
+                                log.appendToLog("Connexité :" + res.get(2));
                                 if (res.get(2).equals("non connexes")) {
                                     connexes = false;
                                 }
@@ -579,6 +597,7 @@ public class Launch extends JFrame {
 
                     // Charger un fichier de chemin
                     case 6:
+                        log.appendToLog("Charger un fichier de chemin :");
                         // Paramétrer le menu de selection
                         makeControlPanel(51);
 
@@ -606,6 +625,7 @@ public class Launch extends JFrame {
 
                     // Réinitialiser la map
                     case 7:
+                        log.appendToLog("Réinitialiser la carte :");
                         // Paramétrer le menu de selection
                         makeControlPanel(6);
 
@@ -635,6 +655,7 @@ public class Launch extends JFrame {
 
                     // Obtenir un numéro de sommet
                     case 8:
+                        log.appendToLog("Obtenir un numéro de sommet :");
                         // Paramétrer le menu de selection
                         makeControlPanel(8);
                         jButtonOk.setEnabled(false);
@@ -674,7 +695,7 @@ public class Launch extends JFrame {
             sortie.close();
 
             // On quitte
-            System.out.println("Programme termine.");
+            log.appendToLog("Programme terminé.");
             System.exit(0);
 
 
@@ -1018,8 +1039,10 @@ public class Launch extends JFrame {
             default:
                 break;
         }
+        controlPanel.add(space);
+        controlPanel.add(log);
         cp.add(controlPanel, 0);
-        this.repaint();
+        controlPanel.repaint();
         this.pack();
     }
 
@@ -1170,7 +1193,7 @@ public class Launch extends JFrame {
             try {
                 Thread.sleep(200);
             } catch (InterruptedException e) {
-                System.out.println("Error during thread sleep : " + e);
+                log.appendToLog("Error during thread sleep : " + e);
             }
         }
         buttonClicked = false;
