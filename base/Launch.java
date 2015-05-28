@@ -572,6 +572,9 @@ public class Launch extends JFrame {
                                 }
                             }
                         }
+
+                        // on le détruit sinon la ram n'aime pas trop trop ...
+                        grapheInverse = null;
                         break;
 
                     // Charger un fichier de chemin

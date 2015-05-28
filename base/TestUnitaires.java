@@ -20,30 +20,54 @@ public class TestUnitaires {
     }
 
     public void go() {
+        boolean error = false;
         // TODO : tableau de boolean pour montrer quels sont les tests qui n'ont pas marché !
-        if (!testCarte("midip"))
+        if (!testCarte("midip")) {
             System.out.println("Error : testCarte");
-        if (!testDessin())
+            error = true;
+        }
+        if (!testDessin()) {
             System.out.println("Error : testDessin");
-        if (!testGraphe())
+            error = true;
+        }
+        if (!testGraphe()) {
             System.out.println("Error : testGraphe");
-        if (!testDijkstra())
+            error = true;
+        }
+        if (!testDijkstra()) {
             System.out.println("Error : testDijkstra");
-        if (!testStar())
+            error = true;
+        }
+        if (!testStar()) {
             System.out.println("Error : testStar");
-        if (!testChemin("chemin_midip"))
+            error = true;
+        }
+        if (!testChemin("chemin_midip")) {
             System.out.println("Error : testChemin");
-        if (!testDecoupeCheminDistance())
+            error = true;
+        }
+        if (!testDecoupeCheminDistance()) {
             System.out.println("Error : testDecoupeCheminDistance");
-        if (!testDecoupeCheminTemps())
+            error = true;
+        }
+        if (!testDecoupeCheminTemps()) {
             System.out.println("Error : testDecoupeCheminTemps");
-        if (!testDecoupeCheminPieton())
+            error = true;
+        }
+        if (!testDecoupeCheminPieton()) {
             System.out.println("Error : testDecoupeCheminPieton");
-        if (!testConnexite())
+            error = true;
+        }
+        if (!testConnexite()) {
             System.out.println("Error : testConnexite");
-        if (!testCovoit())
+            error = true;
+        }
+        if (!testCovoit()) {
             System.out.println("Error : testCovoit");
-
+            error = true;
+        }
+        if (!error)
+            System.out.println("Campagne de test : Validée");
 
     }
 
@@ -286,8 +310,6 @@ public class TestUnitaires {
                 if (!(Math.abs(((Pcc_Dijkstra) algo).getCout() - ((Pcc_Dijkstra) algo2).chemin(dest, noeud_rejoint, graphe)) < 0.01 * (((Pcc_Dijkstra) algo).getCout()))) {
                     System.out.println("Cout dijkstra : " + ((Pcc_Dijkstra) algo).getCout() + " - cout algo covoit : " + ((Pcc_Dijkstra) algo2).chemin(dest, noeud_rejoint, graphe) + " et res = " + Math.abs(((Pcc_Dijkstra) algo).getCout() - ((Pcc_Dijkstra) algo2).chemin(dest, noeud_rejoint, graphe)));
                     return false;
-                } else {
-                    System.out.println("OK !");
                 }
             } else {
                 System.out.print("Pas de rencontre car ");
