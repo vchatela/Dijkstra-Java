@@ -13,7 +13,7 @@ public class Log extends JTextPane {
     private StyledDocument docLog;  // Pour le log
 
     public Log() {
-        this.setPreferredSize(new Dimension(400, 100));
+        this.setPreferredSize(new Dimension(400, 125));
         this.setEditable(false);
         this.setBorder(new EmptyBorder(new Insets(5, 5, 5, 5)));
         docLog = this.getStyledDocument();
@@ -33,4 +33,5 @@ public class Log extends JTextPane {
         }
         catch(Exception e) { System.out.println(e); }
     }
+
 }

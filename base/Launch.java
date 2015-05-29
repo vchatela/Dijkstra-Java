@@ -337,7 +337,7 @@ public class Launch extends JFrame {
                 cp.add(dessinPanel);
             this.pack();
             this.setLocationRelativeTo(null);
-
+            log.appendToLog("Instanciation de la carte ");
             // Création du graphe en fonction de la map selectionnée
             graphe = new Graphe(nomCarte, mapdata, dessinPanel, false);
 
@@ -358,15 +358,17 @@ public class Launch extends JFrame {
 
                     // Quitter l'application
                     case 0:
+                        log.setText("");
                         log.appendToLog("Quitter l'application");
                         continuer = false;
                         break;
 
                     // Connexité
                     case 1:
-                        log.appendToLog("Algorithme de CONNEXITE :");
+                        log.setText("");
                         // Initialisation et lancement de l'algorithme
                         initialiserAlgo(true);
+                        log.appendToLog("Algorithme de CONNEXITE : " + origine + " vers " + dest);
                         algo = new Connexite(graphe, origine, dest, affichageDeroulementAlgo);
                         ArrayList perfConnexite = algo.run();
                         afficherEtEcrireResultats(3, perfConnexite);
@@ -374,9 +376,10 @@ public class Launch extends JFrame {
 
                     // PCC Standard : Dijkstra
                     case 2:
-                        log.appendToLog("Algorithme PCC Standard : DIJKSTRA :");
+                        log.setText("");
                         // Initialisation et lancement de l'algorithme
                         initialiserAlgo(false);
+                        log.appendToLog("Algorithme PCC Standard : DIJKSTRA : " + origine + " vers " + dest);
                         algo = new Pcc_Dijkstra(graphe, origine, dest, choixCout, false, false, Double.POSITIVE_INFINITY, affichageDeroulementAlgo, true);
                         ArrayList perfStandard = algo.run();
                         afficherEtEcrireResultats(1, perfStandard);
@@ -384,9 +387,10 @@ public class Launch extends JFrame {
 
                     // PCC A-Star : Dijkstra guidé
                     case 3:
-                        log.appendToLog("Algorithme PCC guidé : DIJKSTRA A-STAR :");
+                        log.setText("");
                         //Initialisation et lancement de l'algorithme
                         initialiserAlgo(false);
+                        log.appendToLog("Algorithme PCC guidé : DIJKSTRA A-STAR : " + origine + " vers " + dest);
                         algo = new Pcc_Star(graphe, origine, dest, choixCout, false, false, Double.POSITIVE_INFINITY, affichageDeroulementAlgo, true);
                         ArrayList perfAStar = algo.run();
                         afficherEtEcrireResultats(2, perfAStar);
@@ -394,9 +398,10 @@ public class Launch extends JFrame {
 
                     // Programme de test algo connexité et des 2 algos Dijkstra : PCC Standard + PCC A-Star
                     case 4:
-                        log.appendToLog("Programme de TEST des Algorithmes :");
+                        log.setText("");
                         // Initialisation des algorithmes
                         initialiserAlgo(false);
+                        log.appendToLog("Programme de TEST des Algorithmes : " + origine + " vers " + dest);
 
                         // 1i algo -> Connexité
                         algo = new Connexite(graphe, origine, dest, affichageDeroulementAlgo);
@@ -417,7 +422,8 @@ public class Launch extends JFrame {
 
                     // Covoiturage
                     case 5:
-                        log.appendToLog("COVOITURAGE :");
+                        log.setText("");
+                        log.appendToLog("Covoiturage :");
                         // ArrayList contenant les couts màj
                         Algo algoVoitureDest, algoPietonDest, algoDestInverse;
                         ArrayList<Label> covoitSomme = new ArrayList<>();
@@ -442,7 +448,8 @@ public class Launch extends JFrame {
                         dureeExe = System.currentTimeMillis();
 
                         // Lancement des algorithmes
-
+                        log.setText("");
+                        log.appendToLog("Algorithme Dijsktra Voiture de " + origine + " vers " + dest);
                         // PCC de la VOITURE vers TOUS
                         algoVoitureDest = new Pcc_Dijkstra(graphe, origine, dest, choixCout, true, false, Double.POSITIVE_INFINITY, affichageDeroulementAlgo, false);
                         perfVoitureTous = algoVoitureDest.run();
@@ -451,17 +458,20 @@ public class Launch extends JFrame {
                         // Permet de copier l'arraylist précédent sans le déréférencer
                         ArrayList<Label> covoitSave = new ArrayList<>();
                         for (Label aCovoitVoiture : covoitVoiture) covoitSave.add(new Label(aCovoitVoiture));
-
+                        log.appendToLog("Algorithme Dijsktra Pieton de " + pieton + " vers " + dest);
                         // PCC du PIETON vers TOUS
                         algoPietonDest = new Pcc_Dijkstra(graphe, pieton, dest, choixCout, true, true, tempsAttenteMaxPieton, affichageDeroulementAlgo, false);
                         perfPietonTous = algoPietonDest.run();
                         ArrayList<Label> covoitPieton = algoPietonDest.getLabels();
+
+                        log.appendToLog("Construction du Graphe inverse");
 
                         // PCC de la DESTINATION vers TOUS utilisant un graphe INVERSE
                         nomCarte = jComboBoxCartes.getSelectedItem().toString();
                         mapdata = Openfile.open(nomCarte);
                         Graphe grapheInverse = new Graphe(nomCarte, mapdata, new DessinInvisible(), true);
                         algoDestInverse = new Pcc_Dijkstra(grapheInverse, dest, pieton, choixCout, true, false, Double.POSITIVE_INFINITY, affichageDeroulementAlgo, false);
+                        log.appendToLog("Algorithme Dijsktra sur Graphe Inverse de " + dest + " vers " + origine);
                         perfDestTous = algoDestInverse.run();
                         ArrayList<Label> covoitDestination = algoDestInverse.getLabels();
 
@@ -507,10 +517,10 @@ public class Launch extends JFrame {
                                     noeud_rejoint = i;
                                 }
                             }
-
+                            log.setText("");
                             // On test si un NOEUD REJOINT existe, ie. les
                             if (noeud_rejoint != -1) {
-                                log.appendToLog("On se rejoins au noeud : " + covoitSomme.get(noeud_rejoint));
+                                log.appendToLog("On se rejoint au noeud : " + covoitSomme.get(noeud_rejoint));
 
                                 // Tester pour savoir si le pieton et la voiture se rendent seuls à la destination
                                 if (separement = seuls.get(noeud_rejoint)) {
@@ -597,6 +607,7 @@ public class Launch extends JFrame {
 
                     // Charger un fichier de chemin
                     case 6:
+                        log.setText("");
                         log.appendToLog("Charger un fichier de chemin :");
                         // Paramétrer le menu de selection
                         makeControlPanel(51);
@@ -625,6 +636,7 @@ public class Launch extends JFrame {
 
                     // Réinitialiser la map
                     case 7:
+                        log.setText("");
                         log.appendToLog("Réinitialiser la carte :");
                         // Paramétrer le menu de selection
                         makeControlPanel(6);
@@ -655,6 +667,7 @@ public class Launch extends JFrame {
 
                     // Obtenir un numéro de sommet
                     case 8:
+                        log.setText("");
                         log.appendToLog("Obtenir un numéro de sommet :");
                         // Paramétrer le menu de selection
                         makeControlPanel(8);
