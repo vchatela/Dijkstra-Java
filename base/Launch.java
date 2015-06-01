@@ -325,6 +325,10 @@ public class Launch extends JFrame {
         try {
             // On ne peux plus cliquer sur CHARGER (le temps que la carte charge, sinon probleme, on en charge d'autres)
             jButtonLoad.setEnabled(false);
+            jComboBoxCartes.setEnabled(false);
+            jCheckBox.setEnabled(false);
+            jTextFieldFichier.setEnabled(false);
+            jCheckBox.setEnabled(false);
 
             // Récupérer la carte souhaitée
             nomCarte = jComboBoxCartes.getSelectedItem().toString();
@@ -343,6 +347,8 @@ public class Launch extends JFrame {
 
             // Variable pour les algorithmes
             Algo algo;
+            int noeud_rejoint;
+            Node node;
 
             // Ouverture et initialisation du fichier de sortie contenant des resultats
             sortie = fichierSortie();
@@ -379,10 +385,19 @@ public class Launch extends JFrame {
                         log.setText("");
                         // Initialisation et lancement de l'algorithme
                         initialiserAlgo(false);
-                        log.appendToLog("Algorithme PCC Standard : DIJKSTRA : " + origine + " vers " + dest);
+                        log.appendToLog("Algorithme PCC Standard : DIJKSTRA : \nDe " + origine + " vers " + dest);
                         algo = new Pcc_Dijkstra(graphe, origine, dest, choixCout, false, false, Double.POSITIVE_INFINITY, affichageDeroulementAlgo, true);
                         ArrayList perfStandard = algo.run();
                         afficherEtEcrireResultats(1, perfStandard);
+
+                        // Recupération d'un noeud au hasard du chemin tracé si on y est arrivé
+                        if (perfStandard != null) {
+                            noeud_rejoint = ((Pcc_Generique) algo).cheminTest();
+                            log.appendToLog("Un noeud du chemin : " + noeud_rejoint);
+                            node = graphe.getArrayList().get(noeud_rejoint);
+                            graphe.getDessin().setColor(Color.black);
+                            graphe.getDessin().drawPoint(node.getLongitude(), node.getLatitude(), 8);
+                        }
                         break;
 
                     // PCC A-Star : Dijkstra guidé
@@ -393,7 +408,16 @@ public class Launch extends JFrame {
                         log.appendToLog("Algorithme PCC guidé : DIJKSTRA A-STAR : " + origine + " vers " + dest);
                         algo = new Pcc_Star(graphe, origine, dest, choixCout, false, false, Double.POSITIVE_INFINITY, affichageDeroulementAlgo, true);
                         ArrayList perfAStar = algo.run();
-                        afficherEtEcrireResultats(2, perfAStar);
+                        afficherEtEcrireResultats(1, perfAStar);
+
+                        // Recupération d'un noeud au hasard du chemin tracé si on y est arrivé
+                        if (perfAStar != null) {
+                            noeud_rejoint = ((Pcc_Generique) algo).cheminTest();
+                            log.appendToLog("Un noeud du chemin : " + noeud_rejoint);
+                            node = graphe.getArrayList().get(noeud_rejoint);
+                            graphe.getDessin().setColor(Color.black);
+                            graphe.getDessin().drawPoint(node.getLongitude(), node.getLatitude(), 8);
+                        }
                         break;
 
                     // Programme de test algo connexité et des 2 algos Dijkstra : PCC Standard + PCC A-Star
@@ -432,7 +456,7 @@ public class Launch extends JFrame {
                         ArrayList perfDestTous;
                         ArrayList<String> durees = new ArrayList<>();
                         ArrayList<Boolean> seuls = new ArrayList<>();
-                        int noeud_rejoint = -1;
+                        noeud_rejoint = -1;
                         double tempsTotalmin = Double.POSITIVE_INFINITY;
                         double dureeExe; // Durée d'execution
                         double minPieton, minVoiture; // Temps min vers point de rencontre
@@ -520,7 +544,7 @@ public class Launch extends JFrame {
                             log.setText("");
                             // On test si un NOEUD REJOINT existe, ie. les
                             if (noeud_rejoint != -1) {
-                                log.appendToLog("On se rejoint au noeud : " + covoitSomme.get(noeud_rejoint));
+                                log.appendToLog("On se rejoint au noeud : " + covoitSomme.get(noeud_rejoint).getNum_node());
 
                                 // Tester pour savoir si le pieton et la voiture se rendent seuls à la destination
                                 if (separement = seuls.get(noeud_rejoint)) {
@@ -557,8 +581,8 @@ public class Launch extends JFrame {
                                     // Afficher le point de rencontre si souhaité
                                     if (display) {
                                         // on trace le point de rencontre
-                                        Node node = graphe.getArrayList().get(noeud_rejoint);
-                                        graphe.getDessin().setColor(Color.magenta);
+                                        node = graphe.getArrayList().get(noeud_rejoint);
+                                        graphe.getDessin().setColor(Color.black);
                                         graphe.getDessin().drawPoint(node.getLongitude(), node.getLatitude(), 12);
                                     }
                                 }
@@ -608,7 +632,7 @@ public class Launch extends JFrame {
                     // Charger un fichier de chemin
                     case 6:
                         log.setText("");
-                        log.appendToLog("Charger un fichier de chemin :");
+                        log.appendToLog("Charger un fichier de chemin : ");
                         // Paramétrer le menu de selection
                         makeControlPanel(51);
 
@@ -617,6 +641,8 @@ public class Launch extends JFrame {
 
                         // On récupère le nom de la carte
                         String nomChemin = jComboBoxChemins.getSelectedItem().toString();
+
+                        log.appendToLog(nomChemin);
 
                         // Paramétrer le menu de selection
                         makeControlPanel(52);
@@ -629,6 +655,10 @@ public class Launch extends JFrame {
                         jTextField1.setText(graphe.getChemin().Calculer_cout_chemin_distance());
                         jTextField2.setText(graphe.getChemin().Calculer_cout_chemin_temps());
 
+                        log.appendToLog("Distance : " + graphe.getChemin().Calculer_cout_chemin_distance());
+                        log.appendToLog("Temps : " + graphe.getChemin().Calculer_cout_chemin_temps());
+
+
                         // On doit cliquer sur OK pour continuer
                         waitButtonOk();
 
@@ -637,7 +667,7 @@ public class Launch extends JFrame {
                     // Réinitialiser la map
                     case 7:
                         log.setText("");
-                        log.appendToLog("Réinitialiser la carte :");
+                        log.appendToLog("Réinitialiser la carte : ");
                         // Paramétrer le menu de selection
                         makeControlPanel(6);
 
@@ -647,6 +677,7 @@ public class Launch extends JFrame {
                         // Récupérer la carte souhaitée
                         nomCarte = jComboBoxCartes.getSelectedItem().toString();
                         mapdata = Openfile.open(nomCarte);
+                        log.appendToLog(nomCarte);
 
                         // On supprime l'ancienne carte
                         cp.remove(dessinPanel);
@@ -659,6 +690,8 @@ public class Launch extends JFrame {
                             cp.add(dessinPanel);
                         this.pack();
                         this.setLocationRelativeTo(null);
+
+                        log.appendToLog("Instanciation de la carte...");
 
                         // Création du graphe en fonction de la map selectionnée
                         graphe = new Graphe(nomCarte, mapdata, dessinPanel, false);
@@ -865,6 +898,8 @@ public class Launch extends JFrame {
         jTextField2.setText("");
         jTextFieldOrigine.setText("");
         jTextFieldDest.setText("");
+        jComboBoxCartes.setEnabled(true);
+        jCheckBox.setEnabled(true);
 
         // En fonction du paramètre donné
         switch (choice) {
@@ -1213,16 +1248,21 @@ public class Launch extends JFrame {
     }
 
     public String AffichageTempsHeureMin(double min) {
-        int heures, minutes;
-        int totalSecondes = (int) Math.round(min) * 60;
+        int heures, minutes, sec;
+        double totalSecondes2 = min*60;
+        int totalSecondes = (int) Math.round(totalSecondes2);
 
         minutes = (totalSecondes / 60) % 60;
         heures = (totalSecondes / (60 * 60));
+        sec = (totalSecondes - 60*minutes - 3600*heures);
 
-        if (min >= 60) {
-            return (heures + " heure(s) et " + minutes + " minute(s)");
-        }
-        return (minutes + " minute(s)");
+        System.out.println("Cout : " + min);
+
+        if (min >= 60)
+            return (heures + " heure(s), " + minutes + " minute(s) et " + sec + " sec");
+        else if (minutes > 0)
+            return  (minutes + " minute(s) et " + sec + " sec");
+        else return (sec + " sec");
     }
 
     public String AffichageTempsCalcul(double ms) {

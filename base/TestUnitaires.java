@@ -67,7 +67,7 @@ public class TestUnitaires {
             error = true;
         }
         if (!error)
-            System.out.println("Campagne de test : Validée");
+            System.out.println("Campagne de tests : Validée");
 
     }
 
