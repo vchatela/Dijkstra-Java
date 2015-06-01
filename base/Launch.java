@@ -530,7 +530,8 @@ public class Launch extends JFrame {
                                         covoitSomme.set(i, covoitVoiture.get(dest));
                                     else covoitSomme.set(i, covoitPieton.get(dest));
                                     seuls.add(i, true);
-                                } else {
+                                }
+                                else {
                                     // Sinon ils y vont ensembles
                                     seuls.add(i, false);
                                 }
