@@ -30,16 +30,21 @@ public abstract class Algo {
     public abstract ArrayList getLabels();
 
     public String AffichageTempsHeureMin(double min) {
-        int heures, minutes;
-        int totalSecondes = (int) Math.round(min) * 60;
+        int heures, minutes, sec;
+        double totalSecondes2 = min * 60;
+        int totalSecondes = (int) Math.round(totalSecondes2);
 
         minutes = (totalSecondes / 60) % 60;
         heures = (totalSecondes / (60 * 60));
+        sec = (totalSecondes - 60 * minutes - 3600 * heures);
 
-        if (min >= 60) {
-            return (heures + " heure(s) et " + minutes + " minute(s)");
-        }
-        return (minutes + " minute(s)");
+        System.out.println("Cout : " + min);
+
+        if (min >= 60)
+            return (heures + " heure(s), " + minutes + " minute(s) et " + sec + " sec");
+        else if (minutes > 0)
+            return (minutes + " minute(s) et " + sec + " sec");
+        else return (sec + " sec");
     }
 
     public String AffichageTempsCalcul(double ms) {
