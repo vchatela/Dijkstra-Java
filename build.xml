@@ -1,0 +1,343 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project name="dijkstra-java" default="all">
+<<<<<<< HEAD
+<<<<<<< HEAD
+  
+  
+=======
+
+
+>>>>>>> d0aacea... oups
+  <property file="dijkstra-java.properties"/>
+=======
+  
+  
+  <property file="build.properties"/>
+>>>>>>> 3b554d0... Go
+  <!-- Uncomment the following property if no tests compilation is needed -->
+  <!-- 
+  <property name="skip.tests" value="true"/>
+   -->
+<<<<<<< HEAD
+<<<<<<< HEAD
+  
+  <!-- Compiler options -->
+  
+=======
+
+  <!-- Compiler options -->
+
+>>>>>>> d0aacea... oups
+=======
+  
+  <!-- Compiler options -->
+  
+>>>>>>> 3b554d0... Go
+  <property name="compiler.debug" value="on"/>
+  <property name="compiler.generate.no.warnings" value="off"/>
+  <property name="compiler.args" value=""/>
+  <property name="compiler.max.memory" value="700m"/>
+  <patternset id="ignored.files">
+    <exclude name="**/*.hprof/**"/>
+    <exclude name="**/*.pyc/**"/>
+    <exclude name="**/*.pyo/**"/>
+    <exclude name="**/*.rbc/**"/>
+    <exclude name="**/*~/**"/>
+    <exclude name="**/.DS_Store/**"/>
+    <exclude name="**/.bundle/**"/>
+    <exclude name="**/.git/**"/>
+    <exclude name="**/.hg/**"/>
+    <exclude name="**/.svn/**"/>
+<<<<<<< HEAD
+=======
+    <exclude name="**/.tox/**"/>
+>>>>>>> d0aacea... oups
+    <exclude name="**/CVS/**"/>
+    <exclude name="**/RCS/**"/>
+    <exclude name="**/SCCS/**"/>
+    <exclude name="**/__pycache__/**"/>
+<<<<<<< HEAD
+    <exclude name="**/.tox/**"/>
+=======
+>>>>>>> d0aacea... oups
+    <exclude name="**/_svn/**"/>
+    <exclude name="**/rcs/**"/>
+    <exclude name="**/vssver.scc/**"/>
+    <exclude name="**/vssver2.scc/**"/>
+  </patternset>
+  <patternset id="library.patterns">
+    <include name="*.war"/>
+    <include name="*.ear"/>
+    <include name="*.apk"/>
+    <include name="*.zip"/>
+    <include name="*.swc"/>
+    <include name="*.ane"/>
+    <include name="*.egg"/>
+    <include name="*.jar"/>
+  </patternset>
+  <patternset id="compiler.resources">
+    <exclude name="**/?*.java"/>
+    <exclude name="**/?*.form"/>
+    <exclude name="**/?*.class"/>
+    <exclude name="**/?*.groovy"/>
+    <exclude name="**/?*.scala"/>
+    <exclude name="**/?*.flex"/>
+    <exclude name="**/?*.kt"/>
+    <exclude name="**/?*.clj"/>
+    <exclude name="**/?*.aj"/>
+  </patternset>
+<<<<<<< HEAD
+<<<<<<< HEAD
+  
+  <!-- JDK definitions -->
+  
+=======
+
+  <!-- JDK definitions -->
+  <!--
+    <property name="jdk.bin.1.8" value="${jdk.home.1.8}/bin"/>
+    <path id="jdk.classpath.1.8">
+      <fileset dir="${jdk.home.1.8}">
+        <include name="jre/lib/charsets.jar"/>
+        <include name="jre/lib/deploy.jar"/>
+        <include name="jre/lib/javaws.jar"/>
+        <include name="jre/lib/jce.jar"/>
+        <include name="jre/lib/jfr.jar"/>
+        <include name="jre/lib/jfxswt.jar"/>
+        <include name="jre/lib/jsse.jar"/>
+        <include name="jre/lib/management-agent.jar"/>
+        <include name="jre/lib/plugin.jar"/>
+        <include name="jre/lib/resources.jar"/>
+        <include name="jre/lib/rt.jar"/>
+        <include name="jre/lib/ext/access-bridge-64.jar"/>
+        <include name="jre/lib/ext/cldrdata.jar"/>
+        <include name="jre/lib/ext/dnsns.jar"/>
+        <include name="jre/lib/ext/jaccess.jar"/>
+        <include name="jre/lib/ext/jfxrt.jar"/>
+        <include name="jre/lib/ext/localedata.jar"/>
+        <include name="jre/lib/ext/nashorn.jar"/>
+        <include name="jre/lib/ext/sunec.jar"/>
+        <include name="jre/lib/ext/sunjce_provider.jar"/>
+        <include name="jre/lib/ext/sunmscapi.jar"/>
+        <include name="jre/lib/ext/sunpkcs11.jar"/>
+        <include name="jre/lib/ext/zipfs.jar"/>
+      </fileset>
+    </path>
+
+<<<<<<< HEAD
+>>>>>>> d0aacea... oups
+=======
+  
+  <!-- JDK definitions -->
+  
+>>>>>>> 3b554d0... Go
+  <property name="jdk.bin.1.8" value="${jdk.home.1.8}/bin"/>
+  <path id="jdk.classpath.1.8">
+    <fileset dir="${jdk.home.1.8}">
+      <include name="jre/lib/charsets.jar"/>
+      <include name="jre/lib/deploy.jar"/>
+      <include name="jre/lib/javaws.jar"/>
+      <include name="jre/lib/jce.jar"/>
+      <include name="jre/lib/jfr.jar"/>
+      <include name="jre/lib/jfxswt.jar"/>
+      <include name="jre/lib/jsse.jar"/>
+      <include name="jre/lib/management-agent.jar"/>
+      <include name="jre/lib/plugin.jar"/>
+      <include name="jre/lib/resources.jar"/>
+      <include name="jre/lib/rt.jar"/>
+      <include name="jre/lib/ext/access-bridge-64.jar"/>
+      <include name="jre/lib/ext/cldrdata.jar"/>
+      <include name="jre/lib/ext/dnsns.jar"/>
+      <include name="jre/lib/ext/jaccess.jar"/>
+      <include name="jre/lib/ext/jfxrt.jar"/>
+      <include name="jre/lib/ext/localedata.jar"/>
+      <include name="jre/lib/ext/nashorn.jar"/>
+      <include name="jre/lib/ext/sunec.jar"/>
+      <include name="jre/lib/ext/sunjce_provider.jar"/>
+      <include name="jre/lib/ext/sunmscapi.jar"/>
+      <include name="jre/lib/ext/sunpkcs11.jar"/>
+      <include name="jre/lib/ext/zipfs.jar"/>
+    </fileset>
+<<<<<<< HEAD
+  </path>
+<<<<<<< HEAD
+  
+  <property name="project.jdk.home" value="${jdk.home.1.8}"/>
+  <property name="project.jdk.bin" value="${jdk.bin.1.8}"/>
+  <property name="project.jdk.classpath" value="jdk.classpath.1.8"/>
+  <!-- Register Custom Compiler Taskdefs -->
+  <property name="javac2.home" value="${idea.home}/lib"/>
+  <path id="javac2.classpath">
+    <pathelement location="${javac2.home}/javac2.jar"/>
+    <pathelement location="${javac2.home}/jdom.jar"/>
+    <pathelement location="${javac2.home}/asm-all.jar"/>
+    <pathelement location="${javac2.home}/jgoodies-forms.jar"/>
+  </path>
+  <target name="register.custom.compilers">
+    <taskdef name="javac2" classname="com.intellij.ant.Javac2" classpathref="javac2.classpath"/>
+    <taskdef name="instrumentIdeaExtensions" classname="com.intellij.ant.InstrumentIdeaExtensions" classpathref="javac2.classpath"/>
+  </target>
+  
+  <!-- Modules -->
+  
+  <import file="${basedir}/module_dijkstra-java.xml"/>
+  
+  <target name="init" description="Build initialization">
+    <!-- Perform any build initialization in this target -->
+  </target>
+  
+  <target name="clean" depends="clean.module.dijkstra-java" description="cleanup all"/>
+  
+  <target name="build.modules" depends="init, clean, compile.module.dijkstra-java" description="build all modules"/>
+  
+  <target name="all" depends="build.modules" description="build all"/>
+</project>
+=======
+
+  <property name="project.jdk.home" value="${jdk.home.1.8}"/>
+  <property name="project.jdk.bin" value="${jdk.bin.1.8}"/>
+  <property name="project.jdk.classpath" value="jdk.classpath.1.8"/>
+=======
+    <property name="project.jdk.home" value="${jdk.home.1.8}"/>
+    <property name="project.jdk.bin" value="${jdk.bin.1.8}"/>
+    <property name="project.jdk.classpath" value="jdk.classpath.1.8"/>
+>>>>>>> e14532f... remove jdk def
+
+    Modules -->
+
+
+  <!-- Module Dijkstra-Java -->
+
+  <dirname property="module.dijkstra-java.basedir" file="${ant.file}"/>
+
+
+  <property name="module.jdk.home.dijkstra-java" value="${project.jdk.home}"/>
+  <property name="module.jdk.bin.dijkstra-java" value="${project.jdk.bin}"/>
+  <property name="module.jdk.classpath.dijkstra-java" value="${project.jdk.classpath}"/>
+
+  <property name="compiler.args.dijkstra-java" value="-encoding windows-1252 -source 8 ${compiler.args}"/>
+
+  <property name="dijkstra-java.output.dir" value="${module.dijkstra-java.basedir}/out/production/Dijkstra-Java"/>
+  <property name="dijkstra-java.testoutput.dir" value="${module.dijkstra-java.basedir}/out/test/Dijkstra-Java"/>
+
+  <path id="dijkstra-java.module.bootclasspath">
+    <!-- Paths to be included in compilation bootclasspath -->
+  </path>
+
+  <path id="dijkstra-java.module.production.classpath">
+    <path refid="${module.jdk.classpath.dijkstra-java}"/>
+  </path>
+
+  <path id="dijkstra-java.runtime.production.module.classpath">
+    <pathelement location="${dijkstra-java.output.dir}"/>
+=======
+>>>>>>> 3b554d0... Go
+  </path>
+  
+  <property name="project.jdk.home" value="${jdk.home.1.8}"/>
+  <property name="project.jdk.bin" value="${jdk.bin.1.8}"/>
+  <property name="project.jdk.classpath" value="jdk.classpath.1.8"/>
+  
+  <!-- Modules -->
+  
+  
+  <!-- Module Dijkstra-Java -->
+  
+  <dirname property="module.dijkstra-java.basedir" file="${ant.file}"/>
+  
+  
+  <property name="module.jdk.home.dijkstra-java" value="${project.jdk.home}"/>
+  <property name="module.jdk.bin.dijkstra-java" value="${project.jdk.bin}"/>
+  <property name="module.jdk.classpath.dijkstra-java" value="${project.jdk.classpath}"/>
+  
+  <property name="compiler.args.dijkstra-java" value="-encoding windows-1252 -source 8 ${compiler.args}"/>
+  
+  <property name="dijkstra-java.output.dir" value="${module.dijkstra-java.basedir}/out/production/Dijkstra-Java"/>
+  <property name="dijkstra-java.testoutput.dir" value="${module.dijkstra-java.basedir}/out/test/Dijkstra-Java"/>
+  
+  <path id="dijkstra-java.module.bootclasspath">
+    <!-- Paths to be included in compilation bootclasspath -->
+  </path>
+  
+  <path id="dijkstra-java.module.production.classpath">
+    <path refid="${module.jdk.classpath.dijkstra-java}"/>
+  </path>
+  
+  <path id="dijkstra-java.runtime.production.module.classpath">
+    <pathelement location="${dijkstra-java.output.dir}"/>
+  </path>
+  
+  <path id="dijkstra-java.module.classpath">
+    <path refid="${module.jdk.classpath.dijkstra-java}"/>
+    <pathelement location="${dijkstra-java.output.dir}"/>
+  </path>
+  
+  <path id="dijkstra-java.runtime.module.classpath">
+    <pathelement location="${dijkstra-java.testoutput.dir}"/>
+    <pathelement location="${dijkstra-java.output.dir}"/>
+  </path>
+  
+  
+  <patternset id="excluded.from.module.dijkstra-java">
+    <patternset refid="ignored.files"/>
+    <exclude name="out/**"/>
+    <exclude name="out/production/**"/>
+    <exclude name="out/production/Dijkstra-Java/**"/>
+    <exclude name="out/production/Dijkstra-Java/base/**"/>
+    <exclude name="out/production/Dijkstra-Java/core/**"/>
+    <exclude name="out/production/Dijkstra-Java/Maps/**"/>
+    <exclude name="out/production/Dijkstra-Java/.idea/**"/>
+    <exclude name="out/production/Dijkstra-Java/.idea/copyright/**"/>
+    <exclude name="out/production/Dijkstra-Java/Chemins/**"/>
+    <exclude name="out/production/Dijkstra-Java/Documentation - Livrable/**"/>
+  </patternset>
+  
+  <patternset id="excluded.from.compilation.dijkstra-java">
+    <patternset refid="excluded.from.module.dijkstra-java"/>
+  </patternset>
+  
+  <path id="dijkstra-java.module.sourcepath">
+    <dirset dir="${module.dijkstra-java.basedir}/../../GitHub">
+      <include name="Dijkstra-Java"/>
+    </dirset>
+  </path>
+  
+  
+  <target name="compile.module.dijkstra-java" depends="compile.module.dijkstra-java.production,compile.module.dijkstra-java.tests" description="Compile module Dijkstra-Java"/>
+  
+  <target name="compile.module.dijkstra-java.production" description="Compile module Dijkstra-Java; production classes">
+    <mkdir dir="${dijkstra-java.output.dir}"/>
+    <javac destdir="${dijkstra-java.output.dir}" debug="${compiler.debug}" nowarn="${compiler.generate.no.warnings}" memorymaximumsize="${compiler.max.memory}" fork="true" executable="${module.jdk.bin.dijkstra-java}/javac">
+      <compilerarg line="${compiler.args.dijkstra-java}"/>
+      <bootclasspath refid="dijkstra-java.module.bootclasspath"/>
+      <classpath refid="dijkstra-java.module.production.classpath"/>
+      <src refid="dijkstra-java.module.sourcepath"/>
+      <patternset refid="excluded.from.compilation.dijkstra-java"/>
+    </javac>
+    
+    <copy todir="${dijkstra-java.output.dir}">
+      <fileset dir="${module.dijkstra-java.basedir}">
+        <patternset refid="compiler.resources"/>
+        <type type="file"/>
+      </fileset>
+    </copy>
+  </target>
+  
+  <target name="compile.module.dijkstra-java.tests" depends="compile.module.dijkstra-java.production" description="compile module Dijkstra-Java; test classes" unless="skip.tests"/>
+  
+  <target name="clean.module.dijkstra-java" description="cleanup module">
+    <delete dir="${dijkstra-java.output.dir}"/>
+    <delete dir="${dijkstra-java.testoutput.dir}"/>
+  </target>
+  
+  <target name="init" description="Build initialization">
+    <!-- Perform any build initialization in this target -->
+  </target>
+  
+  <target name="clean" depends="clean.module.dijkstra-java" description="cleanup all"/>
+  
+  <target name="build.modules" depends="init, clean, compile.module.dijkstra-java" description="build all modules"/>
+  
+  <target name="all" depends="build.modules" description="build all"/>
+</project>
+>>>>>>> d0aacea... oups
