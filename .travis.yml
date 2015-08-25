@@ -1,2 +1,2 @@
 language: java
-install: ant dijkstra-java
+install: ant init
