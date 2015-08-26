@@ -183,14 +183,16 @@
     <delete dir="${dijkstra-java.output.dir}"/>
     <delete dir="${dijkstra-java.testoutput.dir}"/>
   </target>
-  
+
   <target name="init" description="Build initialization">
     <!-- Perform any build initialization in this target -->
   </target>
-  
+  <target name="test" depends="" description="test all"/>
+
+  <target name="debug" depends="init, clean, compile.module.dijkstra-java, test" description="debug install"/>
   <target name="clean" depends="clean.module.dijkstra-java" description="cleanup all"/>
-  
+
   <target name="build.modules" depends="init, clean, compile.module.dijkstra-java" description="build all modules"/>
-  
+
   <target name="all" depends="build.modules" description="build all"/>
 </project>
