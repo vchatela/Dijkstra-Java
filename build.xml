@@ -151,7 +151,7 @@
   </patternset>
 
   <path id="dijkstra-java.module.sourcepath">
-    <dirset dir="${module.dijkstra-java.basedir}/../../GitHub">
+    <dirset dir="${module.dijkstra-java.basedir}/../../">
       <include name="Dijkstra-Java"/>
     </dirset>
   </path>
