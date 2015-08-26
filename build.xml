@@ -1,15 +1,15 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project name="dijkstra-java" default="all">
-
-
-  <property file="dijkstra-java.properties"/>
+  
+  
+  <property file="build.properties"/>
   <!-- Uncomment the following property if no tests compilation is needed -->
   <!-- 
   <property name="skip.tests" value="true"/>
    -->
-
+  
   <!-- Compiler options -->
-
+  
   <property name="compiler.debug" value="on"/>
   <property name="compiler.generate.no.warnings" value="off"/>
   <property name="compiler.args" value=""/>
@@ -56,134 +56,45 @@
     <exclude name="**/?*.clj"/>
     <exclude name="**/?*.aj"/>
   </patternset>
-
+  
   <!-- JDK definitions -->
-  <!--
-    <property name="jdk.bin.1.8" value="${jdk.home.1.8}/bin"/>
-    <path id="jdk.classpath.1.8">
-      <fileset dir="${jdk.home.1.8}">
-        <include name="jre/lib/charsets.jar"/>
-        <include name="jre/lib/deploy.jar"/>
-        <include name="jre/lib/javaws.jar"/>
-        <include name="jre/lib/jce.jar"/>
-        <include name="jre/lib/jfr.jar"/>
-        <include name="jre/lib/jfxswt.jar"/>
-        <include name="jre/lib/jsse.jar"/>
-        <include name="jre/lib/management-agent.jar"/>
-        <include name="jre/lib/plugin.jar"/>
-        <include name="jre/lib/resources.jar"/>
-        <include name="jre/lib/rt.jar"/>
-        <include name="jre/lib/ext/access-bridge-64.jar"/>
-        <include name="jre/lib/ext/cldrdata.jar"/>
-        <include name="jre/lib/ext/dnsns.jar"/>
-        <include name="jre/lib/ext/jaccess.jar"/>
-        <include name="jre/lib/ext/jfxrt.jar"/>
-        <include name="jre/lib/ext/localedata.jar"/>
-        <include name="jre/lib/ext/nashorn.jar"/>
-        <include name="jre/lib/ext/sunec.jar"/>
-        <include name="jre/lib/ext/sunjce_provider.jar"/>
-        <include name="jre/lib/ext/sunmscapi.jar"/>
-        <include name="jre/lib/ext/sunpkcs11.jar"/>
-        <include name="jre/lib/ext/zipfs.jar"/>
-      </fileset>
-    </path>
-
-    <property name="project.jdk.home" value="${jdk.home.1.8}"/>
-    <property name="project.jdk.bin" value="${jdk.bin.1.8}"/>
-    <property name="project.jdk.classpath" value="jdk.classpath.1.8"/>
-
-    Modules -->
-
-
-  <!-- Module Dijkstra-Java -->
-
-  <dirname property="module.dijkstra-java.basedir" file="${ant.file}"/>
-
-
-  <property name="module.jdk.home.dijkstra-java" value="${project.jdk.home}"/>
-  <property name="module.jdk.bin.dijkstra-java" value="${project.jdk.bin}"/>
-  <property name="module.jdk.classpath.dijkstra-java" value="${project.jdk.classpath}"/>
-
-  <property name="compiler.args.dijkstra-java" value="-encoding windows-1252 -source 8 ${compiler.args}"/>
-
-  <property name="dijkstra-java.output.dir" value="${module.dijkstra-java.basedir}/out/production/Dijkstra-Java"/>
-  <property name="dijkstra-java.testoutput.dir" value="${module.dijkstra-java.basedir}/out/test/Dijkstra-Java"/>
-
-  <path id="dijkstra-java.module.bootclasspath">
-    <!-- Paths to be included in compilation bootclasspath -->
+  
+  <property name="jdk.bin.1.8" value="${jdk.home.1.8}/bin"/>
+  <path id="jdk.classpath.1.8">
+    <fileset dir="${jdk.home.1.8}">
+      <include name="jre/lib/charsets.jar"/>
+      <include name="jre/lib/deploy.jar"/>
+      <include name="jre/lib/javaws.jar"/>
+      <include name="jre/lib/jce.jar"/>
+      <include name="jre/lib/jfr.jar"/>
+      <include name="jre/lib/jfxswt.jar"/>
+      <include name="jre/lib/jsse.jar"/>
+      <include name="jre/lib/management-agent.jar"/>
+      <include name="jre/lib/plugin.jar"/>
+      <include name="jre/lib/resources.jar"/>
+      <include name="jre/lib/rt.jar"/>
+      <include name="jre/lib/ext/access-bridge-64.jar"/>
+      <include name="jre/lib/ext/cldrdata.jar"/>
+      <include name="jre/lib/ext/dnsns.jar"/>
+      <include name="jre/lib/ext/jaccess.jar"/>
+      <include name="jre/lib/ext/jfxrt.jar"/>
+      <include name="jre/lib/ext/localedata.jar"/>
+      <include name="jre/lib/ext/nashorn.jar"/>
+      <include name="jre/lib/ext/sunec.jar"/>
+      <include name="jre/lib/ext/sunjce_provider.jar"/>
+      <include name="jre/lib/ext/sunmscapi.jar"/>
+      <include name="jre/lib/ext/sunpkcs11.jar"/>
+      <include name="jre/lib/ext/zipfs.jar"/>
+    </fileset>
   </path>
-
-  <path id="dijkstra-java.module.production.classpath">
-    <path refid="${module.jdk.classpath.dijkstra-java}"/>
-  </path>
-
-  <path id="dijkstra-java.runtime.production.module.classpath">
-    <pathelement location="${dijkstra-java.output.dir}"/>
-  </path>
-
-  <path id="dijkstra-java.module.classpath">
-    <path refid="${module.jdk.classpath.dijkstra-java}"/>
-    <pathelement location="${dijkstra-java.output.dir}"/>
-  </path>
-
-  <path id="dijkstra-java.runtime.module.classpath">
-    <pathelement location="${dijkstra-java.testoutput.dir}"/>
-    <pathelement location="${dijkstra-java.output.dir}"/>
-  </path>
-
-
-  <patternset id="excluded.from.module.dijkstra-java">
-    <patternset refid="ignored.files"/>
-    <exclude name="out/**"/>
-    <exclude name="out/production/**"/>
-    <exclude name="out/production/Dijkstra-Java/**"/>
-    <exclude name="out/production/Dijkstra-Java/base/**"/>
-    <exclude name="out/production/Dijkstra-Java/core/**"/>
-    <exclude name="out/production/Dijkstra-Java/Maps/**"/>
-    <exclude name="out/production/Dijkstra-Java/.idea/**"/>
-    <exclude name="out/production/Dijkstra-Java/.idea/copyright/**"/>
-    <exclude name="out/production/Dijkstra-Java/Chemins/**"/>
-    <exclude name="out/production/Dijkstra-Java/Documentation - Livrable/**"/>
-  </patternset>
-
-  <patternset id="excluded.from.compilation.dijkstra-java">
-    <patternset refid="excluded.from.module.dijkstra-java"/>
-  </patternset>
-
-  <path id="dijkstra-java.module.sourcepath">
-    <dirset dir="${module.dijkstra-java.basedir}">
-      <include name="core"/>
-      <include name="base"/>
-    </dirset>
-  </path>
-
-
-  <target name="compile.module.dijkstra-java" depends="compile.module.dijkstra-java.production,compile.module.dijkstra-java.tests" description="Compile module Dijkstra-Java"/>
-
-  <target name="compile.module.dijkstra-java.production" description="Compile module Dijkstra-Java; production classes">
-    <mkdir dir="${dijkstra-java.output.dir}"/>
-    <javac includeantruntime="false" destdir="${dijkstra-java.output.dir}" debug="${compiler.debug}" nowarn="${compiler.generate.no.warnings}" memorymaximumsize="${compiler.max.memory}" fork="true" executable="javac">
-      <compilerarg line="${compiler.args.dijkstra-java}"/>
-      <bootclasspath refid="dijkstra-java.module.bootclasspath"/>
-      <classpath refid="dijkstra-java.module.production.classpath"/>
-      <src refid="dijkstra-java.module.sourcepath"/>
-      <patternset refid="excluded.from.compilation.dijkstra-java"/>
-    </javac>
-
-    <copy todir="${dijkstra-java.output.dir}">
-      <fileset dir="${module.dijkstra-java.basedir}">
-        <patternset refid="compiler.resources"/>
-        <type type="file"/>
-      </fileset>
-    </copy>
-  </target>
-
-  <target name="compile.module.dijkstra-java.tests" depends="compile.module.dijkstra-java.production" description="compile module Dijkstra-Java; test classes" unless="skip.tests"/>
-
-  <target name="clean.module.dijkstra-java" description="cleanup module">
-    <delete dir="${dijkstra-java.output.dir}"/>
-    <delete dir="${dijkstra-java.testoutput.dir}"/>
-  </target>
+  
+  <property name="project.jdk.home" value="${jdk.home.1.8}"/>
+  <property name="project.jdk.bin" value="${jdk.bin.1.8}"/>
+  <property name="project.jdk.classpath" value="jdk.classpath.1.8"/>
+  
+  <!-- Modules -->
+  
+  <import file="${basedir}/module_dijkstra-java.xml"/>
 
   <target name="init" description="Build initialization">
     <!-- Perform any build initialization in this target -->
