@@ -151,7 +151,7 @@
   </patternset>
 
   <path id="dijkstra-java.module.sourcepath">
-    <dirset dir="${module.dijkstra-java.basedir}/../../">
+    <dirset dir="${module.dijkstra-java.basedir}">
       <include name="Dijkstra-Java"/>
     </dirset>
   </path>
@@ -161,7 +161,7 @@
 
   <target name="compile.module.dijkstra-java.production" description="Compile module Dijkstra-Java; production classes">
     <mkdir dir="${dijkstra-java.output.dir}"/>
-    <javac destdir="${dijkstra-java.output.dir}" debug="${compiler.debug}" nowarn="${compiler.generate.no.warnings}" memorymaximumsize="${compiler.max.memory}" fork="true" executable="${module.jdk.bin.dijkstra-java}/javac">
+    <javac includeantruntime="false" destdir="${dijkstra-java.output.dir}" debug="${compiler.debug}" nowarn="${compiler.generate.no.warnings}" memorymaximumsize="${compiler.max.memory}" fork="true" executable="${module.jdk.bin.dijkstra-java}/javac">
       <compilerarg line="${compiler.args.dijkstra-java}"/>
       <bootclasspath refid="dijkstra-java.module.bootclasspath"/>
       <classpath refid="dijkstra-java.module.production.classpath"/>
