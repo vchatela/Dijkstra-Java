@@ -187,11 +187,8 @@
   <target name="init" description="Build initialization">
     <!-- Perform any build initialization in this target -->
   </target>
-  <target name="test" description="Build initialization">
-    <!-- Perform any test in this target -->
-  </target>
-  <target name="debug" description="Build initialization"/>
-  <target name="clean" depends="init, clean, compile.module.dijkstra-java, test" description="cleanup all"/>
+  
+  <target name="clean" depends="clean.module.dijkstra-java" description="cleanup all"/>
   
   <target name="build.modules" depends="init, clean, compile.module.dijkstra-java" description="build all modules"/>
   
