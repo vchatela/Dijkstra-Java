@@ -1,0 +1,24 @@
+Fichier créé le : Tue Sep 22 15:06:36 CEST 2015
+
+Covoiturage
+Carte : paris
+Origine Voiture : 370
+Origine Pieton : 467
+Arrivée : 131
+
+On est bien arrivé ! 
+Le conducteur et le pieton se rendent ensemble à la destination
+Rencontre au noeud  : 467
+
+Temps de la voiture vers le point rencontre : 1 minute(s) et 2 sec
+Temps du pieton vers le point rencontre : 0 sec
+Temps d'attente de la voiture : Pas d'attente
+Temps d'attente du pieton : 1 minute(s) et 2 sec
+Temps du point de rencontre vers la destination : 2 minute(s) et 39 sec
+Temps total : 3 minute(s) et 41 sec
+
+Durée exécution : 113.0ms
+
+
+
+

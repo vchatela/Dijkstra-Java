@@ -430,18 +430,46 @@ public class Launch extends JFrame {
                         // 1i algo -> Connexité
                         algo = new Connexite(graphe, origine, dest, affichageDeroulementAlgo);
                         // Lancement des algorithmes et récupération des résultats
-                        ArrayList perf3 = algo.run();
+                        final ArrayList[] perf3 = new ArrayList[1];
+                        final Algo finalAlgo = algo;
+
+                        Thread t = new Thread(new Runnable() {
+                            @Override
+                            public void run() {
+                                perf3[0] = finalAlgo.run();
+                            }
+                        });
 
                         // 2i algo -> PCC Standard : Dijkstra
                         algo = new Pcc_Dijkstra(graphe, origine, dest, choixCout, false, false, Double.POSITIVE_INFINITY, affichageDeroulementAlgo, true);
                         // Lancement des algorithmes et récupération des résultats
-                        ArrayList perf1 = algo.run();
-
+                        final ArrayList[] perf1 = {algo.run()};
+                        final Algo finalAlgo1 = algo;
+                        Thread t2 = new Thread(new Runnable() {
+                            @Override
+                            public void run() {
+                                perf1[0] = finalAlgo1.run();
+                            }
+                        });
                         // 3i algo -> PCC A-Star : Dijkstra guidé
                         algo = new Pcc_Star(graphe, origine, dest, choixCout, false, false, Double.POSITIVE_INFINITY, affichageDeroulementAlgo, true);
-                        ArrayList perf2 = algo.run();
+                        final ArrayList[] perf2 = {algo.run()};
+                        final Algo finalAlgo2 = algo;
+                        Thread t3 = new Thread(new Runnable() {
+                            @Override
+                            public void run() {
+                                perf2[0] = finalAlgo2.run();
+                            }
+                        });
+                        t.start();
+                        t2.start();
+                        t3.start();
+                        //wait threads
+                        t.join();
+                        t2.join();
+                        t3.join();
 
-                        afficherEtEcrireResultats(perf1, perf2, perf3);
+                        afficherEtEcrireResultats(perf1[0], perf2[0], perf3[0]);
                         break;
 
                     // Covoiturage
