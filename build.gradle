@@ -1,0 +1,24 @@
+apply plugin: 'java'
+apply plugin: 'idea'
+
+buildscript {
+    repositories {
+        mavenCentral()
+    }
+    dependencies {
+    }
+}
+
+sourceSets {
+    main {
+        java {
+            srcDir 'core/'
+            srcDir 'base/'
+        }
+        resources {
+            srcDir 'Maps'
+            srcDir 'Chemins'
+        }
+    }
+}
+
