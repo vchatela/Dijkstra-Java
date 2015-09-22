@@ -1,6 +1,6 @@
-package core;
+package src.main.java.core;
 
-import base.Descripteur;
+import src.main.java.base.Descripteur;
 
 import java.util.ArrayList;
 

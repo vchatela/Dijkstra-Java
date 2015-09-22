@@ -1,7 +1,7 @@
-package base;
+package src.main.java.base;
 
-import core.Algo;
-import core.Graphe;
+import src.main.java.core.Algo;
+import src.main.java.core.Graphe;
 
 import java.io.DataInputStream;
 import java.io.PrintStream;
@@ -12,6 +12,7 @@ import java.util.ArrayList;
  */
 public class LaunchPerf {
     // Declaration de Variables li� � l'execution du programme
+    private final boolean isTest = false;
     private String nomCarte;                   // Nom de la carte � charger
     private String nomChemin;                  // Nom du chemin � charger
     private String resultat;                   // Contient les resultats des algos
@@ -52,7 +53,7 @@ public class LaunchPerf {
 
             // algo -> PCC Standard : Dijkstra
             //algo = new Pcc_Dijkstra(graphe, origine, dest, false, 0, false, false, true);
-            test = algo.run();
+            test = algo.run(isTest);
             dureeP = algo.getNb_elements_tas();
             System.out.println(test.get(4));
             try {
@@ -62,7 +63,7 @@ public class LaunchPerf {
 
             // algo -> PCC A-Star : Dijkstra guid�
             //algo = new Pcc_Star(graphe, origine, dest, false, 0, false, false, true);
-            test = algo.run();
+            test = algo.run(isTest);
             System.out.println(test.get(4));
 
             dureeA = algo.getNb_elements_tas();

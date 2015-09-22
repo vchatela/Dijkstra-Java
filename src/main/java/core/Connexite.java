@@ -1,4 +1,4 @@
-package core;
+package src.main.java.core;
 
 import javax.swing.*;
 import java.awt.*;
@@ -56,7 +56,7 @@ public class Connexite extends Algo {
         return 0;
     }
 
-    public ArrayList run() {
+    public ArrayList run(boolean b) {
 
         if ((origine <= 0) || (origine > graphe.getArrayList().size())) {
             JOptionPane.showMessageDialog(null, "Le numero de sommet d'origine saisi : " + origine + " n'appartient pas au graphe");

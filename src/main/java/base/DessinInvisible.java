@@ -1,4 +1,4 @@
-package base;
+package src.main.java.base;
 
 /**
  * Cette implementation de la classe Dessin ne produit pas d'affichage,

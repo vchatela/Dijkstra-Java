@@ -1,4 +1,4 @@
-package base;
+package src.main.java.base;
 
 /**
  * Choix des couleurs pour l'affichage.

@@ -1,4 +1,4 @@
-package core;
+package src.main.java.core;
 // ******************PUBLIC OPERATIONS*********************
 // void insert( x )       --> Insert x
 // Comparable deleteMin( )--> Return and remove smallest item

@@ -1,4 +1,4 @@
-package core;
+package src.main.java.core;
 
 import javax.swing.*;
 import java.util.ArrayList;
@@ -68,11 +68,13 @@ public class Pcc_Generique<E extends Comparable<E>> extends Algo {
      * - retourne null si un des point saisis n'appartient pas au graphe
      * - retourne un ArrayList contenant les résultats de l'execution sinon
      */
-    public ArrayList run() {
+    public ArrayList run(boolean b) {
 
         if ((origine <= 0) || (origine > graphe.getArrayList().size())) {
+            if(!b)
             JOptionPane.showMessageDialog(null, "Le numero de sommet d'origine saisi : " + origine + " n'appartient pas au graphe");
         } else if ((destination <= 0) || (destination > graphe.getArrayList().size())) {
+            if(!b)
             JOptionPane.showMessageDialog(null, "Le numero de sommet de destination saisi : " + origine + " n'appartient pas au graphe");
         }
         // a noter que : si booleen TOUS alors message de confirmation de vers tout le monde

@@ -1,4 +1,4 @@
-package base;
+package src.main.java.base;
 
 /*
  * Ce programme propose de lancer divers algorithmes sur les graphes
@@ -7,8 +7,8 @@ package base;
 
 //TODO : thread qui plante en fin de prog : AWT - EvenQueue-0
 
-import core.*;
-import core.Label;
+import src.main.java.core.*;
+import src.main.java.core.Label;
 
 import javax.swing.*;
 import javax.swing.border.EmptyBorder;
@@ -28,7 +28,7 @@ public class Launch extends JFrame {
     /**
      * Variable declarations
      */
-
+    private final boolean isTest = false;
     // Declaration et initialisation des tableaux d'informations
     static private final String menuDisplay[] = {"Quitter", "Connexite", "PCC Standard", "PCC A-star", "Tester les performances", "Covoiturage",
             "Charger un fichier de chemin", "Reinitialiser la carte", "Situer un sommet"};
@@ -376,7 +376,7 @@ public class Launch extends JFrame {
                         initialiserAlgo(true);
                         log.appendToLog("Algorithme de CONNEXITE : " + origine + " vers " + dest);
                         algo = new Connexite(graphe, origine, dest, affichageDeroulementAlgo);
-                        ArrayList perfConnexite = algo.run();
+                        ArrayList perfConnexite = algo.run(isTest);
                         afficherEtEcrireResultats(3, perfConnexite);
                         break;
 
@@ -387,7 +387,7 @@ public class Launch extends JFrame {
                         initialiserAlgo(false);
                         log.appendToLog("Algorithme PCC Standard : DIJKSTRA : \nDe " + origine + " vers " + dest);
                         algo = new Pcc_Dijkstra(graphe, origine, dest, choixCout, false, false, Double.POSITIVE_INFINITY, affichageDeroulementAlgo, true);
-                        ArrayList perfStandard = algo.run();
+                        ArrayList perfStandard = algo.run(isTest);
                         afficherEtEcrireResultats(1, perfStandard);
 
                         // Recupération d'un noeud au hasard du chemin tracé si on y est arrivé
@@ -407,7 +407,7 @@ public class Launch extends JFrame {
                         initialiserAlgo(false);
                         log.appendToLog("Algorithme PCC guidé : DIJKSTRA A-STAR : " + origine + " vers " + dest);
                         algo = new Pcc_Star(graphe, origine, dest, choixCout, false, false, Double.POSITIVE_INFINITY, affichageDeroulementAlgo, true);
-                        ArrayList perfAStar = algo.run();
+                        ArrayList perfAStar = algo.run(isTest);
                         afficherEtEcrireResultats(1, perfAStar);
 
                         // Recupération d'un noeud au hasard du chemin tracé si on y est arrivé
@@ -436,29 +436,29 @@ public class Launch extends JFrame {
                         Thread t = new Thread(new Runnable() {
                             @Override
                             public void run() {
-                                perf3[0] = finalAlgo.run();
+                                perf3[0] = finalAlgo.run(isTest);
                             }
                         });
 
                         // 2i algo -> PCC Standard : Dijkstra
                         algo = new Pcc_Dijkstra(graphe, origine, dest, choixCout, false, false, Double.POSITIVE_INFINITY, affichageDeroulementAlgo, true);
                         // Lancement des algorithmes et récupération des résultats
-                        final ArrayList[] perf1 = {algo.run()};
+                        final ArrayList[] perf1 = {algo.run(isTest)};
                         final Algo finalAlgo1 = algo;
                         Thread t2 = new Thread(new Runnable() {
                             @Override
                             public void run() {
-                                perf1[0] = finalAlgo1.run();
+                                perf1[0] = finalAlgo1.run(isTest);
                             }
                         });
                         // 3i algo -> PCC A-Star : Dijkstra guidé
                         algo = new Pcc_Star(graphe, origine, dest, choixCout, false, false, Double.POSITIVE_INFINITY, affichageDeroulementAlgo, true);
-                        final ArrayList[] perf2 = {algo.run()};
+                        final ArrayList[] perf2 = {algo.run(isTest)};
                         final Algo finalAlgo2 = algo;
                         Thread t3 = new Thread(new Runnable() {
                             @Override
                             public void run() {
-                                perf2[0] = finalAlgo2.run();
+                                perf2[0] = finalAlgo2.run(isTest);
                             }
                         });
                         t.start();
@@ -504,7 +504,7 @@ public class Launch extends JFrame {
                         log.appendToLog("Algorithme Dijsktra Voiture de " + origine + " vers " + dest);
                         // PCC de la VOITURE vers TOUS
                         algoVoitureDest = new Pcc_Dijkstra(graphe, origine, dest, choixCout, true, false, Double.POSITIVE_INFINITY, affichageDeroulementAlgo, false);
-                        perfVoitureTous = algoVoitureDest.run();
+                        perfVoitureTous = algoVoitureDest.run(isTest);
                         ArrayList<Label> covoitVoiture = algoVoitureDest.getLabels();
 
                         // Permet de copier l'arraylist précédent sans le déréférencer
@@ -513,7 +513,7 @@ public class Launch extends JFrame {
                         log.appendToLog("Algorithme Dijsktra Pieton de " + pieton + " vers " + dest);
                         // PCC du PIETON vers TOUS
                         algoPietonDest = new Pcc_Dijkstra(graphe, pieton, dest, choixCout, true, true, tempsAttenteMaxPieton, affichageDeroulementAlgo, false);
-                        perfPietonTous = algoPietonDest.run();
+                        perfPietonTous = algoPietonDest.run(isTest);
                         ArrayList<Label> covoitPieton = algoPietonDest.getLabels();
 
                         log.appendToLog("Construction du Graphe inverse");
@@ -524,7 +524,7 @@ public class Launch extends JFrame {
                         Graphe grapheInverse = new Graphe(nomCarte, mapdata, new DessinInvisible(), true);
                         algoDestInverse = new Pcc_Dijkstra(grapheInverse, dest, pieton, choixCout, true, false, Double.POSITIVE_INFINITY, affichageDeroulementAlgo, false);
                         log.appendToLog("Algorithme Dijsktra sur Graphe Inverse de " + dest + " vers " + origine);
-                        perfDestTous = algoDestInverse.run();
+                        perfDestTous = algoDestInverse.run(isTest);
                         ArrayList<Label> covoitDestination = algoDestInverse.getLabels();
 
                         // On continue si les points saisis existent
@@ -619,7 +619,7 @@ public class Launch extends JFrame {
                                 pasRencontres = true;
                                 // Pas de rencontre car ...
                                 algo = new Connexite(graphe, origine, pieton, false);
-                                ArrayList res = algo.run();
+                                ArrayList res = algo.run(isTest);
                                 // ... le piéton attend trop et doit marcher plus de tempsAttenteMaxPieton minutes
                                 log.appendToLog("Connexité :" + res.get(2));
                                 if (res.get(2).equals("non connexes")) {
@@ -640,12 +640,12 @@ public class Launch extends JFrame {
                         //On demande à l'utilisateur s'il veut lancer un PCC jusqu'à la dest
                         if (!connexes && noeud_rejoint == -1) {
                             algo = new Connexite(graphe, pieton, dest, false);
-                            ArrayList res = algo.run();
+                            ArrayList res = algo.run(isTest);
                             if (res.get(2).equals("connexes")) {
                                 switch (JOptionPane.showConfirmDialog(null, "Souhaitez-vous simuler la durée prévue si le piéton se rend en voiture à la destination ?", "", JOptionPane.OK_OPTION)) {
                                     case JOptionPane.OK_OPTION:
                                         algo = new Pcc_Star(graphe, pieton, dest, choixCout, false, false, Double.POSITIVE_INFINITY, affichageDeroulementAlgo, true);
-                                        ArrayList perfPietonDest = algo.run();
+                                        ArrayList perfPietonDest = algo.run(isTest);
                                         afficherEtEcrireResultats(2, perfPietonDest);
                                         break;
                                     default:

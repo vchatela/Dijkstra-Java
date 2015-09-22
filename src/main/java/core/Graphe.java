@@ -1,14 +1,14 @@
-package core;
+package src.main.java.core;
 
 /**
  * Classe representant un graphe.
  * A vous de completer selon vos choix de conception.
  */
 
-import base.Couleur;
-import base.Descripteur;
-import base.Dessin;
-import base.Utils;
+import src.main.java.base.Couleur;
+import src.main.java.base.Descripteur;
+import src.main.java.base.Dessin;
+import src.main.java.base.Utils;
 
 import javax.swing.*;
 import java.awt.*;

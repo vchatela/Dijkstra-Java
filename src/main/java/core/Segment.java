@@ -1,4 +1,4 @@
-package core;
+package src.main.java.core;
 
 public class Segment {
 

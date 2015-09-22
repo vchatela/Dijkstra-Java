@@ -1,4 +1,4 @@
-package base;
+package src.main.java.base;
 
 import java.io.*;
 import java.util.zip.GZIPInputStream;
@@ -50,7 +50,7 @@ public class Openfile {
         if (!filename.equals(new File(filename).getName())) {
             System.out.println("Le nom du fichier ne doit pas contenir un chemin (ni absolu, ni relatif).");
             System.out.println("Il doit juste contenir le nom du fichier contenant la carte.");
-            System.out.println("Si vous voulez utiliser un dossier specifique, configurez base/Openfile.java");
+            System.out.println("Si vous voulez utiliser un dossier specifique, configurez src.main.java.base/Openfile.java");
             System.exit(1);
         }
 

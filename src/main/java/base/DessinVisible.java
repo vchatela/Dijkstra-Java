@@ -1,4 +1,4 @@
-package base;
+package src.main.java.base;
 
 import java.awt.*;
 import java.awt.image.BufferedImage;

@@ -1,4 +1,4 @@
-package base;
+package src.main.java.base;
 
 import java.io.DataInputStream;
 import java.io.IOException;

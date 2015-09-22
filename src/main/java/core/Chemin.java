@@ -1,9 +1,9 @@
 /**
  *
  */
-package core;
+package src.main.java.core;
 
-import base.Dessin;
+import src.main.java.base.Dessin;
 
 import java.awt.*;
 import java.util.ArrayList;

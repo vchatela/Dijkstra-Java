@@ -1,4 +1,4 @@
-package core;
+package src.main.java.core;
 
 import java.util.ArrayList;
 
@@ -25,7 +25,7 @@ public abstract class Algo {
 
     public abstract int getNb_elements_tas();
 
-    public abstract ArrayList run();
+    public abstract ArrayList run(boolean b);
 
     public abstract ArrayList getLabels();
 

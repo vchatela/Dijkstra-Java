@@ -1,4 +1,4 @@
-package base;
+package src.main.java.base;
 
 /**
  * Classe abstraite pour dessiner a l'ecran.
