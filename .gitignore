@@ -42,3 +42,10 @@ core/.metadata/.plugins/org.eclipse.jdt.core/nonChainingJarsCache
 *.gz
 *.name
 Dijkstra-Java.iml
+*.html
+out/*
+.img/*
+.css/*
+0
+sortie
+*.MF

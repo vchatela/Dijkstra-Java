@@ -7,6 +7,7 @@ import java.awt.*;
 
 /**
  * Created by Joris on 28/05/15.
+ *
  */
 public class Log extends JTextPane {
 
