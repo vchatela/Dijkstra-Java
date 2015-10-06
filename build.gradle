@@ -1,0 +1,21 @@
+apply plugin: 'java'
+apply plugin: 'idea'
+
+buildscript {
+    repositories {
+        mavenCentral()
+    }
+    dependencies {
+    }
+}
+
+sourceSets {
+    main {
+        java {
+        }
+    }
+    test{
+        java {
+        }
+    }
+}
