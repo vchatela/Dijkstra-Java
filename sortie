@@ -1,23 +1,23 @@
-Fichier créé le : Tue Sep 22 15:06:36 CEST 2015
+Fichier crÃ©Ã© le : Fri Nov 20 11:07:04 CET 2015
 
 Covoiturage
-Carte : paris
-Origine Voiture : 370
-Origine Pieton : 467
-Arrivée : 131
+Carte : midip
+Origine Voiture : 106747
+Origine Pieton : 5750
+ArrivÃ©e : 58327
 
-On est bien arrivé ! 
-Le conducteur et le pieton se rendent ensemble à la destination
-Rencontre au noeud  : 467
+On est bien arrivÃ© ! 
+Le conducteur et le pieton se rendent ensemble Ã  la destination
+Rencontre au noeud  : 5749
 
-Temps de la voiture vers le point rencontre : 1 minute(s) et 2 sec
-Temps du pieton vers le point rencontre : 0 sec
+Temps de la voiture vers le point rencontre : 1 heure(s), 48 minute(s) et 53 sec
+Temps du pieton vers le point rencontre : 35 sec
 Temps d'attente de la voiture : Pas d'attente
-Temps d'attente du pieton : 1 minute(s) et 2 sec
-Temps du point de rencontre vers la destination : 2 minute(s) et 39 sec
-Temps total : 3 minute(s) et 41 sec
+Temps d'attente du pieton : 1 heure(s), 48 minute(s) et 18 sec
+Temps du point de rencontre vers la destination : 2 heure(s), 53 minute(s) et 3 sec
+Temps total : 4 heure(s), 41 minute(s) et 56 sec
 
-Durée exécution : 113.0ms
+DurÃ©e exÃ©cution : 1 seconde(s) 907.0
 
 
 
